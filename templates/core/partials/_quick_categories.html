@@ -1,0 +1,28 @@
+{% load i18n %}
+{% if quick_categories %}
+<section class="home-quick container section-gap" aria-labelledby="home-quick-title">
+  <h2 class="home-section__kicker" id="home-quick-title">{% trans "Категорії" %}</h2>
+  <ul class="home-quick__list" role="list">
+    {% for cat in quick_categories %}
+    <li class="home-quick__item">
+      <a class="home-quick__link" href="{{ cat.get_absolute_url }}">
+        {% if cat.image %}
+        <img
+          class="home-quick__img"
+          src="{{ cat.image.url }}"
+          alt=""
+          width="120"
+          height="120"
+          loading="lazy"
+          decoding="async"
+        >
+        {% else %}
+        <span class="home-quick__img home-quick__img--empty" aria-hidden="true"></span>
+        {% endif %}
+        <span class="home-quick__name">{{ cat.name }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}

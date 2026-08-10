@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<article class="cms-page container section-gap">
+  <h1 class="cms-page__title">{{ page.title }}</h1>
+  <div class="cms-page__body">
+    {{ page.body|linebreaks }}
+  </div>
+</article>
+{% endblock %}

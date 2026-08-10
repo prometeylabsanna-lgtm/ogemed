@@ -1,0 +1,23 @@
+{% load i18n %}
+<div
+  class="cookie-banner"
+  id="cookie-banner"
+  data-cookie-banner
+  hidden
+  role="dialog"
+  aria-live="polite"
+  aria-label="{% trans 'Повідомлення про cookies' %}"
+>
+  <div class="cookie-banner__inner">
+    <p class="cookie-banner__text">
+      {% blocktrans trimmed %}
+      Ми використовуємо необхідні cookies для роботи кошика та сесії.
+      Продовжуючи користуватися сайтом, ви погоджуєтесь з їх використанням.
+      {% endblocktrans %}
+      <a class="cookie-banner__link" href="{% url 'cms:privacy' %}">{% trans "Детальніше" %}</a>
+    </p>
+    <button type="button" class="btn btn--primary cookie-banner__accept" data-cookie-accept>
+      {% trans "Прийняти" %}
+    </button>
+  </div>
+</div>

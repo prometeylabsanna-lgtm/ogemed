@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/cabinet.css' %}">
+{% endblock %}
+
+{% block body_class %}page-cabinet{% endblock %}
+
+{% block content %}
+<section class="cabinet-page container section-gap" aria-labelledby="cabinet-title">
+  <header class="cabinet-page__head">
+    <p class="cabinet-page__kicker">{% trans "Кабінет" %}</p>
+    <h1 class="cabinet-page__title" id="cabinet-title">{% trans "Профіль" %}</h1>
+  </header>
+
+  {% include "accounts/partials/_cabinet_nav.html" with nav_active="profile" %}
+
+  <div class="cabinet-page__layout">
+    <div class="cabinet-page__main">
+      <form method="post" class="cabinet-form" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="field-error" role="alert">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+
+        <h2 class="cabinet-page__section">{% trans "Контакт" %}</h2>
+
+        {% with f=form.full_name %}
+        <div class="form-field{% if f.errors %} form-field--error{% endif %}">
+          <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+          {{ f }}
+          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+        </div>
+        {% endwith %}
+        {% with f=form.phone %}
+        <div class="form-field{% if f.errors %} form-field--error{% endif %}">
+          <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+          {{ f }}
+          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+        </div>
+        {% endwith %}
+        {% with f=form.email %}
+        <div class="form-field{% if f.errors %} form-field--error{% endif %}">
+          <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+          {{ f }}
+          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+        </div>
+        {% endwith %}
+
+        <h2 class="cabinet-page__section">{% trans "Адреса за замовчуванням" %}</h2>
+
+        {% with f=form.default_city %}
+        <div class="form-field{% if f.errors %} form-field--error{% endif %}">
+          <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+          {{ f }}
+          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+        </div>
+        {% endwith %}
+        {% with f=form.default_street %}
+        <div class="form-field{% if f.errors %} form-field--error{% endif %}">
+          <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+          {{ f }}
+          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+        </div>
+        {% endwith %}
+        {% with f=form.default_building %}
+        <div class="form-field{% if f.errors %} form-field--error{% endif %}">
+          <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+          {{ f }}
+          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+        </div>
+        {% endwith %}
+        {% with f=form.default_apartment %}
+        <div class="form-field{% if f.errors %} form-field--error{% endif %}">
+          <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+          {{ f }}
+          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+        </div>
+        {% endwith %}
+
+        <div class="cabinet-form__actions">
+          <button type="submit" class="btn btn--primary">{% trans "Зберегти" %}</button>
+          <a class="cabinet-form__link" href="{% url 'accounts:password_change' %}">{% trans "Змінити пароль" %}</a>
+        </div>
+      </form>
+    </div>
+
+    <aside class="cabinet-page__summary" aria-labelledby="profile-aside-title">
+      <h2 class="cabinet-page__summary-title" id="profile-aside-title">{% trans "Швидкі дії" %}</h2>
+      <dl class="cabinet-page__rows">
+        <div class="cabinet-page__row">
+          <dt>{% trans "Замовлення" %}</dt>
+          <dd><a href="{% url 'accounts:orders' %}">{% trans "Переглянути" %}</a></dd>
+        </div>
+        <div class="cabinet-page__row">
+          <dt>{% trans "Пароль" %}</dt>
+          <dd><a href="{% url 'accounts:password_change' %}">{% trans "Змінити" %}</a></dd>
+        </div>
+        <div class="cabinet-page__row">
+          <dt>{% trans "Каталог" %}</dt>
+          <dd><a href="{% url 'catalog:list' %}">{% trans "До покупок" %}</a></dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
+</section>
+{% endblock %}

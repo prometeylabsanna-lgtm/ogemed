@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/product_card.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/product_grid.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog_brands.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog_toolbar.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog_more.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/label_icons.css' %}">
+{% endblock %}
+
+{% block body_class %}page-catalog{% endblock %}
+
+{% block content %}
+<section class="catalog container section-gap">
+  <h1 class="catalog__title">{{ category.name }}</h1>
+
+  <form
+    class="catalog-controls"
+    id="catalog-filters"
+    method="get"
+    action="{{ list_url }}"
+    hx-get="{{ list_url }}"
+    hx-target="#product-grid"
+    hx-swap="innerHTML"
+    hx-push-url="true"
+    hx-trigger="change, submit"
+    hx-sync="this:replace"
+    hx-include="#catalog-sort"
+  >
+    {% include "catalog/partials/_brand_cards.html" %}
+    {% include "catalog/partials/_filter_bar.html" %}
+  </form>
+
+  <div class="catalog__layout">
+    {% include "catalog/partials/_sort.html" %}
+    <div class="catalog__grid" id="product-grid">
+      {% include "catalog/partials/_product_grid.html" %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% vstatic 'js/catalog-filters.js' %}" defer></script>
+{% endblock %}

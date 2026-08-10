@@ -1,0 +1,88 @@
+/* Акордеони форми оформлення */
+
+.checkout-acc {
+  margin: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.checkout-acc__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 14px 0;
+  list-style: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.checkout-acc__summary::-webkit-details-marker {
+  display: none;
+}
+
+.checkout-acc__summary::marker {
+  content: "";
+}
+
+.checkout-acc__title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.checkout-acc__icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.checkout-acc__icon::before,
+.checkout-acc__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: var(--color-accent-700);
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.checkout-acc__icon::before {
+  width: 12px;
+  height: 1.5px;
+  transform: translate(-50%, -50%);
+}
+
+.checkout-acc__icon::after {
+  width: 1.5px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+}
+
+.checkout-acc[open] .checkout-acc__icon::after {
+  transform: translate(-50%, -50%) scaleY(0);
+  opacity: 0;
+}
+
+.checkout-acc__body {
+  padding: 0 0 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkout-acc__icon::before,
+  .checkout-acc__icon::after {
+    transition: none;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .checkout-acc__summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+}

@@ -1,0 +1,20 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% trans "Перехід до оплати" %}</title>
+</head>
+<body>
+  <p>{% trans "Перенаправляємо на LiqPay…" %}</p>
+  <form id="liqpay-form" method="post" action="{{ liqpay.checkout_url }}">
+    <input type="hidden" name="data" value="{{ liqpay.data }}">
+    <input type="hidden" name="signature" value="{{ liqpay.signature }}">
+    <button type="submit">{% trans "Сплатити" %}</button>
+  </form>
+  <script>
+    document.getElementById("liqpay-form").submit();
+  </script>
+</body>
+</html>

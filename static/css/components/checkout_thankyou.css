@@ -1,0 +1,225 @@
+/* Сторінка «Дякуємо» після оформлення */
+
+body.page-thankyou {
+  background: var(--color-bg-light);
+}
+
+body.page-thankyou .site-footer {
+  margin-top: 0;
+}
+
+.thankyou__head {
+  max-width: 36rem;
+  margin-bottom: clamp(28px, 4vw, 40px);
+}
+
+.thankyou__kicker {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.thankyou__title {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.thankyou__lead {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-neutral-700);
+}
+
+.thankyou__layout {
+  display: grid;
+  gap: clamp(24px, 3vw, 36px);
+  max-width: 36rem;
+}
+
+.thankyou__panel {
+  padding: clamp(18px, 2.5vw, 26px);
+  background: color-mix(in srgb, #fff 48%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 68%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 78%, transparent) inset,
+    var(--shadow-md);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.thankyou__status {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.thankyou__status-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.thankyou__status-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: right;
+}
+
+.thankyou__ok {
+  margin: 0 0 14px;
+  color: var(--color-accent-700);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.thankyou__wait,
+.thankyou__note {
+  margin: 0 0 14px;
+  color: var(--color-neutral-700);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.thankyou__retry {
+  margin: 0 0 16px;
+}
+
+.thankyou__items {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.thankyou__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.thankyou__item-name {
+  min-width: 0;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.thankyou__item-qty {
+  display: inline-block;
+  margin-left: 4px;
+  color: var(--color-neutral-700);
+  font-size: 12px;
+}
+
+.thankyou__item-price {
+  flex-shrink: 0;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+
+.thankyou__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+.thankyou__total-label {
+  font-size: 12px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.thankyou__total-value {
+  white-space: nowrap;
+  color: var(--color-accent-700);
+}
+
+.thankyou__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 20px;
+}
+
+.thankyou__btn {
+  min-height: 44px;
+  min-width: 180px;
+  padding-inline: 22px;
+}
+
+.thankyou__link {
+  font-size: 13px;
+  color: var(--color-neutral-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.thankyou__link:hover,
+.thankyou__link:focus-visible {
+  color: var(--color-accent-800);
+}
+
+@media (max-width: 767px) {
+  .thankyou__title {
+    font-size: clamp(28px, 9vw, 36px);
+  }
+
+  .thankyou__btn {
+    width: 100%;
+  }
+
+  .thankyou__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .thankyou__link {
+    text-align: center;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .thankyou__btn,
+  .thankyou__link {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thankyou__link {
+    transition: none;
+  }
+}

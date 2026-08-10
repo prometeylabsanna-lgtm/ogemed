@@ -1,0 +1,15 @@
+{% extends "notify/email/base_email.html" %}
+{% block title %}Статус замовлення {{ order.order_number }}{% endblock %}
+{% block content %}
+<h1 style="margin:0 0 12px;font-size:22px;font-weight:600;">Оновлення замовлення</h1>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.5;">
+  Замовлення <strong>{{ order.order_number }}</strong> змінило статус.
+</p>
+<p style="margin:0 0 8px;font-size:14px;">
+  <strong>Було:</strong> {{ previous_status_label }}
+</p>
+<p style="margin:0 0 8px;font-size:14px;">
+  <strong>Стало:</strong> {{ order.get_status_display }}
+</p>
+<p style="margin:16px 0 0;font-size:14px;">Сума: {{ order.total }} ₴</p>
+{% endblock %}

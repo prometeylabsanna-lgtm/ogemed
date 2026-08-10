@@ -1,0 +1,11 @@
+{% load i18n %}
+{% if variant %}
+<p class="pdp__sku">{% trans "Артикул" %}: {{ variant.sku }}</p>
+<div class="pdp__pricing">
+  <span class="pdp__price-current">{{ variant.price }} ₴</span>
+  {% if variant.old_price %}<span class="pdp__price-old">{{ variant.old_price }} ₴</span>{% endif %}
+  <span class="pdp__availability pdp__availability--{{ variant.effective_availability }}">
+    {{ variant.get_effective_availability_display }}
+  </span>
+</div>
+{% endif %}

@@ -1,0 +1,31 @@
+{% load i18n %}
+<div class="pdp-gallery" data-pdp-gallery data-close-label="{% trans 'Закрити' %}">
+  {% if images %}
+  <div class="pdp-gallery__stage">
+    {% for img in images %}
+    <figure class="pdp-gallery__slide{% if forloop.first %} is-active{% endif %}">
+      <img
+        src="{{ img.image.url }}"
+        alt="{{ img.alt_uk|default:product.name }}"
+        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+        data-zoom-src="{{ img.image.url }}"
+      >
+    </figure>
+    {% endfor %}
+    {% if images|length > 1 %}
+    <div class="slider-bars slider-bars--ink">
+      {% for img in images %}
+      <button
+        type="button"
+        class="slider-bars__item{% if forloop.first %} is-active{% endif %}"
+        data-gallery-dot="{{ forloop.counter0 }}"
+        aria-label="{% blocktrans with n=forloop.counter %}Фото {{ n }}{% endblocktrans %}"
+      ></button>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="pdp__placeholder">{{ product.name|truncatechars:1 }}</div>
+  {% endif %}
+</div>

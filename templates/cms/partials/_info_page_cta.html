@@ -1,0 +1,39 @@
+{% load i18n %}
+<div
+  class="info-page__cta"
+  data-info-cta-sheet
+  role="complementary"
+  aria-label="{% if cta_title %}{{ cta_title }}{% else %}{% trans 'Потрібна допомога?' %}{% endif %}"
+>
+  <div class="info-page__cta-panel">
+    <button
+      type="button"
+      class="info-page__cta-dismiss"
+      data-info-cta-dismiss
+      aria-label="{% trans 'Сховати' %}"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+    <h2 class="info-page__cta-title">
+      {% if cta_title %}{{ cta_title }}{% else %}{% trans "Потрібна допомога?" %}{% endif %}
+    </h2>
+    <p class="info-page__cta-text">
+      {% if cta_text %}{{ cta_text }}{% else %}{% trans "Напишіть або залиште номер — менеджер OGEMED for you відповість у робочі години." %}{% endif %}
+    </p>
+    <button type="button" class="info-page__cta-btn" data-callback-trigger>
+      {% trans "Залишити заявку" %}
+    </button>
+    <a class="info-page__cta-secondary" href="{% url 'cms:contacts' %}">
+      {% trans "Усі контакти" %}
+    </a>
+  </div>
+</div>
+<button
+  type="button"
+  class="info-page__cta-reopen"
+  data-info-cta-reopen
+  hidden
+  aria-label="{% trans 'Показати заявку' %}"
+>
+  {% trans "Заявка" %}
+</button>

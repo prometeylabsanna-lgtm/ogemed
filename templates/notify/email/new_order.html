@@ -1,0 +1,23 @@
+{% extends "notify/email/base_email.html" %}
+{% block title %}Замовлення {{ order.order_number }}{% endblock %}
+{% block content %}
+{% if for_customer %}
+  <h1 style="margin:0 0 12px;font-size:22px;font-weight:600;">Дякуємо за замовлення!</h1>
+  <p style="margin:0 0 16px;font-size:15px;line-height:1.5;">
+    Ми прийняли замовлення <strong>{{ order.order_number }}</strong>.
+  </p>
+{% else %}
+  <h1 style="margin:0 0 12px;font-size:22px;font-weight:600;">Нове замовлення</h1>
+  <p style="margin:0 0 16px;font-size:15px;line-height:1.5;">
+    Номер: <strong>{{ order.order_number }}</strong>
+  </p>
+{% endif %}
+<p style="margin:0 0 8px;font-size:14px;"><strong>Клієнт:</strong> {{ order.customer_name }}, {{ order.customer_phone }}</p>
+{% if order.customer_email %}
+<p style="margin:0 0 8px;font-size:14px;"><strong>Email:</strong> {{ order.customer_email }}</p>
+{% endif %}
+<p style="margin:0 0 8px;font-size:14px;"><strong>Сума:</strong> {{ order.total }} ₴</p>
+<p style="margin:0 0 8px;font-size:14px;"><strong>Оплата:</strong> {{ order.get_payment_type_display }}</p>
+<p style="margin:0 0 8px;font-size:14px;"><strong>Доставка:</strong> {{ order.get_delivery_type_display }}</p>
+<p style="margin:0 0 8px;font-size:14px;"><strong>Статус:</strong> {{ order.get_status_display }}</p>
+{% endblock %}

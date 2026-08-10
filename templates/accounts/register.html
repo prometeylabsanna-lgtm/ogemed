@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block body_class %}page-auth page-auth--register{% endblock %}
+
+{% block content %}
+<section class="auth-page container section-gap" aria-labelledby="auth-title">
+  <header class="auth-page__head">
+    <p class="auth-page__kicker">{% trans "Акаунт" %}</p>
+    <h1 class="auth-page__title" id="auth-title">{% trans "Реєстрація" %}</h1>
+    <p class="auth-page__lead">
+      {% trans "Вже є акаунт?" %}
+      <a href="{% url 'accounts:login' %}">{% trans "Увійти" %}</a>
+    </p>
+  </header>
+
+  <form method="post" class="auth-form" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="auth-form__errors" role="alert">
+      {% for error in form.non_field_errors %}
+      <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% for field in form %}
+    <div class="form-field{% if field.errors %} form-field--error{% endif %}">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}<div class="field-error" id="{{ field.id_for_label }}-error">{{ field.errors.0 }}</div>{% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="auth-form__actions">
+      <button type="submit" class="btn btn--primary auth-form__submit">{% trans "Створити акаунт" %}</button>
+    </div>
+  </form>
+
+  <p class="auth-page__footer auth-page__footer--legal">
+    {% url 'cms:offer' as offer_url %}
+    {% url 'cms:privacy' as privacy_url %}
+    {% blocktrans trimmed with offer_url=offer_url privacy_url=privacy_url %}
+    Реєструючись, ви приймаєте
+    <a href="{{ offer_url }}">Публічну оферту</a>
+    та
+    <a href="{{ privacy_url }}">Політику конфіденційності</a>.
+    {% endblocktrans %}
+  </p>
+</section>
+{% endblock %}

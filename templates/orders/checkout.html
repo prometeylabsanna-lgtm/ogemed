@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/checkout.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/checkout_acc.css' %}">
+{% endblock %}
+
+{% block body_class %}page-checkout{% endblock %}
+
+{% block content %}
+<section class="checkout container section-gap" aria-labelledby="checkout-title">
+  <header class="checkout__head">
+    <p class="checkout__kicker">{% trans "Замовлення" %}</p>
+    <h1 class="checkout__title" id="checkout-title">{% trans "Оформлення" %}</h1>
+  </header>
+
+  <div class="checkout__layout">
+    <div class="checkout__main">
+      <ul class="checkout__products" aria-label="{% trans 'Товари в замовленні' %}">
+        {% for line in lines %}
+        <li class="checkout__product">
+          <div class="checkout__product-media">
+            {% with img=line.variant.product.main_image %}
+              {% if img %}
+                <img src="{{ img.image.url }}" alt="{{ line.variant.product.name }}" width="72" height="90" loading="lazy">
+              {% else %}
+                <span class="checkout__product-placeholder" aria-hidden="true"></span>
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div class="checkout__product-body">
+            <div class="checkout__product-info">
+              <a class="checkout__product-name" href="{{ line.variant.product.get_absolute_url }}">{{ line.variant.product.name }}</a>
+              {% if line.variant.label %}<span class="checkout__product-label">{{ line.variant.label }}</span>{% endif %}
+              <span class="checkout__product-meta">× {{ line.quantity }}</span>
+            </div>
+            <div class="checkout__product-aside">
+              <div class="checkout__product-price">{{ line.line_total }} ₴</div>
+              <form
+                class="checkout__product-remove-form"
+                method="post"
+                action="{% url 'cart:remove' %}"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="variant_id" value="{{ line.variant.pk }}">
+                <input type="hidden" name="next" value="{% url 'orders:checkout' %}">
+                <button
+                  type="submit"
+                  class="checkout__product-remove"
+                  aria-label="{% blocktrans with name=line.variant.product.name %}Видалити {{ name }}{% endblocktrans %}"
+                >
+                  <span class="checkout__product-remove-icon" aria-hidden="true">×</span>
+                  <span class="checkout__product-remove-label">{% trans "Видалити" %}</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <form method="post" class="checkout__form" id="checkout-form" novalidate data-checkout-form>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="form-errors">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <details
+          class="checkout-acc"
+          data-checkout-acc="buyer"
+          {% if not form.is_bound or form.customer_name.errors or form.customer_phone.errors or form.customer_email.errors %}open{% endif %}
+        >
+          <summary class="checkout-acc__summary">
+            <span class="checkout-acc__title">{% trans "Дані покупця" %}</span>
+            <span class="checkout-acc__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="checkout-acc__body">
+            {% for field in form %}
+              {% if field.name == 'customer_name' or field.name == 'customer_phone' or field.name == 'customer_email' %}
+              <div class="form-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<div class="field-error">{{ field.errors.0 }}</div>{% endif %}
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </details>
+
+        <details
+          class="checkout-acc"
+          data-checkout-acc="delivery"
+          {% if form.non_field_errors or form.delivery_type.errors or form.np_city_name.errors or form.np_warehouse_name.errors or form.np_point_type.errors or form.courier_city.errors or form.courier_street.errors or form.courier_building.errors or form.courier_apartment.errors or form.courier_comment.errors %}open{% endif %}
+        >
+          <summary class="checkout-acc__summary">
+            <span class="checkout-acc__title">{% trans "Доставка" %}</span>
+            <span class="checkout-acc__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="checkout-acc__body">
+            <div class="form-field">{{ form.delivery_type.label_tag }}{{ form.delivery_type }}</div>
+            <div class="checkout__np" data-delivery-block="nova_poshta">
+              <div class="form-field np-autocomplete">
+                {{ form.np_city_name.label_tag }}
+                {{ form.np_city_name }}
+                <ul
+                  class="np-autocomplete__list"
+                  id="np-city-list"
+                  role="listbox"
+                  hidden
+                  data-empty-label="{% trans 'Нічого не знайдено' %}"
+                ></ul>
+              </div>
+              <div class="form-field np-autocomplete">
+                {{ form.np_warehouse_name.label_tag }}
+                {{ form.np_warehouse_name }}
+                <ul
+                  class="np-autocomplete__list"
+                  id="np-warehouse-list"
+                  role="listbox"
+                  hidden
+                  data-empty-label="{% trans 'Нічого не знайдено' %}"
+                ></ul>
+              </div>
+              <div class="form-field">{{ form.np_point_type.label_tag }}{{ form.np_point_type }}</div>
+              {{ form.np_city_ref }}{{ form.np_warehouse_ref }}
+            </div>
+            <div class="checkout__courier" data-delivery-block="courier">
+              <div class="form-field">{{ form.courier_city.label_tag }}{{ form.courier_city }}</div>
+              <div class="form-field">{{ form.courier_street.label_tag }}{{ form.courier_street }}</div>
+              <div class="form-field">{{ form.courier_building.label_tag }}{{ form.courier_building }}</div>
+              <div class="form-field">{{ form.courier_apartment.label_tag }}{{ form.courier_apartment }}</div>
+              <div class="form-field">{{ form.courier_comment.label_tag }}{{ form.courier_comment }}</div>
+            </div>
+          </div>
+        </details>
+
+        <details
+          class="checkout-acc"
+          data-checkout-acc="payment"
+          {% if form.payment_type.errors %}open{% endif %}
+        >
+          <summary class="checkout-acc__summary">
+            <span class="checkout-acc__title">{% trans "Оплата" %}</span>
+            <span class="checkout-acc__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="checkout-acc__body">
+            <div class="form-field">{{ form.payment_type.label_tag }}{{ form.payment_type }}</div>
+          </div>
+        </details>
+      </form>
+    </div>
+
+    <aside class="checkout__summary" aria-labelledby="checkout-summary-title">
+      <h2 class="checkout__summary-title" id="checkout-summary-title">{% trans "Підсумок" %}</h2>
+      <dl class="checkout__rows">
+        <div class="checkout__row">
+          <dt>{% trans "Сума" %}</dt>
+          <dd>{{ cart_total }} ₴</dd>
+        </div>
+        <div class="checkout__row checkout__row--note">
+          <dt>{% trans "Доставка" %}</dt>
+          <dd>{% trans "За тарифами перевізника." %}</dd>
+        </div>
+      </dl>
+      <p class="checkout__total">
+        <span class="checkout__total-label">{% trans "Разом" %}</span>
+        <span class="checkout__total-value">{{ cart_total }} ₴</span>
+      </p>
+      <button type="submit" form="checkout-form" class="btn btn--primary checkout__submit">{% trans "Підтвердити" %}</button>
+    </aside>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% vstatic 'js/checkout.js' %}" defer></script>
+{% endblock %}

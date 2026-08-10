@@ -1,0 +1,22 @@
+{% load i18n %}
+{% if variant %}
+  {% if variant.is_purchasable %}
+  <form
+    method="post"
+    action="{% url 'cart:add' %}"
+    class="pdp__add"
+    hx-post="{% url 'cart:add' %}"
+    hx-target="#cart-popup-body"
+    hx-swap="innerHTML"
+  >
+    {% csrf_token %}
+    <input type="hidden" name="variant_id" value="{{ variant.pk }}">
+    <input type="hidden" name="quantity" value="1">
+    <button type="submit" class="btn btn--primary pdp__add-btn">{% trans "До кошика" %}</button>
+  </form>
+  {% else %}
+  <p class="pdp__unavailable">{% trans "Немає в наявності" %}</p>
+  {% endif %}
+{% else %}
+<p class="pdp__unavailable">{% trans "Немає доступних модифікацій" %}</p>
+{% endif %}

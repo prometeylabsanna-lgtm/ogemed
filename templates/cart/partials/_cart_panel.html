@@ -1,0 +1,120 @@
+{% load i18n %}
+{% if lines %}
+<div class="cart-panel">
+  <div class="cart-panel__main">
+    <ul class="cart-lines">
+      {% for line in lines %}
+      <li class="cart-line">
+        <div class="cart-line__media">
+          {% with img=line.variant.product.main_image %}
+            {% if img %}
+              <img src="{{ img.image.url }}" alt="{{ line.variant.product.name }}" width="72" height="90" loading="lazy">
+            {% else %}
+              <span class="cart-line__placeholder" aria-hidden="true"></span>
+            {% endif %}
+          {% endwith %}
+        </div>
+        <div class="cart-line__body">
+          <div class="cart-line__info">
+            <a class="cart-line__name" href="{{ line.variant.product.get_absolute_url }}">{{ line.variant.product.name }}</a>
+            {% if line.variant.label %}<span class="cart-line__label">{{ line.variant.label }}</span>{% endif %}
+            <span class="cart-line__sku">{{ line.variant.sku }}</span>
+            <div class="cart-line__price">{{ line.unit_price }} ₴</div>
+          </div>
+          <div class="cart-line__controls">
+            <div class="cart-line__controls-lead">
+              <label class="cart-line__qty-text" for="qty-{{ line.variant.pk }}">{% trans "Кількість" %}</label>
+              <div class="cart-line__total-label">
+                <span>{% trans "Сума" %}</span><span class="cart-line__total-sep" aria-hidden="true">:</span>
+              </div>
+            </div>
+            <div class="cart-line__controls-trail">
+              <form
+                class="cart-line__qty"
+                method="post"
+                action="{% url 'cart:update' %}"
+                hx-post="{% url 'cart:update' %}"
+                hx-target="closest [data-cart-panel]"
+                hx-swap="innerHTML"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="variant_id" value="{{ line.variant.pk }}">
+                <div class="cart-line__qty-stepper">
+                  <button type="button" class="cart-line__qty-btn" data-qty-delta="-1" aria-label="{% trans 'Менше' %}">−</button>
+                  <input
+                    id="qty-{{ line.variant.pk }}"
+                    type="number"
+                    name="quantity"
+                    min="1"
+                    {% if line.variant.effective_availability == "in_stock" %}
+                    max="{{ line.variant.stock }}"
+                    data-stock="{{ line.variant.stock }}"
+                    {% endif %}
+                    value="{{ line.quantity }}"
+                    hx-trigger="change"
+                  >
+                  <button type="button" class="cart-line__qty-btn cart-line__qty-btn--plus" data-qty-delta="1" aria-label="{% trans 'Більше' %}">+</button>
+                </div>
+              </form>
+              <div class="cart-line__total-value">{{ line.line_total }} ₴</div>
+              <form
+                class="cart-line__remove-form"
+                method="post"
+                action="{% url 'cart:remove' %}"
+                hx-post="{% url 'cart:remove' %}"
+                hx-target="closest [data-cart-panel]"
+                hx-swap="innerHTML"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="variant_id" value="{{ line.variant.pk }}">
+                <button type="submit" class="cart-line__remove">
+                  <span class="cart-line__remove-icon" aria-hidden="true">×</span>
+                  <span class="cart-line__remove-label">{% trans "Видалити" %}</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <aside class="cart-panel__summary" aria-labelledby="cart-summary-title">
+    <div class="cart-panel__summary-inner">
+      <h2 class="cart-panel__summary-title" id="cart-summary-title">{% trans "Підсумок" %}</h2>
+      <dl class="cart-panel__rows">
+        <div class="cart-panel__row">
+          <dt>{% trans "Сума" %}</dt>
+          <dd>{{ cart_total }} ₴</dd>
+        </div>
+        <div class="cart-panel__row cart-panel__row--note">
+          <dt>{% trans "Доставка" %}</dt>
+          <dd>{% trans "Розраховується під час оформлення." %}</dd>
+        </div>
+      </dl>
+      <p class="cart-panel__total">
+        <span class="cart-panel__total-label">{% trans "Разом" %}</span>
+        <span class="cart-panel__total-value">{{ cart_total }} ₴</span>
+      </p>
+      <a class="btn btn--primary cart-panel__checkout" href="{% url 'orders:checkout' %}">{% trans "Оформити замовлення" %}</a>
+    </div>
+  </aside>
+</div>
+{% else %}
+<div class="cart-empty-wrap">
+  <p class="cart-empty">{% trans "Кошик порожній" %}</p>
+  <div class="cart-empty__actions">
+    <a
+      class="cart-empty__link cart-empty__link--continue"
+      href="{% url 'catalog:list' %}"
+      data-cart-close
+    >{% trans "Продовжити покупки" %}</a>
+    <a
+      class="cart-empty__link cart-empty__link--full"
+      href="{% url 'cart:detail' %}"
+    >{% trans "Повна сторінка кошика" %}</a>
+  </div>
+</div>
+{% endif %}
+<span id="cart-count-sync" hidden hx-swap-oob="innerHTML:[data-cart-count]">{{ cart|length }}</span>

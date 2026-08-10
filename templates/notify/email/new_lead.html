@@ -1,0 +1,10 @@
+{% extends "notify/email/base_email.html" %}
+{% block title %}Заявка: {{ lead.get_lead_type_display }}{% endblock %}
+{% block content %}
+<h1 style="margin:0 0 12px;font-size:22px;font-weight:600;">{{ lead.get_lead_type_display }}</h1>
+<p style="margin:0 0 8px;font-size:14px;"><strong>Імʼя:</strong> {{ lead.name }}</p>
+<p style="margin:0 0 8px;font-size:14px;"><strong>Телефон:</strong> {{ lead.phone }}</p>
+<p style="margin:0 0 8px;font-size:14px;"><strong>Email:</strong> {{ lead.email|default:"—" }}</p>
+<p style="margin:0 0 8px;font-size:14px;"><strong>Повідомлення:</strong></p>
+<p style="margin:0;font-size:14px;line-height:1.5;white-space:pre-wrap;">{{ lead.message|default:"—" }}</p>
+{% endblock %}

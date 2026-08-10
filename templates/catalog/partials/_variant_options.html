@@ -1,0 +1,79 @@
+{% load i18n %}
+{% if variant_option_groups %}
+<div class="pdp__variants" data-pdp-variants>
+  {% for group in variant_option_groups %}
+  <div class="pdp__variant-group{% if group.is_color %} pdp__variant-group--color{% endif %}">
+    <p class="pdp__variant-group-label" id="pdp-vg-{{ group.attribute.slug }}">{{ group.attribute.name }}</p>
+    <div
+      class="pdp__variant-options{% if group.is_color %} pdp__variant-options--swatch{% endif %}"
+      role="listbox"
+      aria-labelledby="pdp-vg-{{ group.attribute.slug }}"
+    >
+      {% for opt in group.options %}
+        {% if opt.target_variant %}
+        <a
+          role="option"
+          class="pdp__variant{% if group.is_color %} pdp__variant--swatch{% else %} pdp__variant--check{% endif %}{% if opt.is_selected %} is-active{% endif %}{% if not opt.is_available %} is-soft{% endif %}"
+          href="?variant={{ opt.target_variant.pk }}"
+          hx-get="{{ product.get_absolute_url }}?variant={{ opt.target_variant.pk }}&partial=variant"
+          hx-target="#pdp-price"
+          hx-swap="innerHTML"
+          hx-push-url="{{ product.get_absolute_url }}?variant={{ opt.target_variant.pk }}"
+          aria-selected="{% if opt.is_selected %}true{% else %}false{% endif %}"
+          title="{{ opt.value.name }}"
+          {% if group.is_color %}aria-label="{{ opt.value.name }}"{% endif %}
+        >
+          {% if group.is_color %}
+          <span
+            class="pdp__swatch{% if not opt.is_swatch %} pdp__swatch--empty{% endif %}"
+            {% if opt.is_swatch %}style="background-color: {{ opt.swatch_color }}"{% endif %}
+          ></span>
+          <span class="pdp__variant-label">{{ opt.value.name }}</span>
+          {% else %}
+          <span class="pdp__check" aria-hidden="true"></span>
+          <span class="pdp__variant-label">{{ opt.value.name }}</span>
+          {% endif %}
+        </a>
+        {% else %}
+        <span
+          role="option"
+          class="pdp__variant is-disabled{% if group.is_color %} pdp__variant--swatch{% else %} pdp__variant--check{% endif %}"
+          aria-disabled="true"
+          aria-selected="false"
+          title="{{ opt.value.name }}"
+        >
+          {% if group.is_color %}
+          <span
+            class="pdp__swatch{% if not opt.is_swatch %} pdp__swatch--empty{% endif %}"
+            {% if opt.is_swatch %}style="background-color: {{ opt.swatch_color }}"{% endif %}
+          ></span>
+          <span class="pdp__variant-label">{{ opt.value.name }}</span>
+          {% else %}
+          <span class="pdp__check" aria-hidden="true"></span>
+          <span class="pdp__variant-label">{{ opt.value.name }}</span>
+          {% endif %}
+        </span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% elif variant_flat_labels %}
+<div class="pdp__variants" data-pdp-variants role="list">
+  {% for v in variants %}
+  <a
+    role="listitem"
+    class="pdp__variant pdp__variant--check{% if variant.pk == v.pk %} is-active{% endif %}"
+    href="?variant={{ v.pk }}"
+    hx-get="{{ product.get_absolute_url }}?variant={{ v.pk }}&partial=variant"
+    hx-target="#pdp-price"
+    hx-swap="innerHTML"
+    hx-push-url="{{ product.get_absolute_url }}?variant={{ v.pk }}"
+  >
+    <span class="pdp__check" aria-hidden="true"></span>
+    <span class="pdp__variant-label">{{ v.label|default:v.sku }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}

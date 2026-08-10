@@ -1,0 +1,65 @@
+{% load i18n %}
+{% if featured_brands %}
+<section class="brand-showcase" data-brand-showcase>
+  <div class="brand-showcase__scroll" data-brand-scroll>
+    <div class="brand-showcase__sticky">
+      <div class="brand-showcase-intro container">
+        <h2 class="home-section__kicker brand-showcase-intro__title">{% trans "Бренди" %}</h2>
+      </div>
+
+      <div class="brand-showcase__stage" data-brand-stage>
+        {% for brand in featured_brands %}
+        <article
+          class="brand-panel{% if forloop.counter|divisibleby:2 %} brand-panel--right{% else %} brand-panel--left{% endif %}{% if forloop.counter == 2 %} brand-panel--sm-media{% elif forloop.counter == 3 %} brand-panel--lg-media{% endif %}"
+          data-brand-panel
+          data-brand-index="{{ forloop.counter0 }}"
+          {% if not forloop.first %}aria-hidden="true"{% endif %}
+        >
+          <div class="brand-panel__inner container">
+            <div class="brand-panel__text">
+              <h3 class="brand-panel__name">{{ brand.name }}</h3>
+              {% if brand.tagline %}<p class="brand-panel__desc">{{ brand.tagline }}</p>{% endif %}
+            </div>
+            <div class="brand-panel__media">
+              {% comment %}Вітрина тримає окреме фото (зазвичай PNG без фону); фолбек — плитка каталогу{% endcomment %}
+              {% with showcase=brand.showcase_image|default:brand.cover_image %}
+              {% if showcase %}
+              <img
+                class="brand-panel__visual"
+                src="{{ showcase.url }}"
+                alt="{{ brand.name }}"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                width="800"
+                height="1000"
+                decoding="async"
+              >
+              {% endif %}
+              {% endwith %}
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      {% if featured_brands|length > 1 %}
+      <div class="brand-showcase__dots container" data-brand-dots role="tablist" aria-label="{% trans 'Бренди' %}">
+        {% for brand in featured_brands %}
+        <button
+          type="button"
+          class="brand-showcase__dot{% if forloop.first %} is-active{% endif %}"
+          data-brand-dot="{{ forloop.counter0 }}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-label="{{ brand.name }}"
+        ></button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="brand-showcase__footer container">
+    <a class="brand-showcase__all" href="{% url 'catalog:brands' %}">{% trans "Перейти до всіх брендів" %}</a>
+  </div>
+</section>
+{% endif %}

@@ -1,0 +1,125 @@
+{% load i18n %}
+<div class="catalog-bar">
+  <div class="catalog-bar__group">
+    <div class="cat-dd" data-dropdown>
+      <button type="button" class="cat-dd__toggle" data-dropdown-toggle aria-expanded="false">
+        <span class="cat-dd__label">{% trans "Категорія" %}</span>
+        <span class="cat-dd__value">{% if category %}{{ category.name }}{% else %}{% trans "Усі категорії" %}{% endif %}</span>
+        <svg class="cat-dd__chevron" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+          <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+      </button>
+      <div class="cat-dd__panel" data-dropdown-panel hidden>
+        <ul class="cat-dd__list" role="list">
+          <li>
+            <a class="cat-dd__link{% if not category %} is-selected{% endif %}"
+               href="{% url 'catalog:list' %}{% if filter_query %}?{{ filter_query }}{% endif %}">{% trans "Усі категорії" %}</a>
+          </li>
+          {% for parent in filter_categories %}
+          <li>
+            <a class="cat-dd__link cat-dd__link--parent{% if category.pk == parent.pk %} is-selected{% endif %}"
+               href="{{ parent.get_absolute_url }}{% if filter_query %}?{{ filter_query }}{% endif %}">{{ parent.name }}</a>
+            {% with children=parent.children.all %}
+            {% if children %}
+            <ul class="cat-dd__sublist" role="list">
+              {% for child in children %}
+              <li>
+                <a class="cat-dd__link cat-dd__link--child{% if category.pk == child.pk %} is-selected{% endif %}"
+                   href="{{ child.get_absolute_url }}{% if filter_query %}?{{ filter_query }}{% endif %}">{{ child.name }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="cat-dd" data-dropdown>
+      <button type="button" class="cat-dd__toggle" data-dropdown-toggle aria-expanded="false">
+        <span class="cat-dd__label">{% trans "Ціна" %}</span>
+        <span
+          class="cat-dd__value"
+          data-dropdown-value
+          data-empty="{% trans 'Будь-яка' %}"
+          data-price-from="{% trans 'від' %}"
+          data-price-to="{% trans 'до' %}"
+        >{% trans "Будь-яка" %}</span>
+        <svg class="cat-dd__chevron" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+          <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+      </button>
+      <div class="cat-dd__panel cat-dd__panel--price" data-dropdown-panel hidden>
+        <div class="cat-dd__price-row">
+          <label class="sr-only" for="price_min">{% trans "Ціна від" %}</label>
+          <input id="price_min" type="number" name="price_min" inputmode="numeric" min="0" step="1"
+                 placeholder="{% trans 'від' %}" value="{{ request.GET.price_min }}">
+          <span class="cat-dd__dash" aria-hidden="true">—</span>
+          <label class="sr-only" for="price_max">{% trans "Ціна до" %}</label>
+          <input id="price_max" type="number" name="price_max" inputmode="numeric" min="0" step="1"
+                 placeholder="{% trans 'до' %}" value="{{ request.GET.price_max }}">
+        </div>
+        <button type="submit" class="btn btn--primary cat-dd__apply">{% trans "Застосувати" %}</button>
+      </div>
+    </div>
+
+    {% for attr in filter_attributes %}
+    <div
+      class="cat-dd{% if attr.slug == 'typ-shkiry' and skin_type_select %} is-open{% endif %}"
+      data-dropdown
+      {% if attr.slug == "typ-shkiry" %}data-skin-type-filter{% endif %}
+    >
+      <button type="button" class="cat-dd__toggle" data-dropdown-toggle aria-expanded="{% if attr.slug == 'typ-shkiry' and skin_type_select %}true{% else %}false{% endif %}">
+        <span class="cat-dd__label">{{ attr.name }}</span>
+        <span class="cat-dd__value" data-dropdown-value data-empty="{% trans 'Усі' %}">{% trans "Усі" %}</span>
+        <svg class="cat-dd__chevron" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+          <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+      </button>
+      <div class="cat-dd__panel" data-dropdown-panel {% if attr.slug != "typ-shkiry" or not skin_type_select %}hidden{% endif %}>
+        <ul class="cat-dd__list" role="list">
+          {% for value in attr.values.all %}
+          <li>
+            <label class="cat-dd__check">
+              {% if attr.slug == "typ-shkiry" %}
+              <input type="radio" name="skin_type" value="{{ value.slug }}"
+                     data-label="{{ value.name }}"
+                     {% if value.slug == selected_skin_type %}checked{% endif %}>
+              {% else %}
+              <input type="checkbox" name="attr" value="{{ value.slug }}"
+                     data-label="{{ value.name }}"
+                     {% if value.slug in selected_attrs %}checked{% endif %}>
+              {% endif %}
+              <span>{{ value.name }}</span>
+            </label>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if selected_label %}
+  {% comment %}Мітка з головної: чекбокс тримає ?label= у формі, знімається одним кліком{% endcomment %}
+  <label class="cat-chip">
+    <input class="cat-chip__input" type="checkbox" name="label" value="{{ selected_label.slug }}" checked>
+    {% include "catalog/partials/_label_icon.html" with icon=selected_label.icon %}
+    <span class="cat-chip__text">{{ selected_label.title }}</span>
+    <span class="cat-chip__x" aria-hidden="true">
+      <svg width="10" height="10" viewBox="0 0 10 10" focusable="false">
+        <path d="M1 1 9 9M9 1 1 9" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      </svg>
+    </span>
+  </label>
+  {% endif %}
+
+  <a
+    class="catalog-bar__reset"
+    data-filter-reset
+    href="{{ list_url }}"
+    {% if not has_active_filters %}hidden{% endif %}
+  >{% trans "Скинути фільтри" %}</a>
+</div>

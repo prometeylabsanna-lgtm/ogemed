@@ -1,0 +1,87 @@
+/* Стрілки слайдерів: тонкий чорний шеврон.
+   --nav-arrow-size — розмір самого знака, --nav-arrow-hit — зона натискання
+   (лишається ≥40px, щоб на тачі влучати пальцем). */
+.nav-arrow {
+  --nav-arrow-size: 16px;
+  --nav-arrow-hit: 40px;
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--nav-arrow-hit);
+  height: var(--nav-arrow-hit);
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  color: var(--color-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.25s ease, color 0.2s ease, opacity 0.25s ease;
+}
+
+.nav-arrow__svg {
+  display: block;
+  width: var(--nav-arrow-size);
+  height: var(--nav-arrow-size);
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
+
+.nav-arrow--prev .nav-arrow__svg {
+  transform: scaleX(-1);
+}
+
+.nav-arrow:hover,
+.nav-arrow:focus-visible {
+  color: #000;
+  transform: scale(1.12);
+  outline: none;
+}
+
+.nav-arrow:focus-visible {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+.nav-arrow:active {
+  transform: scale(0.94);
+}
+
+.nav-arrow:disabled,
+.nav-arrow.is-disabled {
+  opacity: 0.24;
+  cursor: default;
+  pointer-events: none;
+  transform: none;
+}
+
+@media (max-width: 767px) {
+  .nav-arrow {
+    --nav-arrow-size: 14px;
+  }
+}
+
+/* iOS Safari тримає :hover після тапу — гасимо збільшення на тачі */
+@media (hover: none) {
+  .nav-arrow:hover {
+    transform: none;
+    color: var(--color-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-arrow,
+  .nav-arrow__svg {
+    transition: none;
+  }
+
+  .nav-arrow:hover,
+  .nav-arrow:focus-visible,
+  .nav-arrow:active {
+    transform: none;
+  }
+}

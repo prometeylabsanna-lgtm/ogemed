@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/product_card.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/product_grid.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog_more.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="catalog container section-gap">
+  <h1 class="catalog__title">{% trans "Пошук" %}</h1>
+  <form class="search-form" method="get" action="{% url 'catalog:search' %}">
+    <label class="sr-only" for="q">{% trans "Пошук" %}</label>
+    <input id="q" type="search" name="q" value="{{ q }}" placeholder="{% trans 'за назвою або артикулом' %}">
+    <button type="submit" class="btn btn--primary">{% trans "Знайти" %}</button>
+  </form>
+  <div id="product-grid">
+    {% include "catalog/partials/_product_grid.html" %}
+  </div>
+</section>
+{% endblock %}

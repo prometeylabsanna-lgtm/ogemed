@@ -1,0 +1,9 @@
+{% if for_customer %}Дякуємо за замовлення {{ order.order_number }}!
+{% else %}Нове замовлення {{ order.order_number }}
+{% endif %}
+Клієнт: {{ order.customer_name }}, {{ order.customer_phone }}
+{% if order.customer_email %}Email: {{ order.customer_email }}
+{% endif %}Сума: {{ order.total }} грн
+Оплата: {{ order.get_payment_type_display }}
+Доставка: {{ order.get_delivery_type_display }}
+Статус: {{ order.get_status_display }}

@@ -1,0 +1,32 @@
+{% load i18n %}
+{% if filter_brands %}
+<div class="brand-filter">
+  <h2 class="brand-filter__title">{% trans "Бренди" %}</h2>
+  {% comment %}Скидання бренду — повторний клік по вибраній картці (catalog-filters.js){% endcomment %}
+  <ul class="brand-filter__row" role="list">
+    {% for brand in filter_brands %}
+    <li class="brand-filter__item">
+      <label class="brand-card">
+        <input
+          class="brand-card__input"
+          type="radio"
+          name="brand"
+          value="{{ brand.slug }}"
+          {% if selected_brand == brand.slug %}checked{% endif %}
+        >
+        <span class="brand-card__media">
+          {% if brand.cover_image %}
+            <img src="{{ brand.cover_image.url }}" alt="{{ brand.name }}" loading="lazy" width="320" height="240">
+          {% elif brand.logo %}
+            <img class="brand-card__logo" src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy" width="320" height="240">
+          {% else %}
+            <span class="brand-card__placeholder">{{ brand.name|slice:":1" }}</span>
+          {% endif %}
+        </span>
+        <span class="brand-card__name">{{ brand.name }}</span>
+      </label>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

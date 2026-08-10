@@ -1,0 +1,13 @@
+{% comment %}Uploaded logo, or a typographic wordmark that scales to the tile width.{% endcomment %}
+{% if brand.logo %}
+  <img class="brand-logo__img" src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy" width="260" height="140">
+{% else %}
+  <svg
+    class="brand-logo__wordmark"
+    viewBox="0 0 {% widthratio brand.name|length 1 18 %} 34"
+    role="img"
+    aria-label="{{ brand.name }}"
+  >
+    <text x="50%" y="24" text-anchor="middle">{{ brand.name|upper }}</text>
+  </svg>
+{% endif %}

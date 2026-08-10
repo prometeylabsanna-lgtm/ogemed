@@ -1,0 +1,4 @@
+{% load i18n %}
+{% for product in products %}
+  {% include "catalog/partials/_product_card.html" with product=product %}
+{% endfor %}

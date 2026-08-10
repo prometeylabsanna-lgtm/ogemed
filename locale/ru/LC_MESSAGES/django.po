@@ -1,0 +1,1291 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-04 17:23+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "diana.k@example.org"
+msgstr "diana.k@example.org"
+
+msgid "Пароль"
+msgstr "Пароль"
+
+msgid "Ваш пароль"
+msgstr "Ваш пароль"
+
+msgid "Імʼя"
+msgstr "Имя"
+
+msgid "Ваше імʼя"
+msgstr "Ваше имя"
+
+msgid "Мінімум 8 символів"
+msgstr "Минимум 8 символов"
+
+msgid "Підтвердження пароля"
+msgstr "Подтверждение пароля"
+
+msgid "Повторіть пароль"
+msgstr "Повторите пароль"
+
+msgid "Вкажіть імʼя (мінімум 2 символи)"
+msgstr "Укажите имя (минимум 2 символа)"
+
+msgid "Імʼя занадто довге"
+msgstr "Имя слишком длинное"
+
+msgid "Імʼя може містити лише літери, пробіли, дефіс і апостроф"
+msgstr "Имя может содержать только буквы, пробелы, дефис и апостроф"
+
+msgid "Вкажіть коректне імʼя"
+msgstr "Укажите корректное имя"
+
+msgid "Введіть коректну email-адресу"
+msgstr "Введите корректный email-адрес"
+
+msgid "Користувач з таким email вже існує"
+msgstr "Пользователь с таким email уже существует"
+
+msgid "Пароль має містити щонайменше 8 символів"
+msgstr "Пароль должен содержать не менее 8 символов"
+
+msgid "Пароль не може складатися лише з цифр"
+msgstr "Пароль не может состоять только из цифр"
+
+msgid "Пароль не повинен збігатися з email"
+msgstr "Пароль не должен совпадать с email"
+
+msgid "Користувач"
+msgstr "Пользователь"
+
+msgid "ПІБ"
+msgstr "ФИО"
+
+msgid "Телефон"
+msgstr "Телефон"
+
+msgid "Місто"
+msgstr "Город"
+
+msgid "Вулиця"
+msgstr "Улица"
+
+msgid "Будинок"
+msgstr "Дом"
+
+msgid "Квартира"
+msgstr "Квартира"
+
+msgid "Профіль"
+msgstr "Профиль"
+
+msgid "Профілі"
+msgstr "Профили"
+
+msgid "Вхід"
+msgstr "Вход"
+
+msgid "Реєстрація"
+msgstr "Регистрация"
+
+msgid "Відновлення пароля"
+msgstr "Восстановление пароля"
+
+msgid "Зміна пароля"
+msgstr "Смена пароля"
+
+msgid "Кабінет"
+msgstr "Кабинет"
+
+msgid "Пароль змінено"
+msgstr "Пароль изменён"
+
+msgid "Замовлення"
+msgstr "Заказы"
+
+#, python-format
+msgid "Замовлення №%(n)s"
+msgstr "Заказ №%(n)s"
+
+msgid "Кошик"
+msgstr "Корзина"
+
+msgid "Не вдалося прочитати зображення."
+msgstr "Не удалось прочитать изображение."
+
+#, python-format
+msgid ""
+"Фото %(width)s×%(height)spx замале. Потрібно від %(min)spx по довгій "
+"стороні, інакше збільшення на сторінці товару буде розмитим."
+msgstr ""
+"Фото %(width)s×%(height)spx слишком малое. Нужно от %(min)spx по длинной "
+"сторони, иначе увеличение на странице товара буде размытым."
+
+msgid "Без ароматизаторів"
+msgstr "Без ароматизаторов"
+
+msgid "Веган-формула"
+msgstr "Веган-формула"
+
+msgid "Дерматологічно протестовано"
+msgstr "Дерматологически протестировано"
+
+msgid "Делікатна формула"
+msgstr "Деликатная формула"
+
+msgid "Гіпоалергенно"
+msgstr "Гипоаллергенно"
+
+msgid "Без парабенів"
+msgstr "Без парабенов"
+
+msgid "Без тестів на тваринах"
+msgstr "Без тестов на животных"
+
+msgid "Очищення"
+msgstr "Очищение"
+
+msgid "В наявності"
+msgstr "В наличии"
+
+msgid "Під замовлення"
+msgstr "Под заказ"
+
+msgid "Немає в наявності"
+msgstr "Нет в наличии"
+
+msgid "Батьківська категорія"
+msgstr "Родительская категория"
+
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Назва (UK)"
+msgstr "Название (UK)"
+
+msgid "Назва (RU)"
+msgstr "Название (RU)"
+
+msgid "Зображення"
+msgstr "Изображение"
+
+msgid "Активна"
+msgstr "Активна"
+
+msgid "Швидкі категорії на головній"
+msgstr "Быстрые категории на главной"
+
+msgid "Якщо увімкнено — категорія зʼявиться в блоці на головній."
+msgstr "Если включено — категория появится в блоке на главной."
+
+msgid "Порядок"
+msgstr "Порядок"
+
+msgid "Категорія"
+msgstr "Категория"
+
+msgid "Категорії"
+msgstr "Категории"
+
+msgid "Короткий опис (UK)"
+msgstr "Краткое описание (UK)"
+
+msgid "Короткий опис (RU)"
+msgstr "Краткое описание (RU)"
+
+msgid "Логотип"
+msgstr "Логотип"
+
+msgid "Фото для каталогу"
+msgstr "Фото для каталога"
+
+msgid "Плитка бренду у фільтрах каталогу."
+msgstr "Плитка бренда в фильтрах каталога."
+
+msgid "Зображення для вітрини на головній"
+msgstr "Изображение для витрины на главной"
+
+msgid "PNG без фону. Якщо порожнє — візьметься фото для каталогу."
+msgstr "PNG без фона. Если пусто — возьмётся фото для каталога."
+
+msgid "Показувати на головній"
+msgstr "Показывать на главной"
+
+msgid "Активний"
+msgstr "Активный"
+
+msgid "Бренд"
+msgstr "Бренд"
+
+msgid "Бренди"
+msgstr "Бренды"
+
+msgid "У фільтрах"
+msgstr "В фильтрах"
+
+msgid "Атрибут"
+msgstr "Атрибут"
+
+msgid "Атрибути"
+msgstr "Атрибуты"
+
+msgid "Значення (UK)"
+msgstr "Значение (UK)"
+
+msgid "Значення (RU)"
+msgstr "Значение (RU)"
+
+msgid "Колір HEX"
+msgstr "Цвет HEX"
+
+msgid "Значення атрибута"
+msgstr "Значение атрибута"
+
+msgid "Значення атрибутів"
+msgstr "Значения атрибутов"
+
+msgid "Опис (UK)"
+msgstr "Описание (UK)"
+
+msgid "Опис (RU)"
+msgstr "Описание (RU)"
+
+msgid "Основна категорія"
+msgstr "Основная категория"
+
+msgid "Характеристики"
+msgstr "Характеристики"
+
+msgid "Наявність"
+msgstr "Наличие"
+
+msgid "Хіт"
+msgstr "Хит"
+
+msgid "Новинка"
+msgstr "Новинка"
+
+msgid "Акція"
+msgstr "Акция"
+
+msgid "Популярність"
+msgstr "Популярность"
+
+msgid "Пошуковий індекс"
+msgstr "Поисковый индекс"
+
+msgid "Товар"
+msgstr "Товар"
+
+msgid "Товари"
+msgstr "Товары"
+
+msgid "Артикул"
+msgstr "Артикул"
+
+msgid "Модифікація (UK)"
+msgstr "Модификация (UK)"
+
+msgid "Модифікація (RU)"
+msgstr "Модификация (RU)"
+
+msgid "Ціна"
+msgstr "Цена"
+
+msgid "Стара ціна"
+msgstr "Старая цена"
+
+msgid "Залишок"
+msgstr "Остаток"
+
+msgid "Наявність (override)"
+msgstr "Наличие (override)"
+
+msgid "Порожньо = успадкувати від товару"
+msgstr "Пусто = наследовать от товара"
+
+msgid "Атрибути варіанту"
+msgstr "Атрибуты варианта"
+
+msgid "Варіант"
+msgstr "Вариант"
+
+msgid "Варіанти"
+msgstr "Варианты"
+
+msgid "Від 1600px по довгій стороні — фото збільшується на сторінці товару."
+msgstr "От 1600px по длинной стороне — фото увеличивается на странице товара."
+
+msgid "Alt (UK)"
+msgstr "Alt (UK)"
+
+msgid "Alt (RU)"
+msgstr "Alt (RU)"
+
+msgid "Головне"
+msgstr "Главное"
+
+msgid "Зображення товару"
+msgstr "Изображение товара"
+
+msgid "Зображення товарів"
+msgstr "Изображения товаров"
+
+msgid "Новизна"
+msgstr "Новизна"
+
+msgid "Ціна: спочатку дешевші"
+msgstr "Цена: сначала дешевле"
+
+msgid "Ціна: спочатку дорожчі"
+msgstr "Цена: сначала дороже"
+
+msgid "Сітка"
+msgstr "Сетка"
+
+msgid "Список"
+msgstr "Список"
+
+msgid "Каталог"
+msgstr "Каталог"
+
+msgid "Товарів цього бренду поки немає"
+msgstr "Товаров этого бренда пока нет"
+
+msgid "Пошук"
+msgstr "Поиск"
+
+msgid "Hero видимий"
+msgstr "Hero видимый"
+
+msgid "Hero kicker (UK)"
+msgstr "Hero kicker (UK)"
+
+msgid "Hero kicker (RU)"
+msgstr "Hero kicker (RU)"
+
+msgid "Hero заголовок (UK)"
+msgstr "Hero заголовок (UK)"
+
+msgid "Hero заголовок (RU)"
+msgstr "Hero заголовок (RU)"
+
+msgid "Hero текст (UK)"
+msgstr "Hero текст (UK)"
+
+msgid "Hero текст (RU)"
+msgstr "Hero текст (RU)"
+
+msgid "Hero зображення"
+msgstr "Hero изображение"
+
+msgid "Історія видима"
+msgstr "История видимая"
+
+msgid "Історія kicker (UK)"
+msgstr "История kicker (UK)"
+
+msgid "Історія kicker (RU)"
+msgstr "История kicker (RU)"
+
+msgid "Історія заголовок (UK)"
+msgstr "История заголовок (UK)"
+
+msgid "Історія заголовок (RU)"
+msgstr "История заголовок (RU)"
+
+msgid "Історія текст (UK, запасний)"
+msgstr "История текст (UK, запасной)"
+
+msgid "Історія текст (RU, запасний)"
+msgstr "История текст (RU, запасной)"
+
+msgid "Історія зображення"
+msgstr "История изображение"
+
+msgid "Картка 1 — заголовок (UK)"
+msgstr "Карточка 1 — заголовок (UK)"
+
+msgid "Картка 1 — заголовок (RU)"
+msgstr "Карточка 1 — заголовок (RU)"
+
+msgid "Картка 1 — текст (UK)"
+msgstr "Карточка 1 — текст (UK)"
+
+msgid "Картка 1 — текст (RU)"
+msgstr "Карточка 1 — текст (RU)"
+
+msgid "Картка 2 — заголовок (UK)"
+msgstr "Карточка 2 — заголовок (UK)"
+
+msgid "Картка 2 — заголовок (RU)"
+msgstr "Карточка 2 — заголовок (RU)"
+
+msgid "Картка 2 — текст (UK)"
+msgstr "Карточка 2 — текст (UK)"
+
+msgid "Картка 2 — текст (RU)"
+msgstr "Карточка 2 — текст (RU)"
+
+msgid "Картка 3 — заголовок (UK)"
+msgstr "Карточка 3 — заголовок (UK)"
+
+msgid "Картка 3 — заголовок (RU)"
+msgstr "Карточка 3 — заголовок (RU)"
+
+msgid "Картка 3 — текст (UK)"
+msgstr "Карточка 3 — текст (UK)"
+
+msgid "Картка 3 — текст (RU)"
+msgstr "Карточка 3 — текст (RU)"
+
+msgid "Філософія видима"
+msgstr "Философия видимая"
+
+msgid "Філософія kicker (UK)"
+msgstr "Философия kicker (UK)"
+
+msgid "Філософія kicker (RU)"
+msgstr "Философия kicker (RU)"
+
+msgid "Філософія заголовок (UK)"
+msgstr "Философия заголовок (UK)"
+
+msgid "Філософія заголовок (RU)"
+msgstr "Философия заголовок (RU)"
+
+msgid "Філософія вступ (UK)"
+msgstr "Философия вступление (UK)"
+
+msgid "Філософія вступ (RU)"
+msgstr "Философия вступление (RU)"
+
+msgid "Філософія зображення"
+msgstr "Философия изображение"
+
+msgid "Теза 1 — заголовок (UK)"
+msgstr "Тезис 1 — заголовок (UK)"
+
+msgid "Теза 1 — заголовок (RU)"
+msgstr "Тезис 1 — заголовок (RU)"
+
+msgid "Теза 1 — текст (UK)"
+msgstr "Тезис 1 — текст (UK)"
+
+msgid "Теза 1 — текст (RU)"
+msgstr "Тезис 1 — текст (RU)"
+
+msgid "Теза 2 — заголовок (UK)"
+msgstr "Тезис 2 — заголовок (UK)"
+
+msgid "Теза 2 — заголовок (RU)"
+msgstr "Тезис 2 — заголовок (RU)"
+
+msgid "Теза 2 — текст (UK)"
+msgstr "Тезис 2 — текст (UK)"
+
+msgid "Теза 2 — текст (RU)"
+msgstr "Тезис 2 — текст (RU)"
+
+msgid "Теза 3 — заголовок (UK)"
+msgstr "Тезис 3 — заголовок (UK)"
+
+msgid "Теза 3 — заголовок (RU)"
+msgstr "Тезис 3 — заголовок (RU)"
+
+msgid "Теза 3 — текст (UK)"
+msgstr "Тезис 3 — текст (UK)"
+
+msgid "Теза 3 — текст (RU)"
+msgstr "Тезис 3 — текст (RU)"
+
+msgid "Теза 4 — заголовок (UK)"
+msgstr "Тезис 4 — заголовок (UK)"
+
+msgid "Теза 4 — заголовок (RU)"
+msgstr "Тезис 4 — заголовок (RU)"
+
+msgid "Теза 4 — текст (UK)"
+msgstr "Тезис 4 — текст (UK)"
+
+msgid "Теза 4 — текст (RU)"
+msgstr "Тезис 4 — текст (RU)"
+
+msgid "CTA видимий"
+msgstr "CTA видимый"
+
+msgid "CTA заголовок (UK)"
+msgstr "CTA заголовок (UK)"
+
+msgid "CTA заголовок (RU)"
+msgstr "CTA заголовок (RU)"
+
+msgid "CTA текст (UK)"
+msgstr "CTA текст (UK)"
+
+msgid "CTA текст (RU)"
+msgstr "CTA текст (RU)"
+
+msgid "CTA каталог (UK)"
+msgstr "CTA каталог (UK)"
+
+msgid "CTA каталог (RU)"
+msgstr "CTA каталог (RU)"
+
+msgid "CTA контакти (UK)"
+msgstr "CTA контакты (UK)"
+
+msgid "CTA контакти (RU)"
+msgstr "CTA контакты (RU)"
+
+msgid "Оновлено"
+msgstr "Обновлено"
+
+msgid "Про нас — контент"
+msgstr "О нас — контент"
+
+msgid "Перевірте поля форми"
+msgstr "Проверьте поля формы"
+
+msgid "Помилка"
+msgstr "Ошибка"
+
+msgid "Дякуємо, менеджер звʼяжеться з вами"
+msgstr "Спасибо, менеджер свяжется с вами"
+
+msgid "Ключ сторінки"
+msgstr "Ключ страницы"
+
+msgid "about, shipping, returns, contacts, privacy, offer"
+msgstr "about, shipping, returns, contacts, privacy, offer"
+
+msgid "Заголовок (UK)"
+msgstr "Заголовок (UK)"
+
+msgid "Заголовок (RU)"
+msgstr "Заголовок (RU)"
+
+msgid "Текст (UK)"
+msgstr "Текст (UK)"
+
+msgid "Текст (RU)"
+msgstr "Текст (RU)"
+
+msgid "Опубліковано"
+msgstr "Опубликовано"
+
+msgid "CMS-сторінка"
+msgstr "CMS-страница"
+
+msgid "CMS-сторінки"
+msgstr "CMS-страницы"
+
+msgid "Підзаголовок (UK)"
+msgstr "Пидзаголовок (UK)"
+
+msgid "Підзаголовок (RU)"
+msgstr "Пидзаголовок (RU)"
+
+msgid "CTA (UK)"
+msgstr "CTA (UK)"
+
+msgid "CTA (RU)"
+msgstr "CTA (RU)"
+
+msgid "CTA URL"
+msgstr "CTA URL"
+
+msgid "Hero-слайд"
+msgstr "Hero-слайд"
+
+msgid "Hero-слайди"
+msgstr "Hero-слайди"
+
+msgid "Передзвоніть мені"
+msgstr "Перезвоните мне"
+
+msgid "Зворотний звʼязок"
+msgstr "Обратная связь"
+
+msgid "Повідомлення"
+msgstr "Сообщение"
+
+msgid "Оброблено"
+msgstr "Оброблено"
+
+msgid "Лід"
+msgstr "Лид"
+
+msgid "Ліди"
+msgstr "Лиди"
+
+msgid "Головна"
+msgstr "Главная"
+
+msgid "Створено"
+msgstr "Створено"
+
+msgid "SEO title"
+msgstr "SEO title"
+
+msgid "SEO description"
+msgstr "SEO description"
+
+msgid "PNG/SVG з прозорим фоном. Порожньо = логотип із static/img/logo.png"
+msgstr "PNG/SVG с прозрачным фоном. Пусто = логотип из static/img/logo.png"
+
+msgid "Email менеджера"
+msgstr "Email менеджера"
+
+msgid "Адреса (UK)"
+msgstr "Адреса (UK)"
+
+msgid "Адреса (RU)"
+msgstr "Адреса (RU)"
+
+msgid "Години роботи (UK)"
+msgstr "Години роботи (UK)"
+
+msgid "Години роботи (RU)"
+msgstr "Години роботи (RU)"
+
+msgid "URL карти (iframe)"
+msgstr "URL карти (iframe)"
+
+msgid "Посилання для iframe, напр. OpenStreetMap embed"
+msgstr "Ссылка для iframe, напр. OpenStreetMap embed"
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "Instagram"
+msgstr "Instagram"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Viber"
+msgstr "Viber"
+
+msgid "Telegram консультант (FAB)"
+msgstr "Telegram консультант (FAB)"
+
+msgid "Deep-link на чат консультанта"
+msgstr "Deep-link на чат консультанта"
+
+msgid "Слоган (UK)"
+msgstr "Слоган (UK)"
+
+msgid "Слоган (RU)"
+msgstr "Слоган (RU)"
+
+msgid "Налаштування сайту"
+msgstr "Налаштування сайту"
+
+msgid "OGEMED for you"
+msgstr "OGEMED for you"
+
+msgid "Інтернет-магазин косметики OGEMED for you"
+msgstr "Интернет-магазин косметики OGEMED for you"
+
+#, python-format
+msgid "Заборонений перехід статусу: %(from)s → %(to)s"
+msgstr "Заборонений перехид статусу: %(from)s → %(to)s"
+
+msgid "Доставка"
+msgstr "Доставка"
+
+msgid "Місто НП"
+msgstr "Мисто НП"
+
+msgid "Відділення / поштомат"
+msgstr "Виддилення / поштомат"
+
+msgid "Коментар"
+msgstr "Комментарий"
+
+msgid "Оплата"
+msgstr "Оплата"
+
+msgid "Вкажіть телефон у форматі +380XXXXXXXXX"
+msgstr "Укажите телефон в формати +380XXXXXXXXX"
+
+msgid "Оберіть місто та відділення / поштомат Нової Пошти"
+msgstr "Оберить мисто и виддилення / поштомат Новои Пошти"
+
+msgid "Вкажіть місто та вулицю для курʼєра"
+msgstr "Укажите мисто и вулицю для кур'ера"
+
+msgid "Нове"
+msgstr "Нове"
+
+msgid "Очікує оплати"
+msgstr "Очикуе оплати"
+
+msgid "Оплачено"
+msgstr "Оплачено"
+
+msgid "В обробці"
+msgstr "В обробци"
+
+msgid "Відправлено"
+msgstr "Видправлено"
+
+msgid "Виконано"
+msgstr "Виконано"
+
+msgid "Скасовано"
+msgstr "Скасовано"
+
+msgid "Нова Пошта"
+msgstr "Нова Пошта"
+
+msgid "Курʼєр"
+msgstr "Кур'ер"
+
+msgid "LiqPay"
+msgstr "LiqPay"
+
+msgid "Оплата при отриманні"
+msgstr "Оплаи при отриманни"
+
+msgid "Відділення"
+msgstr "Виддилення"
+
+msgid "Поштомат"
+msgstr "Поштомат"
+
+msgid "Номер"
+msgstr "Номер"
+
+msgid "Токен доступу"
+msgstr "Токен доступу"
+
+msgid "Статус"
+msgstr "Статус"
+
+msgid "Назва"
+msgstr "Название"
+
+msgid "Модифікація"
+msgstr "Модификация"
+
+msgid "Кількість"
+msgstr "Количество"
+
+msgid "Сума"
+msgstr "Сумма"
+
+msgid "Позиція замовлення"
+msgstr "Позиция заказа"
+
+msgid "Позиції замовлення"
+msgstr "Позиции заказа"
+
+#, python-format
+msgid "Товар «%(name)s» більше недоступний"
+msgstr "Товар «%(name)s» бильше недоступний"
+
+#, python-format
+msgid "Недостатньо товару «%(name)s» на складі"
+msgstr "Недостатньо товара «%(name)s» на склади"
+
+msgid "Кошик порожній"
+msgstr "Корзина пуста"
+
+msgid "Оформлення"
+msgstr "Оформление"
+
+msgid "Дякуємо"
+msgstr "Спасибо"
+
+msgid "Успіх"
+msgstr "Успих"
+
+msgid "Sandbox"
+msgstr "Sandbox"
+
+msgid "Спроба оплати"
+msgstr "Спроба оплати"
+
+msgid "Спроби оплати"
+msgstr "Спроби оплати"
+
+msgid "Сторінку не знайдено"
+msgstr "Страница не найдена"
+
+msgid "Можливо, посилання застаріло або адресу введено з помилкою."
+msgstr "Возможно, ссылка устарела или адрес введён с ошибкой."
+
+msgid "На головну"
+msgstr "На главную"
+
+msgid "До каталогу"
+msgstr "В каталог"
+
+msgid "Акаунт"
+msgstr "Аккаунт"
+
+msgid "Вітаємо"
+msgstr "Добро пожаловать"
+
+msgid "Останні замовлення"
+msgstr "Последние заказы"
+
+msgid "Усі замовлення"
+msgstr "Все заказы"
+
+msgid "Замовлень поки немає"
+msgstr "Заказов пока нет"
+
+msgid "Перейдіть за посиланням для скидання пароля:"
+msgstr "Перейдите по ссылке для сброса пароля:"
+
+msgid "Скидання пароля OGEMED for you"
+msgstr "Сброс пароля OGEMED for you"
+
+msgid "Немає акаунту?"
+msgstr "Нет аккаунта?"
+
+msgid "Увійти"
+msgstr "Войти"
+
+msgid "Забули пароль?"
+msgstr "Забыли пароль?"
+
+msgid "Склад"
+msgstr "Состав"
+
+msgid "Товари в замовленні"
+msgstr "Товары в заказе"
+
+msgid "Підсумок"
+msgstr "Итого"
+
+msgid "Контакт"
+msgstr "Контакт"
+
+msgid "Разом"
+msgstr "Итого"
+
+msgid "Оплатити"
+msgstr "Оплатить"
+
+msgid "До списку замовлень"
+msgstr "К списку заказов"
+
+msgid "Дата"
+msgstr "Дата"
+
+msgid "Коли оформити перше замовлення — воно з’явиться тут."
+msgstr "Когда оформите первый заказ — он появится здесь."
+
+msgid "Вийти"
+msgstr "Выйти"
+
+msgid "Зберегти"
+msgstr "Сохранить"
+
+msgid "Ваш пароль успішно оновлено."
+msgstr "Ваш пароль успишно обновлено."
+
+msgid "До профілю"
+msgstr "До профилю"
+
+msgid "Вкажіть email — надішлемо посилання для скидання пароля."
+msgstr "Укажите email — отправим ссылку для сброса пароля."
+
+msgid "Надіслати"
+msgstr "Отправить"
+
+msgid "Новий пароль"
+msgstr "Новий пароль"
+
+msgid "Лист надіслано"
+msgstr "Письмо отправлено"
+
+msgid "Якщо акаунт існує, інструкції надіслано на email."
+msgstr "Если аккаунт существует, инструкции отправлены на email."
+
+msgid "Адреса за замовчуванням"
+msgstr "Адрес по умолчанию"
+
+msgid "Змінити пароль"
+msgstr "Изменить пароль"
+
+msgid "Швидкі дії"
+msgstr "Быстрые действия"
+
+msgid "Переглянути"
+msgstr "Смотреть"
+
+msgid "Змінити"
+msgstr "Изменить"
+
+msgid "До покупок"
+msgstr "К покупкам"
+
+msgid "Вже є акаунт?"
+msgstr "Уже есть аккаунт?"
+
+msgid "Створити акаунт"
+msgstr "Создать аккаунт"
+
+#, python-format
+msgid ""
+"Реєструючись, ви приймаєте <a href=\"%(offer_url)s\">Публічну оферту</a> та "
+"<a href=\"%(privacy_url)s\">Політику конфіденційності</a>."
+msgstr ""
+"Регистрируясь, вы принимаете <a href=\"%(offer_url)s\">Публичную оферту</a> "
+"и <a href=\"%(privacy_url)s\">Политику конфиденциальности</a>."
+
+msgid "Перейти до контенту"
+msgstr "Перейти к контенту"
+
+msgid "Месенджери"
+msgstr "Мессенджеры"
+
+msgid "Написати консультанту в Telegram"
+msgstr "Написать консультанту в Telegram"
+
+msgid "Написати в Viber"
+msgstr "Написать в Viber"
+
+msgid "Менше"
+msgstr "Меньше"
+
+msgid "Більше"
+msgstr "Больше"
+
+msgid "Видалити"
+msgstr "Удалить"
+
+msgid "Розраховується під час оформлення."
+msgstr "Рассчитывается при оформлении."
+
+msgid "Оформити замовлення"
+msgstr "Оформить заказ"
+
+msgid "Продовжити покупки"
+msgstr "Продолжить покупки"
+
+msgid "Повна сторінка кошика"
+msgstr "Полная страница корзины"
+
+msgid "Усі бренди"
+msgstr "Все бренды"
+
+msgid "Бренди ще не додані"
+msgstr "Бренды ещё не добавлены"
+
+msgid "Усі категорії"
+msgstr "Все категории"
+
+msgid "Будь-яка"
+msgstr "Любая"
+
+msgid "від"
+msgstr "от"
+
+msgid "до"
+msgstr "до"
+
+msgid "Ціна від"
+msgstr "Цена вид"
+
+msgid "Ціна до"
+msgstr "Цена до"
+
+msgid "Застосувати"
+msgstr "Применить"
+
+msgid "Усі"
+msgstr "Все"
+
+msgid "Скинути фільтри"
+msgstr "Скинути фильтри"
+
+msgid "Закрити"
+msgstr "Закрыть"
+
+#, python-format
+msgid "Фото %(n)s"
+msgstr "Фото %(n)s"
+
+msgid "До кошика"
+msgstr "В корзину"
+
+msgid "Показати ще"
+msgstr "Показать ещё"
+
+msgid "Пагінація"
+msgstr "Пагинация"
+
+msgid "Назад"
+msgstr "Назад"
+
+msgid "Далі"
+msgstr "Дали"
+
+msgid "Нічого не знайдено"
+msgstr "Ничего не найдено"
+
+msgid "Попередні товари"
+msgstr "Предыдущие товары"
+
+msgid "Наступні товари"
+msgstr "Следующие товары"
+
+msgid "Вигляд каталогу"
+msgstr "Вид каталога"
+
+msgid "Вигляд"
+msgstr "Вид"
+
+msgid "Сортування"
+msgstr "Сортировка"
+
+msgid "Немає доступних модифікацій"
+msgstr "Немае доступних модификаций"
+
+msgid "за назвою або артикулом"
+msgstr "по названию или артикулу"
+
+msgid "Знайти"
+msgstr "Найти"
+
+msgid "Картка історії"
+msgstr "Карточка истории"
+
+msgid "Детальніше"
+msgstr "Подробнее"
+
+msgid "Звʼязок"
+msgstr "Связь"
+
+msgid "Залиште номер — менеджер звʼяжеться з вами найближчим часом."
+msgstr "Оставьте номер — менеджер свяжется с вами в ближайшее время."
+
+msgid "Залишити заявку"
+msgstr "Оставить заявку"
+
+msgid "Або написати в Telegram"
+msgstr "Або написати в Telegram"
+
+msgid "Написати консультанту"
+msgstr "Написати консультанту"
+
+msgid "Адреса"
+msgstr "Адрес"
+
+msgid "Години роботи"
+msgstr "Часы работы"
+
+msgid "Соцмережі"
+msgstr "Соцмережи"
+
+msgid "Карта"
+msgstr "Карта"
+
+msgid "Документи"
+msgstr "Документы"
+
+msgid "Потрібна допомога?"
+msgstr "Нужна помощь?"
+
+msgid "Сховати"
+msgstr "Скрыть"
+
+msgid ""
+"Напишіть або залиште номер — менеджер OGEMED for you відповість у робочі "
+"години."
+msgstr ""
+"Напишите или оставьте номер — менеджер OGEMED for you ответит в рабочие "
+"часы."
+
+msgid "Усі контакти"
+msgstr "Все контакты"
+
+msgid "Показати заявку"
+msgstr "Показать заявку"
+
+msgid "Заявка"
+msgstr "Заявка"
+
+msgid "Сервіс"
+msgstr "Сервис"
+
+#, python-format
+msgid "Слайд %(n)s"
+msgstr "Слайд %(n)s"
+
+msgid "Краса з турботою"
+msgstr "Красота с заботой"
+
+msgid "Новинки"
+msgstr "Новинки"
+
+msgid "Знайдіть свій ідеальний догляд"
+msgstr "Найдите свой идеальный уход"
+
+msgid "Дайте відповідь на декілька запитань або оберіть засіб із повної колекції професійної косметики"
+msgstr "Ответьте на несколько вопросов или выберите средство из полной коллекции профессиональной косметики"
+
+msgid "Переглянути весь каталог"
+msgstr "Смотреть весь каталог"
+
+msgid "Підібрати за типом шкіри"
+msgstr "Подобрать по типу кожи"
+
+msgid "Хіти продажу"
+msgstr "Хиты продаж"
+
+msgid "Перейти до всіх брендів"
+msgstr "Перейти ко всем брендам"
+
+#, python-format
+msgid "Видалити %(name)s"
+msgstr "Удалить %(name)s"
+
+msgid "Дані покупця"
+msgstr "Дани покупця"
+
+msgid "За тарифами перевізника."
+msgstr "По тарифам перевозчика."
+
+msgid "Підтвердити"
+msgstr "Пидтвердити"
+
+msgid "Дякуємо за замовлення"
+msgstr "Спасибо за заказ"
+
+msgid "Замовлення не знайдено"
+msgstr "Заказ не найден"
+
+msgid "Дякуємо за замовлення!"
+msgstr "Спасибо за заказ!"
+
+#, python-format
+msgid "Номер замовлення <strong>%(num)s</strong>"
+msgstr "Номер заказа <strong>%(num)s</strong>"
+
+msgid "Оплату успішно підтверджено."
+msgstr "Оплату успишно пидтверджено."
+
+msgid "Замовлення очікує оплати."
+msgstr "Заказ ожидает оплаты."
+
+msgid "Сплатити знову"
+msgstr "Оплатить снова"
+
+msgid "Замовлення прийнято в обробку."
+msgstr "Заказ принят в обработку."
+
+msgid "Перевірте посилання або зверніться до менеджера."
+msgstr "Проверьте ссылку или обратитесь к менеджеру."
+
+msgid "Контакти"
+msgstr "Контакты"
+
+msgid "Хлібні крихти"
+msgstr "Хлибни крихти"
+
+msgid "Повідомлення про cookies"
+msgstr "Уведомление о cookies"
+
+msgid ""
+"Ми використовуємо необхідні cookies для роботи кошика та сесії. Продовжуючи "
+"користуватися сайтом, ви погоджуєтесь з їх використанням."
+msgstr ""
+"Мы используем необходимые cookies для работы корзины и сессии. Продолжая "
+"пользоваться сайтом, вы соглашаетесь с их использованием."
+
+msgid "Прийняти"
+msgstr "Принять"
+
+msgid "Усі товари"
+msgstr "Все товары"
+
+msgid "Інформація"
+msgstr "Информация"
+
+msgid "Про нас"
+msgstr "О нас"
+
+msgid "Доставка і оплата"
+msgstr "Доставка и оплата"
+
+msgid "Повернення"
+msgstr "Возврат"
+
+msgid "Показати більше посилань"
+msgstr "Показать больше ссылок"
+
+msgid "Політика конфіденційності"
+msgstr "Политика конфиденциальности"
+
+msgid "Публічна оферта"
+msgstr "Публичная оферта"
+
+msgid "Звʼязатись з нами"
+msgstr "Связаться с нами"
+
+msgid "Від команди"
+msgstr "От команды"
+
+msgid "Головна навігація"
+msgstr "Главная навигация"
+
+msgid "Основна навігація"
+msgstr "Основная навигация"
+
+#| msgid "Усі контакти"
+msgid "Усі результати"
+msgstr "Все результаты"
+
+msgid "Мова"
+msgstr "Язык"
+
+msgid "Меню"
+msgstr "Меню"
+
+msgid "Мобільна навігація"
+msgstr "Мобильная навигация"
+
+msgid "Перехід до оплати"
+msgstr "Перехид до оплати"
+
+msgid "Перенаправляємо на LiqPay…"
+msgstr "Перенаправляемо на LiqPay…"
+
+msgid "Сплатити"
+msgstr "Оплатить"
+
+#~ msgid "Потягніть за край аркуша або проведіть пальцем"
+#~ msgstr "Потягнить за край аркуша або проведить пальцем"
+
+#~ msgid "Ваше замовлення"
+#~ msgstr "Ваш заказ"
+
+#~ msgid "Номер замовлення"
+#~ msgstr "Номер заказа"
+
+#~ msgid "Ще"
+#~ msgstr "Ещё"

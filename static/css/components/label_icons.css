@@ -1,0 +1,56 @@
+/* Маски-іконки міток товару: спільні для сторінки товару, меню на головній і фільтрів.
+   Розмір задає --label-icon-size, колір — currentColor батьківського елемента,
+   тому іконка коректно лягає на будь-який фон. */
+.label-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: var(--label-icon-size, 38px);
+  height: var(--label-icon-size, 38px);
+  background: currentColor;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.label-icon--perfume_off {
+  -webkit-mask-image: url("../../img/labels/perfume_off.png");
+  mask-image: url("../../img/labels/perfume_off.png");
+}
+
+.label-icon--branch {
+  -webkit-mask-image: url("../../img/labels/branch.png");
+  mask-image: url("../../img/labels/branch.png");
+}
+
+.label-icon--face_check {
+  -webkit-mask-image: url("../../img/labels/face_check.png");
+  mask-image: url("../../img/labels/face_check.png");
+}
+
+.label-icon--leaf_soft {
+  -webkit-mask-image: url("../../img/labels/leaf_soft.png");
+  mask-image: url("../../img/labels/leaf_soft.png");
+}
+
+.label-icon--hand_drop {
+  -webkit-mask-image: url("../../img/labels/hand_drop.png");
+  mask-image: url("../../img/labels/hand_drop.png");
+}
+
+.label-icon--flask_off {
+  -webkit-mask-image: url("../../img/labels/flask_off.png");
+  mask-image: url("../../img/labels/flask_off.png");
+}
+
+.label-icon--bunny_off {
+  -webkit-mask-image: url("../../img/labels/bunny_off.png");
+  mask-image: url("../../img/labels/bunny_off.png");
+}
+
+.label-icon--face_care {
+  -webkit-mask-image: url("../../img/labels/face_care.png");
+  mask-image: url("../../img/labels/face_care.png");
+}

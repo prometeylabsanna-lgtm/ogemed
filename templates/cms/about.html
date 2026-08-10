@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% load i18n static breadcrumbs vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/about.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/about_history.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/about_philosophy.css' %}">
+{% endblock %}
+
+{% block body_class %}page-about{% endblock %}
+
+{% block breadcrumbs %}
+{% if not about.hero_visible %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if about.hero_visible %}
+<section class="about-hero" aria-labelledby="about-hero-title">
+  <div class="about-hero__media" aria-hidden="true">
+    {% if about.hero_image %}
+    <img
+      class="about-hero__img"
+      src="{{ about.hero_image.url }}"
+      alt=""
+      width="1600"
+      height="900"
+      decoding="async"
+      fetchpriority="high"
+    >
+    {% else %}
+    <img
+      class="about-hero__img"
+      src="{% static 'img/about/hero.jpg' %}"
+      alt=""
+      width="1600"
+      height="900"
+      decoding="async"
+      fetchpriority="high"
+    >
+    {% endif %}
+  </div>
+  {% if breadcrumbs %}
+  <div class="about-hero__crumbs">
+    {% render_breadcrumbs breadcrumbs %}
+  </div>
+  {% endif %}
+  <div class="about-hero__content container">
+    {% if about.hero_kicker %}
+    <p class="about-hero__brand">{{ about.hero_kicker }}</p>
+    {% endif %}
+    {% if about.hero_title %}
+    <h1 class="about-hero__title" id="about-hero-title">{{ about.hero_title }}</h1>
+    {% else %}
+    <h1 class="about-hero__title" id="about-hero-title">{{ page.title }}</h1>
+    {% endif %}
+    {% if about.hero_text %}
+    <p class="about-hero__text">{{ about.hero_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if about.history_visible or about.philosophy_visible %}
+<section class="about-story section-gap" data-history-stack>
+  <div class="about-story__inner container">
+    <div class="about-story__grid">
+      {% if about.history_visible %}
+      <div class="about-story__col about-story__col--history" aria-labelledby="about-history-title">
+        {% if about.history_kicker %}
+        <p class="about-section__kicker">{{ about.history_kicker }}</p>
+        {% endif %}
+        <h2 class="sr-only" id="about-history-title">
+          {% firstof about.history_title about.history_kicker %}
+        </h2>
+
+        {% if about.history_cards %}
+        <div class="about-paper" data-paper-deck>
+          <div class="about-paper__stack" data-paper-stack>
+            {% for card in about.history_cards %}
+            <article
+              class="about-paper__card{% if forloop.first %} is-front{% endif %}"
+              data-paper-card
+              data-paper-index="{{ forloop.counter0 }}"
+              style="--paper-i: {{ forloop.counter0 }}; --paper-depth: {{ forloop.counter0 }}"
+              tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+              role="group"
+              aria-roledescription="{% trans 'Картка історії' %}"
+              aria-label="{{ card.title }}"
+            >
+              <div class="about-paper__frame">
+                <div class="about-paper__sheet">
+                  {% if card.title %}
+                  <h3 class="about-paper__title">{{ card.title }}</h3>
+                  {% endif %}
+                  {% if card.body %}
+                  <div class="about-paper__body">
+                    {{ card.body|linebreaks }}
+                  </div>
+                  {% endif %}
+                </div>
+                <span class="about-paper__curl" aria-hidden="true"></span>
+                <span class="about-paper__swipe" aria-hidden="true">
+                  <svg class="about-paper__swipe-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="currentColor" d="M7.2 4.8 19.5 12 7.2 19.2Z"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="about-paper__edge" data-paper-edge aria-hidden="true"></div>
+            </article>
+            {% endfor %}
+          </div>
+          <div class="about-paper__dots" data-paper-dots aria-hidden="true">
+            {% for card in about.history_cards %}
+            <span class="about-paper__dot{% if forloop.first %} is-active{% endif %}"></span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if about.philosophy_visible %}
+      <div class="about-story__col about-story__col--philosophy" aria-labelledby="about-philosophy-title">
+        <header class="about-philosophy__top">
+          {% if about.philosophy_kicker %}
+          <h2 class="about-philosophy__heading" id="about-philosophy-title">
+            {{ about.philosophy_kicker }}
+          </h2>
+          {% elif about.philosophy_title %}
+          <h2 class="about-philosophy__heading" id="about-philosophy-title">
+            {{ about.philosophy_title }}
+          </h2>
+          {% endif %}
+          {% if about.philosophy_kicker and about.philosophy_title %}
+          <p class="about-philosophy__sub">{{ about.philosophy_title }}</p>
+          {% endif %}
+        </header>
+
+        {% if about.philosophy_theses %}
+        <div class="about-philosophy__motion">
+          <ul class="about-philosophy__values" role="list">
+            {% for thesis in about.philosophy_theses %}
+            <li class="about-value about-value--{{ thesis.n }}">
+              <button
+                type="button"
+                class="about-value__btn"
+                data-value-trigger
+                data-value-title="{{ thesis.title }}"
+                data-value-text="{{ thesis.text }}"
+                aria-haspopup="dialog"
+                {% if thesis.text %}aria-label="{{ thesis.title }}. {% trans 'Детальніше' %}"{% endif %}
+              >
+                <span class="about-value__mark" aria-hidden="true">
+                  {% include "cms/partials/_philosophy_icon.html" with n=thesis.n %}
+                </span>
+                {% if thesis.title %}
+                <span class="about-value__label">{{ thesis.title }}</span>
+                {% endif %}
+              </button>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if about.philosophy_visible and about.philosophy_theses %}
+  <div
+    class="about-value-modal"
+    id="about-value-modal"
+    hidden
+    data-value-modal
+  >
+    <div class="about-value-modal__backdrop" data-value-close></div>
+    <div
+      class="about-value-modal__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="about-value-modal-title"
+    >
+      <button
+        type="button"
+        class="about-value-modal__close"
+        data-value-close
+        aria-label="{% trans 'Закрити' %}"
+      >×</button>
+      <h3 class="about-value-modal__title" id="about-value-modal-title" data-value-modal-title></h3>
+      <p class="about-value-modal__text" data-value-modal-text></p>
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endif %}
+
+{% if about.cta_visible %}
+<section class="about-cta section-gap" aria-labelledby="about-cta-title">
+  <div class="about-cta__inner container">
+    {% if about.cta_title %}
+    <h2 class="about-cta__title" id="about-cta-title">{{ about.cta_title }}</h2>
+    {% endif %}
+    {% if about.cta_text %}
+    <p class="about-cta__text">{{ about.cta_text }}</p>
+    {% endif %}
+    <div class="about-cta__actions">
+      <a class="btn btn--primary about-cta__btn" href="{% url 'catalog:list' %}">
+        {{ about.cta_catalog_label }}
+      </a>
+      <a class="about-cta__link" href="{% url 'cms:contacts' %}">
+        {{ about.cta_contacts_label }}
+      </a>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% vstatic 'js/about-history-stack.js' %}" defer></script>
+<script src="{% vstatic 'js/about-value-modal.js' %}" defer></script>
+{% endblock %}

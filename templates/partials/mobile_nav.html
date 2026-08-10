@@ -1,0 +1,60 @@
+{% load i18n %}
+<nav class="mobile-nav" aria-label="{% trans 'Основна навігація' %}" data-mobile-nav>
+  <a
+    class="mobile-nav__item{% if request.resolver_match.namespace == 'core' and request.resolver_match.url_name == 'home' %} is-active{% endif %}"
+    href="{% url 'core:home' %}"
+    aria-label="{% trans 'Головна' %}"
+  >
+    <svg class="mobile-nav__icon" viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" focusable="false">
+      <path
+        d="M4.5 10.4 12 4.25l7.5 6.15V19a1.75 1.75 0 0 1-1.75 1.75h-3.1v-5.1h-5.3V20.75h-3.1A1.75 1.75 0 0 1 4.5 19V10.4Z"
+        stroke="currentColor"
+        stroke-width="1.55"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </a>
+
+  <a
+    class="mobile-nav__item{% if request.resolver_match.namespace == 'catalog' and nav_section != 'brands' %} is-active{% endif %}"
+    href="{% url 'catalog:list' %}"
+    aria-label="{% trans 'Каталог' %}"
+  >
+    <svg class="mobile-nav__icon" viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" focusable="false">
+      <rect x="4.25" y="4.25" width="6.5" height="6.5" rx="1.1" stroke="currentColor" stroke-width="1.55"/>
+      <rect x="13.25" y="4.25" width="6.5" height="6.5" rx="1.1" stroke="currentColor" stroke-width="1.55"/>
+      <rect x="4.25" y="13.25" width="6.5" height="6.5" rx="1.1" stroke="currentColor" stroke-width="1.55"/>
+      <rect x="13.25" y="13.25" width="6.5" height="6.5" rx="1.1" stroke="currentColor" stroke-width="1.55"/>
+    </svg>
+  </a>
+
+  <a
+    class="mobile-nav__item{% if request.resolver_match.namespace == 'cart' %} is-active{% endif %}"
+    href="{% url 'cart:detail' %}"
+    aria-label="{% trans 'Кошик' %}"
+  >
+    <span class="mobile-nav__cart">
+      <svg class="mobile-nav__icon" viewBox="0 0 28 28" width="22" height="22" fill="none" aria-hidden="true" focusable="false">
+        <path
+          d="M5.2 8.4h17.6l-1.35 12.1a2.4 2.4 0 0 1-2.38 2.15H8.93a2.4 2.4 0 0 1-2.38-2.15L5.2 8.4Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M10.1 8.4V6.7a3.9 3.9 0 0 1 7.8 0v1.7"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+        <path
+          d="M5.2 8.4H3.6M24.4 8.4h-1.6"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+      <span class="mobile-nav__badge" data-cart-count>{{ cart_count|default:0 }}</span>
+    </span>
+  </a>
+</nav>

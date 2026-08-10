@@ -1,0 +1,9 @@
+{% load i18n %}
+<nav class="cabinet-nav" aria-label="{% trans 'Кабінет' %}">
+  <a href="{% url 'accounts:profile' %}"{% if nav_active == 'profile' %} class="is-active" aria-current="page"{% endif %}>{% trans "Профіль" %}</a>
+  <a href="{% url 'accounts:orders' %}"{% if nav_active == 'orders' %} class="is-active" aria-current="page"{% endif %}>{% trans "Замовлення" %}</a>
+  <form class="cabinet-nav__logout" method="post" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit">{% trans "Вийти" %}</button>
+  </form>
+</nav>

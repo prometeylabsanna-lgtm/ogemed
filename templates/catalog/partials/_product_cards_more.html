@@ -1,0 +1,16 @@
+{% load i18n %}
+{% include "catalog/partials/_product_cards.html" %}
+<div id="catalog-more" hx-swap-oob="true">
+  {% if page_obj and page_obj.has_next %}
+  <div class="catalog-more">
+    <button
+      type="button"
+      class="btn btn--ghost catalog-more__btn"
+      hx-get="{{ request.path }}?{% if filter_query %}{{ filter_query }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}&more=1"
+      hx-target="[data-product-grid]"
+      hx-swap="beforeend"
+      hx-indicator="this"
+    >{% trans "Показати ще" %}</button>
+  </div>
+  {% endif %}
+</div>

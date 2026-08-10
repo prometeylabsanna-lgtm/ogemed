@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/info-page.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/info_page_cta_sheet.css' %}">
+{% endblock %}
+
+{% block body_class %}page-info page-privacy page-legal{% endblock %}
+
+{% block content %}
+<section class="info-page container section-gap">
+  <div class="info-page__layout">
+    <div class="info-page__col">
+      <header class="info-page__head">
+        <p class="info-page__kicker">{% trans "Документи" %}</p>
+        <h1 class="info-page__title">{{ page.title }}</h1>
+        {% if page.body %}
+        <div class="info-page__intro">
+          {{ page.body|linebreaks }}
+        </div>
+        {% endif %}
+      </header>
+
+      <div class="info-page__prose">
+        {% for section in info_sections %}
+        <section class="info-page__section">
+          <h2 class="info-page__section-title">{{ section.title }}</h2>
+          <div class="info-page__section-body">{{ section.body|linebreaks }}</div>
+        </section>
+        {% endfor %}
+      </div>
+    </div>
+
+    <aside class="info-page__aside">
+      {% include "cms/partials/_info_page_cta.html" with cta_title=cta_title cta_text=cta_text %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

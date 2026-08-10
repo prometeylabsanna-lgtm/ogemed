@@ -1,0 +1,300 @@
+{% load i18n static vstatic %}
+<header class="site-header" data-site-header>
+  <div class="site-header__float">
+    <div class="site-header__pill">
+      <div class="site-header__bar">
+        <div class="site-header__inner">
+          <a class="site-header__logo" href="{% url 'core:home' %}">
+            <img
+              class="site-header__logo-img"
+              src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% vstatic 'img/logo.png' %}{% endif %}"
+              alt="OGEMED for you"
+              width="691"
+              height="131"
+            >
+          </a>
+
+          <nav class="site-header__nav" aria-label="{% trans 'Головна навігація' %}">
+            <div class="site-header__nav-item site-header__nav-item--catalog" data-catalog-nav>
+              <a
+                class="site-header__nav-link{% if request.resolver_match.namespace == 'catalog' and nav_section != 'brands' %} is-active{% endif %}"
+                href="{% url 'catalog:list' %}"
+                data-catalog-nav-trigger
+                aria-haspopup="true"
+                aria-expanded="false"
+              >{% trans "Каталог" %}</a>
+              {% if catalog_nav %}
+              <div class="catalog-dropdown" data-catalog-dropdown>
+                <div class="catalog-dropdown__inner">
+                  {% for cat in catalog_nav %}
+                  <div class="catalog-dropdown__col">
+                    <a class="catalog-dropdown__parent" href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+                    {% if cat.children.all %}
+                    <ul class="catalog-dropdown__list">
+                      {% for child in cat.children.all %}
+                      <li>
+                        <a class="catalog-dropdown__link" href="{{ child.get_absolute_url }}">{{ child.name }}</a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+                <a class="catalog-dropdown__all" href="{% url 'catalog:list' %}">{% trans "Усі товари" %}</a>
+              </div>
+              {% endif %}
+            </div>
+            <a
+              class="site-header__nav-link{% if nav_section == 'brands' %} is-active{% endif %}"
+              href="{% url 'catalog:brands' %}"
+            >{% trans "Бренди" %}</a>
+            <a class="site-header__nav-link" href="{% url 'cms:about' %}">{% trans "Про нас" %}</a>
+            <a class="site-header__nav-link" href="{% url 'cms:contacts' %}">{% trans "Контакти" %}</a>
+          </nav>
+
+          <div class="site-header__actions">
+            <form
+              class="site-header__search"
+              method="get"
+              action="{% url 'catalog:search' %}"
+              role="search"
+              data-search-suggest
+              data-suggest-url="{% url 'catalog:search_suggest' %}"
+            >
+              <label class="site-header__search-label" for="header-q">{% trans "Пошук" %}</label>
+              <div class="site-header__search-field">
+                <input
+                  id="header-q"
+                  type="search"
+                  name="q"
+                  placeholder="{% trans 'за назвою або артикулом' %}"
+                  value="{{ request.GET.q }}"
+                  autocomplete="off"
+                  aria-autocomplete="list"
+                  aria-controls="header-suggest"
+                  aria-expanded="false"
+                  data-search-input
+                >
+                <ul
+                  class="search-suggest"
+                  id="header-suggest"
+                  role="listbox"
+                  hidden
+                  data-search-list
+                  data-empty-text="{% trans 'Нічого не знайдено' %}"
+                  data-more-text="{% trans 'Усі результати' %}"
+                ></ul>
+              </div>
+            </form>
+
+            <a
+              class="site-header__account"
+              href="{% if user.is_authenticated %}{% url 'accounts:cabinet' %}{% else %}{% url 'accounts:login' %}{% endif %}"
+              aria-label="{% if user.is_authenticated %}{% trans 'Кабінет' %}{% else %}{% trans 'Увійти' %}{% endif %}"
+            >
+              <svg
+                class="site-header__account-icon"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <circle cx="12" cy="8" r="3.25" stroke="currentColor" stroke-width="1.6"/>
+                <path
+                  d="M5.5 18.25c1.55-2.7 3.85-4 6.5-4s4.95 1.3 6.5 4"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </a>
+
+            <a
+              class="site-header__cart"
+              href="{% url 'cart:detail' %}"
+              aria-label="{% trans 'Кошик' %}"
+              data-cart-trigger
+              hx-get="{% url 'cart:detail' %}"
+              hx-target="#cart-popup-body"
+              hx-swap="innerHTML"
+              hx-trigger="click"
+            >
+              <span class="site-header__cart-visual">
+                <svg
+                  class="site-header__cart-icon"
+                  viewBox="0 0 28 28"
+                  width="28"
+                  height="28"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M5.2 8.4h17.6l-1.35 12.1a2.4 2.4 0 0 1-2.38 2.15H8.93a2.4 2.4 0 0 1-2.38-2.15L5.2 8.4Z"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M10.1 8.4V6.7a3.9 3.9 0 0 1 7.8 0v1.7"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M5.2 8.4H3.6M24.4 8.4h-1.6"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M10.4 13.2v5.2M14 13.2v5.2M17.6 13.2v5.2"
+                    stroke="currentColor"
+                    stroke-width="1.35"
+                    stroke-linecap="round"
+                    opacity="0.72"
+                  />
+                </svg>
+                <span class="site-header__cart-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+              </span>
+            </a>
+
+            {% if site_settings.phone %}
+            <a
+              class="site-header__contact-phone"
+              href="tel:{{ site_settings.phone|cut:' '|cut:'-' }}"
+            >{{ site_settings.phone }}</a>
+            {% endif %}
+
+            <div class="site-header__lang" aria-label="{% trans 'Мова' %}">
+              <a
+                class="site-header__lang-link{% if LANGUAGE_CODE == 'uk' %} is-active{% endif %}"
+                href="{{ lang_urls.uk }}"
+                hreflang="uk"
+                lang="uk"
+              >UA</a>
+              <span class="site-header__lang-sep" aria-hidden="true">|</span>
+              <a
+                class="site-header__lang-link{% if LANGUAGE_CODE == 'ru' %} is-active{% endif %}"
+                href="{{ lang_urls.ru }}"
+                hreflang="ru"
+                lang="ru"
+              >RU</a>
+            </div>
+
+            <button
+              type="button"
+              class="site-header__callback-icon"
+              data-callback-trigger
+              aria-label="{% trans 'Передзвоніть мені' %}"
+            >
+              <svg
+                class="site-header__callback-svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M7.4 3.8c.55-.55 1.45-.55 2 0l1.7 1.7c.45.45.55 1.15.25 1.7l-.85 1.55c-.2.35-.15.8.1 1.1l3.35 3.35c.3.25.75.3 1.1.1l1.55-.85c.55-.3 1.25-.2 1.7.25l1.7 1.7c.55.55.55 1.45 0 2l-1.15 1.15c-.55.55-1.35.8-2.15.65-1.95-.35-4.1-1.85-6.35-4.1S6.2 9.85 5.85 7.9c-.15-.8.1-1.6.65-2.15L7.4 3.8Z"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M15.2 4.2c2 .7 3.6 2.3 4.3 4.3"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M15.95 6.55c1 .4 1.8 1.2 2.2 2.2"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              class="site-header__burger"
+              data-burger
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+              aria-label="{% trans 'Меню' %}"
+            >
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+          <nav class="mobile-menu__nav" aria-label="{% trans 'Мобільна навігація' %}">
+            <div class="mobile-menu__catalog">
+              <a href="{% url 'catalog:list' %}">{% trans "Каталог" %}</a>
+              {% if catalog_nav %}
+              <ul class="mobile-menu__cats">
+                {% for cat in catalog_nav %}
+                <li>
+                  <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+                  {% if cat.children.all %}
+                  <ul class="mobile-menu__subcats">
+                    {% for child in cat.children.all %}
+                    <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </div>
+            <a href="{% url 'catalog:brands' %}">{% trans "Бренди" %}</a>
+            <a href="{% url 'cms:about' %}">{% trans "Про нас" %}</a>
+            <a href="{% url 'cms:contacts' %}">{% trans "Контакти" %}</a>
+          </nav>
+          <div class="mobile-menu__lang">
+            <a href="{{ lang_urls.uk }}" class="{% if LANGUAGE_CODE == 'uk' %}is-active{% endif %}">UA</a>
+            <span aria-hidden="true">|</span>
+            <a href="{{ lang_urls.ru }}" class="{% if LANGUAGE_CODE == 'ru' %}is-active{% endif %}">RU</a>
+          </div>
+          {% if site_settings.phone %}
+          <a class="mobile-menu__phone" href="tel:{{ site_settings.phone|cut:' '|cut:'-' }}">{{ site_settings.phone }}</a>
+          {% endif %}
+          <button type="button" class="btn btn--callback" data-callback-trigger>
+            {% trans "Передзвоніть мені" %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div
+  class="cart-popup"
+  id="cart-popup"
+  hidden
+  data-cart-popup
+  role="dialog"
+  aria-modal="true"
+  aria-label="{% trans 'Кошик' %}"
+>
+  <div class="cart-popup__backdrop" data-cart-close></div>
+  <div class="cart-popup__panel">
+    <div class="cart-popup__head">
+      <h2 class="cart-popup__title">{% trans "Кошик" %}</h2>
+      <button type="button" class="cart-popup__close" data-cart-close aria-label="{% trans 'Закрити' %}">×</button>
+    </div>
+    <div class="cart-popup__body" id="cart-popup-body" data-cart-panel></div>
+    <a class="cart-popup__full" href="{% url 'cart:detail' %}">{% trans "Повна сторінка кошика" %}</a>
+  </div>
+</div>

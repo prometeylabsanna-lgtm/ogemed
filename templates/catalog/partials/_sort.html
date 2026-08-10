@@ -1,0 +1,62 @@
+{% load i18n %}
+<aside class="catalog-sort">
+  <div class="catalog-sort__inner">
+    <div
+      class="catalog-view"
+      data-catalog-view
+      role="group"
+      aria-label="{% trans 'Вигляд каталогу' %}"
+    >
+      <h2 class="catalog-sort__title">{% trans "Вигляд" %}</h2>
+      <ul class="catalog-view__list" role="list">
+        {% for value, label in view_options %}
+        <li class="catalog-view__item">
+          <input
+            class="catalog-view__input"
+            type="radio"
+            name="catalog_view"
+            id="view-{{ value }}"
+            value="{{ value }}"
+            {% if current_view == value %}checked{% endif %}
+          >
+          <label class="catalog-view__option" for="view-{{ value }}">
+            <span class="catalog-view__icon catalog-view__icon--{{ value }}" aria-hidden="true"></span>
+            <span class="catalog-view__label">{{ label }}</span>
+          </label>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <form
+      class="catalog-sort__form"
+      id="catalog-sort"
+      method="get"
+      action="{{ list_url }}"
+      hx-get="{{ list_url }}"
+      hx-target="#product-grid"
+      hx-swap="innerHTML"
+      hx-push-url="true"
+      hx-trigger="change"
+      hx-sync="this:replace"
+      hx-include="#catalog-filters"
+    >
+      <h2 class="catalog-sort__title">{% trans "Сортування" %}</h2>
+      <ul class="catalog-sort__list" role="list">
+        {% for value, label in sort_options %}
+        <li class="catalog-sort__item">
+          <input
+            class="catalog-sort__input"
+            type="radio"
+            name="sort"
+            id="sort-{{ value }}"
+            value="{{ value }}"
+            {% if current_sort == value %}checked{% endif %}
+          >
+          <label class="catalog-sort__option" for="sort-{{ value }}">{{ label }}</label>
+        </li>
+        {% endfor %}
+      </ul>
+    </form>
+  </div>
+</aside>

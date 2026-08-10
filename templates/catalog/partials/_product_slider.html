@@ -1,0 +1,26 @@
+{% load i18n %}
+<div class="product-slider" data-product-slider>
+  <button
+    type="button"
+    class="nav-arrow nav-arrow--prev product-slider__arrow product-slider__arrow--prev"
+    data-product-slider-prev
+    aria-label="{% trans 'Попередні товари' %}"
+  >
+    {% include "partials/nav_arrow_icon.html" %}
+  </button>
+  <div class="product-slider__track" data-product-slider-track tabindex="0">
+    {% for product in products %}
+    <div class="product-slider__item">
+      {% include "catalog/partials/_product_card.html" %}
+    </div>
+    {% endfor %}
+  </div>
+  <button
+    type="button"
+    class="nav-arrow nav-arrow--next product-slider__arrow product-slider__arrow--next"
+    data-product-slider-next
+    aria-label="{% trans 'Наступні товари' %}"
+  >
+    {% include "partials/nav_arrow_icon.html" %}
+  </button>
+</div>

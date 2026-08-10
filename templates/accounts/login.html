@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block body_class %}page-auth page-auth--login{% endblock %}
+
+{% block content %}
+<section class="auth-page container section-gap" aria-labelledby="auth-title">
+  <header class="auth-page__head">
+    <p class="auth-page__kicker">{% trans "Акаунт" %}</p>
+    <h1 class="auth-page__title" id="auth-title">{% trans "Вхід" %}</h1>
+    <p class="auth-page__lead">
+      {% trans "Немає акаунту?" %}
+      <a href="{% url 'accounts:register' %}">{% trans "Реєстрація" %}</a>
+    </p>
+  </header>
+
+  <form method="post" class="auth-form" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+
+    {% if form.non_field_errors %}
+    <div class="auth-form__errors" role="alert">
+      {% for error in form.non_field_errors %}
+      <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% for field in form %}
+    <div class="form-field{% if field.errors %} form-field--error{% endif %}">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}<div class="field-error" id="{{ field.id_for_label }}-error">{{ field.errors.0 }}</div>{% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="auth-form__actions">
+      <button type="submit" class="btn btn--primary auth-form__submit">{% trans "Увійти" %}</button>
+    </div>
+  </form>
+
+  <p class="auth-page__footer">
+    <a href="{% url 'accounts:password_reset' %}">{% trans "Забули пароль?" %}</a>
+  </p>
+</section>
+{% endblock %}

@@ -1,0 +1,380 @@
+/* Історія + філософія в два стовпці */
+
+.about-story {
+  background: color-mix(in srgb, var(--color-bg) 20%, white);
+}
+
+.about-story__inner {
+  width: 100%;
+}
+
+.about-story__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 48px);
+  align-items: start;
+}
+
+.about-story__col--history .about-section__kicker,
+.about-story__col--philosophy .about-philosophy__heading {
+  margin-bottom: 16px;
+}
+
+.about-story .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* —— Паперові картки (ліва половина) —— */
+.about-paper {
+  --paper-peek-x: clamp(22px, 3vw, 36px);
+  --paper-peek-y: clamp(20px, 2.6vw, 32px);
+  --paper-frame: clamp(10px, 1.5vw, 16px);
+  --paper-base-rot: 0deg;
+  --paper-milk: #f7f4f3;
+  --paper-milk-deep: #efeae8;
+  width: 100%;
+}
+
+.about-paper__stack {
+  position: relative;
+  width: 100%;
+  min-height: clamp(360px, 44vw, 520px);
+  box-sizing: border-box;
+  padding: clamp(18px, 2.4vw, 28px) clamp(18px, 2.4vw, 28px)
+    clamp(28px, 3.2vw, 40px);
+  touch-action: none;
+  background: transparent;
+}
+
+.about-paper__card {
+  --paper-depth: 0;
+  position: absolute;
+  top: clamp(18px, 2.4vw, 28px);
+  right: calc(clamp(18px, 2.4vw, 28px) + var(--paper-peek-x));
+  bottom: calc(clamp(28px, 3.2vw, 40px) + var(--paper-peek-y));
+  left: clamp(18px, 2.4vw, 28px);
+  z-index: calc(20 - var(--paper-depth, 0));
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  transform: translateX(calc(var(--paper-depth, 0) * 10px))
+    translateY(calc(var(--paper-depth, 0) * 9px))
+    rotate(var(--paper-base-rot, 0deg));
+  transition:
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.75s cubic-bezier(0.33, 1, 0.68, 1);
+  will-change: transform, opacity;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.about-paper__frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--paper-milk);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.97 0 0 0 0 0.955 0 0 0 0 0.95 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(
+      165deg,
+      #fffcfb 0%,
+      var(--paper-milk) 48%,
+      var(--paper-milk-deep) 100%
+    );
+  background-size: 160px 160px, auto;
+  border: 1px solid color-mix(in srgb, #d4cbc7 40%, #fff);
+  border-radius: 0;
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 10px 28px color-mix(in srgb, var(--color-neutral-900) 12%, transparent),
+    0 2px 6px color-mix(in srgb, var(--color-neutral-900) 5%, transparent);
+}
+
+.about-paper__card:not(.is-front) .about-paper__frame {
+  background-color: var(--paper-milk-deep);
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 6px 18px color-mix(in srgb, var(--color-neutral-900) 10%, transparent);
+}
+
+.about-paper__sheet {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(12px, 1.8vw, 18px);
+  padding: clamp(22px, 3vw, 36px) clamp(20px, 2.8vw, 34px);
+  padding-bottom: clamp(40px, 5vw, 56px);
+  overflow: hidden;
+  /* завжди видимий — інакше під час свайпу наступна картка без тексту */
+  visibility: visible;
+  opacity: 1;
+}
+
+.about-paper__card.is-dragging .about-paper__frame {
+  box-shadow:
+    0 1px 0 #fff inset,
+    0 22px 48px color-mix(in srgb, var(--color-neutral-900) 20%, transparent);
+}
+
+.about-paper__card.is-dragging {
+  cursor: grabbing;
+  transition: none;
+  z-index: 40;
+}
+
+.about-paper__card.is-exit {
+  pointer-events: none;
+  transition:
+    transform 0.82s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.72s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.about-paper__card.is-settle {
+  transition:
+    transform 0.78s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.65s cubic-bezier(0.33, 1, 0.68, 1),
+    box-shadow 0.7s ease;
+}
+
+.about-paper__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.2vw, 40px);
+  font-weight: 400;
+  line-height: 1.12;
+  color: #1a1918;
+}
+
+.about-paper__body {
+  margin: 0;
+  font-size: clamp(14px, 1.55vw, 17px);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-neutral-900) 78%, #4a4540);
+}
+
+.about-paper__body p {
+  margin: 0 0 0.7em;
+}
+
+.about-paper__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Загин кута аркуша */
+.about-paper__curl {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  width: clamp(56px, 8vw, 76px);
+  height: clamp(56px, 8vw, 76px);
+  pointer-events: none;
+  background:
+    linear-gradient(
+      135deg,
+      transparent 46%,
+      color-mix(in srgb, var(--color-neutral-900) 12%, transparent) 48%,
+      #e8e2df 52%,
+      #f3efed 100%
+    );
+  box-shadow:
+    -3px -3px 12px color-mix(in srgb, var(--color-neutral-900) 14%, transparent);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.about-paper__card:not(.is-front) .about-paper__curl {
+  opacity: 0.45;
+}
+
+.about-paper__edge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: clamp(36px, 8vw, 52px);
+  z-index: 5;
+  cursor: grab;
+  background: transparent;
+}
+
+/* Трикутна стрілка строго під діагоналлю кутика */
+.about-paper__swipe {
+  display: none;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 6;
+  width: clamp(34px, 5vw, 42px);
+  height: clamp(34px, 5vw, 42px);
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: var(--color-accent-900);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transform: rotate(45deg);
+  transform-origin: center;
+  filter: drop-shadow(0 1px 0 color-mix(in srgb, #fff 70%, transparent));
+}
+
+.about-paper__card.is-front .about-paper__swipe {
+  display: flex;
+}
+
+.about-paper__card.is-dragging .about-paper__swipe,
+.about-paper__card.is-exit .about-paper__swipe {
+  opacity: 0;
+}
+
+.about-paper__swipe-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: about-paper-swipe-hint 1.55s ease-in-out infinite;
+}
+
+@keyframes about-paper-swipe-hint {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.72;
+  }
+  45% {
+    transform: translateX(3px);
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(-1px);
+    opacity: 0.88;
+  }
+}
+
+.about-paper__dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.about-paper__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-text) 18%, transparent);
+}
+
+.about-paper__dot.is-active {
+  background: var(--color-accent-700);
+}
+
+@media (max-width: 900px) {
+  .about-story__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about-paper {
+    --paper-peek-x: 18px;
+    --paper-peek-y: 16px;
+  }
+
+  .about-paper__stack {
+    min-height: clamp(300px, 68vw, 420px);
+  }
+}
+
+@media (max-width: 767px) {
+  .about-paper {
+    --paper-peek-x: 14px;
+    --paper-peek-y: 14px;
+    --paper-frame: 9px;
+  }
+
+  .about-paper__stack {
+    padding: 14px 14px 22px;
+    min-height: clamp(280px, 78vw, 380px);
+  }
+
+  .about-paper__card {
+    top: 14px;
+    right: calc(14px + var(--paper-peek-x));
+    bottom: calc(22px + var(--paper-peek-y));
+    left: 14px;
+  }
+
+  .about-paper__sheet {
+    padding: 18px 16px;
+  }
+
+  .about-paper__title {
+    font-size: clamp(22px, 6.4vw, 28px);
+  }
+
+  .about-paper__body {
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .about-paper__curl {
+    width: 52px;
+    height: 52px;
+  }
+
+  .about-paper__swipe {
+    right: 8px;
+    bottom: 8px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .about-paper__swipe-icon {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-paper__card {
+    transition: none;
+  }
+
+  .about-paper__swipe-icon {
+    animation: none;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .about-paper__card,
+  .about-paper__edge {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .about-paper__stack {
+    -webkit-overflow-scrolling: touch;
+  }
+}

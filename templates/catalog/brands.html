@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/brand_tiles.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="brands container section-gap">
+  <h1 class="brands__title">{% trans "Бренди" %}</h1>
+  {% if brands %}
+  <ul class="brand-tiles" role="list">
+    {% for brand in brands %}
+      {% include "catalog/partials/_brand_tile.html" with brand=brand %}
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="brands__empty">{% trans "Бренди ще не додані" %}</p>
+  {% endif %}
+</section>
+{% endblock %}

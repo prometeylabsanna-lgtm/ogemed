@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/product_card.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/product_grid.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog_toolbar.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/catalog_more.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/brand_tiles.css' %}">
+{% endblock %}
+
+{% block body_class %}page-catalog{% endblock %}
+
+{% block content %}
+<section class="brand-page container section-gap">
+  <header class="brand-page__head">
+    <div class="brand-page__logo">
+      {% if brand.cover_image %}
+        <img
+          class="brand-page__cover"
+          src="{{ brand.cover_image.url }}"
+          alt="{{ brand.name }}"
+          loading="lazy"
+          width="320"
+          height="240"
+        >
+      {% else %}
+        {% include "catalog/partials/_brand_logo.html" with brand=brand %}
+      {% endif %}
+    </div>
+    <div class="brand-page__text">
+      <h1 class="brand-page__title">{{ brand.name }}</h1>
+      {% if brand.tagline %}
+      <p class="brand-page__tagline">{{ brand.tagline }}</p>
+      {% endif %}
+      <a class="brand-page__all" href="{% url 'catalog:brands' %}">{% trans "Усі бренди" %}</a>
+    </div>
+  </header>
+
+  <div class="catalog__layout{% if not products %} catalog__layout--single{% endif %}">
+    {% if products %}
+      {% include "catalog/partials/_sort.html" %}
+    {% endif %}
+    <div class="catalog__grid" id="product-grid">
+      {% include "catalog/partials/_product_grid.html" %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% vstatic 'js/catalog-filters.js' %}" defer></script>
+{% endblock %}

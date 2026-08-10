@@ -1,0 +1,157 @@
+{% load i18n vstatic %}
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <img
+        class="site-footer__logo-img"
+        src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% vstatic 'img/logo.png' %}{% endif %}"
+        alt="OGEMED for you"
+        width="691"
+        height="131"
+        loading="lazy"
+      >
+      {% if site_settings.brand_tagline %}
+      <p class="site-footer__tagline">{{ site_settings.brand_tagline }}</p>
+      {% endif %}
+    </div>
+
+    <div class="site-footer__nav">
+      <div class="site-footer__col site-footer__col--catalog">
+        <p class="site-footer__heading">{% trans "Каталог" %}</p>
+        <ul class="site-footer__list">
+          {% for cat in footer_categories %}
+          <li><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></li>
+          {% endfor %}
+          <li><a href="{% url 'catalog:list' %}">{% trans "Усі товари" %}</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__col site-footer__col--info">
+        <div class="site-footer__info-main" data-footer-acc>
+          <button
+            type="button"
+            class="site-footer__heading site-footer__heading--acc"
+            data-footer-acc-toggle
+            aria-expanded="false"
+            aria-controls="footer-info-more"
+          >
+            <span class="site-footer__heading-text">{% trans "Інформація" %}</span>
+            <span class="site-footer__acc-arrow site-footer__acc-arrow--head" aria-hidden="true"></span>
+          </button>
+          <ul class="site-footer__list">
+            <li><a href="{% url 'cms:about' %}">{% trans "Про нас" %}</a></li>
+            <li><a href="{% url 'cms:shipping' %}">{% trans "Доставка і оплата" %}</a></li>
+            <li><a href="{% url 'cms:returns' %}">{% trans "Повернення" %}</a></li>
+          </ul>
+          <button
+            type="button"
+            class="site-footer__acc-desk"
+            data-footer-acc-toggle
+            aria-expanded="false"
+            aria-controls="footer-info-more"
+            aria-label="{% trans 'Показати більше посилань' %}"
+          >
+            <span class="site-footer__acc-arrow" aria-hidden="true"></span>
+          </button>
+          <ul
+            class="site-footer__list site-footer__list--more"
+            id="footer-info-more"
+            data-footer-acc-panel
+          >
+            <li><a href="{% url 'cms:contacts' %}">{% trans "Контакти" %}</a></li>
+            <li><a href="{% url 'cms:privacy' %}">{% trans "Політика конфіденційності" %}</a></li>
+            <li><a href="{% url 'cms:offer' %}">{% trans "Публічна оферта" %}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="site-footer__col site-footer__col--contact">
+        <p class="site-footer__heading">{% trans "Звʼязатись з нами" %}</p>
+        <ul class="site-footer__list">
+          {% if site_settings.phone %}
+          <li><a href="tel:{{ site_settings.phone|cut:' '|cut:'-' }}">{{ site_settings.phone }}</a></li>
+          {% endif %}
+          {% if site_settings.email %}
+          <li><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></li>
+          {% endif %}
+        </ul>
+        {% if site_settings.telegram_url or site_settings.instagram_url %}
+        <div class="site-footer__socials">
+          {% if site_settings.telegram_url %}
+          <a
+            class="site-footer__social"
+            href="{{ site_settings.telegram_url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Telegram"
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" focusable="false">
+              <path
+                d="M21.2 4.4 3.7 11.1c-1.2.5-1.2 1.1-.2 1.4l4.5 1.4 1.7 5.2c.2.6.4.8.9.8.5 0 .7-.2 1.1-.6l2.6-2.5 4.6 3.4c.8.5 1.4.2 1.6-.8L22.4 5.6c.3-1.1-.5-1.6-1.2-1.2Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              />
+              <path
+                d="m9.6 13.9 9.1-5.7c.4-.3.8-.1.5.3l-5.5 5.4-.2 2.7"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+          {% endif %}
+          {% if site_settings.instagram_url %}
+          <a
+            class="site-footer__social"
+            href="{{ site_settings.instagram_url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" focusable="false">
+              <rect
+                x="3.5"
+                y="3.5"
+                width="17"
+                height="17"
+                rx="5"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="4.1"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <circle
+                cx="17.2"
+                cy="6.8"
+                r="1.05"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom footer-bottom">
+    <span class="site-footer__copy">&copy; {% now "Y" %} OGEMED for you</span>
+    <p class="site-footer__credit">
+      {% trans "Від команди" %}
+      <a
+        href="https://www.prometeylabs.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="prometey-link"
+      >PrometeyLabs</a>
+    </p>
+  </div>
+</footer>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block title %}{% trans "Сторінку не знайдено" %} — OGEMED for you{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/error_page.css' %}">
+{% endblock %}
+
+{% block body_class %}page-error{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<section class="error-page container section-gap" aria-labelledby="error-page-title">
+  <div class="error-page__card">
+    <a class="error-page__logo" href="{% url 'core:home' %}">
+      <img
+        class="error-page__logo-img"
+        src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% vstatic 'img/logo.png' %}{% endif %}"
+        alt="OGEMED for you"
+        width="280"
+        height="53"
+      >
+    </a>
+    <p class="error-page__code" aria-hidden="true">404</p>
+    <h1 class="error-page__title" id="error-page-title">{% trans "Сторінку не знайдено" %}</h1>
+    <p class="error-page__text">
+      {% trans "Можливо, посилання застаріло або адресу введено з помилкою." %}
+    </p>
+    <div class="error-page__actions">
+      <a class="btn btn--primary error-page__btn" href="{% url 'core:home' %}">{% trans "На головну" %}</a>
+      <a class="btn error-page__btn error-page__btn--ghost" href="{% url 'catalog:list' %}">{% trans "До каталогу" %}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

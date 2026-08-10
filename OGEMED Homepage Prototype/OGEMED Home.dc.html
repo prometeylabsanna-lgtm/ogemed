@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/organic-9a3f8c69-cd75-4696-bbc3-d02bd6f73bb9/styles.css">
+  <script src="_ds/organic-9a3f8c69-cd75-4696-bbc3-d02bd6f73bb9/_ds_bundle.js"></script>
+  <script src="./image-slot.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap">
+  <style>
+    :root{
+      --color-accent:#CE8A83; --color-accent-100:#FBEEEC; --color-accent-200:#F6DCD8; --color-accent-300:#EFC3BD;
+      --color-accent-400:#E3A199; --color-accent-500:#CE8A83; --color-accent-600:#B26860; --color-accent-700:#8C4F49;
+      --color-accent-800:#643835; --color-accent-900:#402322;
+    }
+    .btn, .tag, .seg, .input{border-radius:0}
+    .btn-icon{background:transparent;border-radius:0}
+    .btn-primary{background:var(--color-accent-200);border:1px solid var(--color-accent-700);color:var(--color-text);text-transform:uppercase;letter-spacing:0.06em;font-size:13px}
+    .btn-primary:hover{background:var(--color-accent-300)}
+    *{box-sizing:border-box}
+    body{margin:0;background:color-mix(in srgb, var(--color-bg) 32%, white);color:var(--color-text);font-family:var(--font-body);-webkit-tap-highlight-color:transparent}
+    a{color:var(--color-accent-700);text-decoration:none}
+    a:hover{color:var(--color-accent)}
+    ::selection{background:var(--color-accent-200)}
+    header .btn, header a, header nav, header > div { flex-shrink:0 }
+    header > div::-webkit-scrollbar{display:none}
+    .dialog-backdrop{z-index:400}
+  </style>
+</helmet>
+
+<a href="#main" style="position:absolute;left:-9999px;top:0;background:var(--color-surface);padding:10px 16px;borderRadius:0 0 8px 0;zIndex:300" style-focus="left:0">Перейти до контенту</a>
+
+<header style="{{ headerStyle }}">
+  <div style="max-width:1400px;margin:0 auto;padding:14px clamp(16px,4vw,40px);display:flex;flex-wrap:nowrap;align-items:center;gap:clamp(8px,1.6vw,28px);overflow-x:auto;scrollbar-width:none">
+    <a href="/" style="font-family:'Cormorant Garamond', Georgia, serif;font-size:clamp(18px,2.2vw,24px);letter-spacing:0.01em;color:var(--color-accent-700);margin-right:auto;white-space:nowrap">OGEMED <span style="color:var(--color-text)">for you</span></a>
+
+    <sc-if value="{{ !compact }}">
+      <nav style="display:flex;gap:28px;align-items:center">
+        <sc-for list="{{ navLinks }}" as="link" hint-placeholder-count="3">
+          <a href="{{ link.href }}" style="font-size:14px;color:var(--color-text)" style-hover="color:var(--color-accent-700)">{{ link.label }}</a>
+        </sc-for>
+      </nav>
+
+      <div style="position:relative;width:min(240px,20vw)">
+        <div style="display:flex;align-items:center;gap:8px;border:none;border-bottom:1px solid color-mix(in srgb, var(--color-text) 20%, transparent);padding:6px 2px;background:transparent;transition:border-color .3s ease" style-focus="border-color:var(--color-accent)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="opacity:.5;flex:none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" placeholder="за назвою або артикулом" value="{{ searchQuery }}" onChange="{{ onSearchInput }}" onFocus="{{ onSearchFocus }}" onBlur="{{ onSearchBlur }}" aria-label="Пошук товарів" style="border:none;outline:none;background:transparent;font:inherit;font-size:13px;width:100%;color:var(--color-text)"/>
+        </div>
+        <sc-if value="{{ searchActive }}">
+          <div style="position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--color-surface);border-radius:var(--radius-md);box-shadow:var(--shadow-md);overflow:hidden;z-index:80">
+            <sc-if value="{{ searchNoResults }}">
+              <p style="padding:16px;font-size:13px;opacity:.7;margin:0">Нічого не знайдено</p>
+            </sc-if>
+            <sc-for list="{{ searchResults }}" as="r" hint-placeholder-count="0">
+              <a href="{{ r.href }}" style="display:flex;justify-content:space-between;gap:12px;padding:10px 16px;font-size:13px;color:var(--color-text)" style-hover="background:var(--color-accent-100)">
+                <span>{{ r.name }}</span><span style="opacity:.7;white-space:nowrap">{{ r.priceLabel }}</span>
+              </a>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+
+      <div role="group" aria-label="Мова сайту" style="display:flex;align-items:center;gap:6px;font-size:12.5px;letter-spacing:0.04em;flex:none">
+        <button type="button" onClick="{{ setLangUa }}" style="{{ langUaBtnStyle }}">UA</button>
+        <span style="opacity:.35">/</span>
+        <button type="button" onClick="{{ setLangRu }}" style="{{ langRuBtnStyle }}">RU</button>
+      </div>
+
+      <a href="tel:+380441234567" style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text);white-space:nowrap" style-hover="color:var(--color-accent-700)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg>
+        +380 44 123 45 67
+      </a>
+
+      <a href="/account/" title="Особистий кабінет (незабаром)" style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text);white-space:nowrap" style-hover="color:var(--color-accent-700)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 1 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Увійти
+      </a>
+    </sc-if>
+
+    <button type="button" class="btn btn-icon btn-ghost" aria-label="Кошик" onClick="{{ openCart }}" style="position:relative;flex:none">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+      <sc-if value="{{ cartCount }}">
+        <span style="position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 3px;border-radius:4px;background:var(--color-neutral-900);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ cartCount }}</span>
+      </sc-if>
+    </button>
+
+    <sc-if value="{{ !compact }}">
+      <button type="button" class="btn btn-primary" onClick="{{ openCallback }}" style="white-space:nowrap;flex:none;width:fit-content;padding:7px 16px;font-size:11.5px;background:color-mix(in srgb, var(--color-bg) 38%, transparent);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);border:1px solid color-mix(in srgb, var(--color-text) 22%, transparent);color:var(--color-text)" style-hover="background:color-mix(in srgb, var(--color-bg) 55%, transparent)">Передзвоніть мені</button>
+    </sc-if>
+
+    <sc-if value="{{ compact }}">
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="Меню" aria-expanded="{{ mobileMenuOpen }}" aria-controls="mobile-menu" onClick="{{ toggleMobileMenu }}" style="flex:none">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+      </button>
+    </sc-if>
+  </div>
+</header>
+
+<sc-if value="{{ mobileMenuOpen }}">
+  <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Меню сайту" style="{{ mobileMenuStyle }}">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <span style="font-family:'Cormorant Garamond', Georgia, serif;font-size:20px;color:var(--color-accent-700)">OGEMED for you</span>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="Закрити меню" onClick="{{ closeMobileMenu }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--color-divider);border-radius:8px;padding:10px 16px;background:var(--color-surface);margin-bottom:24px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="opacity:.6;flex:none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" placeholder="за назвою або артикулом" value="{{ searchQuery }}" onChange="{{ onSearchInput }}" aria-label="Пошук товарів" style="border:none;outline:none;background:transparent;font:inherit;font-size:14px;width:100%;color:var(--color-text)"/>
+    </div>
+    <sc-if value="{{ searchQuery }}">
+      <div style="margin:-14px 0 20px">
+        <sc-if value="{{ searchNoResults }}"><p style="font-size:13px;opacity:.7">Нічого не знайдено</p></sc-if>
+        <sc-for list="{{ searchResults }}" as="r" hint-placeholder-count="0">
+          <a href="{{ r.href }}" style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;color:var(--color-text)">{{ r.name }} <span style="opacity:.7">{{ r.priceLabel }}</span></a>
+        </sc-for>
+      </div>
+    </sc-if>
+    <nav style="display:flex;flex-direction:column;gap:4px;margin-bottom:24px">
+      <sc-for list="{{ navLinks }}" as="link" hint-placeholder-count="3">
+        <a href="{{ link.href }}" onClick="{{ closeMobileMenu }}" style="font-family:'Cormorant Garamond', Georgia, serif;font-size:22px;padding:10px 0;color:var(--color-text);border-bottom:1px solid var(--color-divider)">{{ link.label }}</a>
+      </sc-for>
+    </nav>
+    <div role="group" aria-label="Мова сайту" style="display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:20px">
+      <button type="button" onClick="{{ setLangUa }}" style="{{ langUaBtnStyle }}">UA</button>
+      <span style="opacity:.35">/</span>
+      <button type="button" onClick="{{ setLangRu }}" style="{{ langRuBtnStyle }}">RU</button>
+    </div>
+    <a href="tel:+380441234567" style="display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:14px;color:var(--color-text)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg>
+      +380 44 123 45 67
+    </a>
+    <a href="/account/" style="display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:20px;color:var(--color-text)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 1 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      Увійти
+    </a>
+    <button type="button" class="btn btn-primary" onClick="{{ openCallback }}" style="width:fit-content;padding:7px 16px;font-size:11.5px;background:color-mix(in srgb, var(--color-bg) 38%, transparent);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);border:1px solid color-mix(in srgb, var(--color-text) 22%, transparent);color:var(--color-text)" style-hover="background:color-mix(in srgb, var(--color-bg) 55%, transparent)">Передзвоніть мені</button>
+  </div>
+</sc-if>
+
+<main id="main">
+  <section style="position:relative;height:min(640px,86vh);min-height:420px;overflow:hidden" onMouseEnter="{{ onHeroEnter }}" onMouseLeave="{{ onHeroLeave }}" onFocus="{{ onHeroEnter }}" onBlur="{{ onHeroLeave }}" aria-roledescription="карусель" aria-label="Головні пропозиції">
+    <div style="position:absolute;inset:0;background:var(--color-neutral-800);z-index:0">
+      <image-slot id="{{ hero.imgId }}" shape="rect" placeholder="Фото для слайда" src="{{ hero.imgSrc }}" style="width:100%;height:100%"></image-slot>
+    </div>
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg, color-mix(in srgb, var(--color-neutral-900) 78%, transparent) 0%, color-mix(in srgb, var(--color-neutral-900) 55%, transparent) 55%, color-mix(in srgb, var(--color-neutral-900) 20%, transparent) 100%);pointer-events:none;z-index:1"></div>
+    <div style="{{ heroTextStyle }}">
+      <span style="display:block;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-accent-200);margin-bottom:14px;font-weight:600">OGEMED for you</span>
+      <h1 style="font-family:'Cormorant Garamond', Georgia, serif;font-weight:400;font-size:clamp(30px,5vw,54px);line-height:1.12;margin:0 0 16px;color:#fff;text-wrap:balance">{{ hero.title }}</h1>
+      <p style="font-size:clamp(15px,1.6vw,18px);line-height:1.6;margin:0 0 26px;max-width:46ch;color:color-mix(in srgb, #fff 88%, transparent)">{{ hero.sub }}</p>
+      <a href="{{ hero.href }}" class="btn btn-primary" style="align-self:flex-start;width:fit-content;background:color-mix(in srgb, var(--color-bg) 78%, transparent);backdrop-filter:blur(12px) saturate(160%);-webkit-backdrop-filter:blur(12px) saturate(160%);border:1px solid color-mix(in srgb, var(--color-text) 25%, transparent);box-shadow:0 6px 20px color-mix(in srgb, var(--color-neutral-900) 25%, transparent);color:var(--color-text)" style-hover="background:color-mix(in srgb, var(--color-bg) 92%, transparent)">{{ hero.cta }}</a>
+    </div>
+    <button type="button" aria-label="Попередній слайд" onClick="{{ prevSlide }}" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);z-index:2;background:none;border:none;padding:8px;cursor:pointer;color:#fff;filter:drop-shadow(0 1px 4px rgba(0,0,0,.45));transition:opacity .25s ease" style-hover="opacity:.65">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button type="button" aria-label="Наступний слайд" onClick="{{ nextSlide }}" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:2;background:none;border:none;padding:8px;cursor:pointer;color:#fff;filter:drop-shadow(0 1px 4px rgba(0,0,0,.45));transition:opacity .25s ease" style-hover="opacity:.65">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+    <div style="position:absolute;bottom:22px;left:0;right:0;z-index:2;display:flex;justify-content:center;gap:10px">
+      <sc-for list="{{ heroDots }}" as="d" hint-placeholder-count="3">
+        <button type="button" onClick="{{ d.onClick }}" aria-label="Слайд {{ d.key }}" style="{{ d.style }}"></button>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="bestsellers" style="max-width:1400px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(16px,4vw,40px) clamp(32px,5vw,56px)">
+    <span style="display:block;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600;margin-bottom:10px">Хіти продажу</span>
+    <h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-weight:400;font-size:clamp(26px,3vw,38px);margin:0 0 8px">Улюблені засоби наших клієнток</h2>
+    <p style="font-size:15px;opacity:.72;max-width:56ch;margin:0 0 32px">Формули, які найчастіше повертаються в кошик, — перевірені результатом і відгуками.</p>
+    <div style="{{ scrollRowStyle }}">
+      <sc-for list="{{ bestsellers }}" as="p" hint-placeholder-count="4">
+        <article class="card" ref="{{ p.cardRef }}" style="{{ p.style }}">
+          <a href="{{ p.href }}" style="position:relative;display:block;border-radius:var(--radius-md);overflow:hidden">
+            <image-slot id="{{ p.imgId }}" shape="rect" placeholder="Фото товару" style="width:100%;aspect-ratio:1/1"></image-slot>
+            <span style="{{ p.badgeStyle }}">{{ p.badge }}</span>
+          </a>
+          <a href="{{ p.href }}" style="{{ p.nameStyle }}">{{ p.name }}</a>
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-weight:600;font-size:14.5px">{{ p.priceLabel }}</span>
+            <sc-if value="{{ p.oldPriceLabel }}"><span style="text-decoration:line-through;opacity:.5;font-size:13px">{{ p.oldPriceLabel }}</span></sc-if>
+          </div>
+          <span style="font-size:11.5px;letter-spacing:0.03em;color:{{ p.stockColor }}">{{ p.stockLabel }}</span>
+          <button type="button" onClick="{{ p.onAdd }}" disabled="{{ p.notInStock }}" style="{{ p.ctaStyle }}">До кошика →</button>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="background:{{ moodSectionBg }};padding:clamp(48px,7vw,88px) 0">
+    <div style="max-width:1400px;margin:0 auto;padding:0 clamp(16px,4vw,40px)">
+      <span style="display:block;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:{{ moodKicker }};font-weight:600;margin-bottom:10px">Новинки</span>
+      <h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-weight:400;font-size:clamp(26px,3vw,38px);margin:0 0 32px">Щойно в асортименті</h2>
+      <div style="{{ scrollRowStyle }}">
+        <sc-for list="{{ newcomers }}" as="p" hint-placeholder-count="4">
+          <article class="card" ref="{{ p.cardRef }}" style="{{ p.style }}">
+            <a href="{{ p.href }}" style="position:relative;display:block;border-radius:var(--radius-md);overflow:hidden">
+              <image-slot id="{{ p.imgId }}" shape="rect" placeholder="Фото товару" style="width:100%;aspect-ratio:1/1"></image-slot>
+              <span style="{{ p.badgeStyle }}">{{ p.badge }}</span>
+            </a>
+            <a href="{{ p.href }}" style="{{ p.nameStyle }}">{{ p.name }}</a>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <span style="font-weight:600;font-size:14.5px">{{ p.priceLabel }}</span>
+              <sc-if value="{{ p.oldPriceLabel }}"><span style="text-decoration:line-through;opacity:.5;font-size:13px">{{ p.oldPriceLabel }}</span></sc-if>
+            </div>
+            <span style="font-size:11.5px;letter-spacing:0.03em;color:{{ p.stockColor }}">{{ p.stockLabel }}</span>
+            <button type="button" onClick="{{ p.onAdd }}" disabled="{{ p.notInStock }}" style="{{ p.ctaStyle }}">До кошика →</button>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="position:relative;margin-top:-1px;background:{{ moodSectionBg }}">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="display:block;width:100%;height:44px;position:relative;top:1px" aria-hidden="true">
+    <path d="M0,40 C240,0 480,55 720,32 C960,10 1200,50 1440,18 L1440,60 L0,60 Z" fill="{{ moodSectionBg }}"></path>
+  </svg>
+  <div style="background:{{ moodSectionBg }};padding:0 clamp(16px,4vw,40px) calc(28px + env(safe-area-inset-bottom,0px));position:relative;overflow:hidden">
+    <img src="uploads/ChatGPT Image 30 лип. 2026 р., 12_50_51.png" alt="" aria-hidden="true" style="position:absolute;top:0;left:0;width:100%;height:220px;object-fit:cover;object-position:top;opacity:.55;mix-blend-mode:multiply;pointer-events:none"/>
+    <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px;padding-bottom:32px;position:relative">
+      <div>
+        <h3 style="font-family:'Cormorant Garamond', Georgia, serif;font-weight:500;font-size:22px;margin:0 0 10px">Підпишіться на розсилку</h3>
+        <p style="font-size:13.5px;line-height:1.5;opacity:.75;margin:0 0 16px;max-width:34ch">і отримайте −10% на перше замовлення та новини про догляд.</p>
+        <sc-if value="{{ !newsletterSubmitted }}">
+          <form onSubmit="{{ submitNewsletter }}" style="display:flex;align-items:center;border:1px solid color-mix(in srgb, var(--color-text) 30%, transparent);border-radius:8px;padding:4px 4px 4px 16px;max-width:320px;background:color-mix(in srgb, white 40%, transparent)">
+            <input type="email" required="" placeholder="Email" value="{{ newsletterEmail }}" onChange="{{ onNewsletterChange }}" aria-label="Email для розсилки" style="flex:1;border:none;outline:none;background:transparent;font:inherit;font-size:13.5px;color:var(--color-text)"/>
+            <button type="submit" aria-label="Підписатися" style="width:32px;height:32px;border-radius:0;border:1px solid var(--color-text);background:transparent;color:var(--color-text);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </form>
+        </sc-if>
+        <sc-if value="{{ newsletterSubmitted }}">
+          <p style="font-size:13.5px;color:var(--color-accent-800);margin:0">Дякуємо! Знижку надіслано на пошту.</p>
+        </sc-if>
+      </div>
+      <div>
+        <span style="display:block;font-family:'Cormorant Garamond', Georgia, serif;font-size:17px;margin-bottom:8px">Каталог</span>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ footerCatalog }}" as="c" hint-placeholder-count="5">
+            <a href="{{ c.href }}" style="font-size:13px;color:var(--color-text);opacity:.8">{{ c.label }}</a>
+          </sc-for>
+        </div>
+      </div>
+      <div>
+        <span style="display:block;font-family:'Cormorant Garamond', Georgia, serif;font-size:17px;margin-bottom:8px">Інформація</span>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ footerInfo }}" as="i" hint-placeholder-count="6">
+            <a href="{{ i.href }}" style="font-size:13px;color:var(--color-text);opacity:.8">{{ i.label }}</a>
+          </sc-for>
+        </div>
+      </div>
+      <div>
+        <span style="display:block;font-family:'Cormorant Garamond', Georgia, serif;font-size:17px;margin-bottom:8px">Контакти</span>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <a href="tel:+380441234567" style="color:var(--color-text);opacity:.8">+380 44 123 45 67</a>
+          <a href="mailto:hello@ogemed.ua" style="color:var(--color-text);opacity:.8">hello@ogemed.ua</a>
+          <a href="https://t.me/ogemed" style="color:var(--color-text);opacity:.8">Telegram</a>
+          <a href="https://instagram.com/ogemed" style="color:var(--color-text);opacity:.8">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding-top:18px;border-top:1px solid color-mix(in srgb, var(--color-text) 12%, transparent)">
+      <span style="font-family:'Cormorant Garamond', Georgia, serif;font-size:18px;color:var(--color-accent-700)">OGEMED for you</span>
+      <span style="font-size:12px;opacity:.6">© {{ year }} OGEMED for you. Усі права захищено.</span>
+    </div>
+  </div>
+</footer>
+
+<a href="https://t.me/ogemed" target="_blank" rel="noopener" aria-label="Написати консультанту в Telegram" style="position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:52px;height:52px;border-radius:14px;background:var(--color-neutral-900);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);z-index:120" style-hover="background:var(--color-neutral-800)">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+</a>
+
+<sc-if value="{{ cartOpen }}">
+  <div style="position:fixed;inset:0;background:color-mix(in srgb, var(--color-neutral-900) 45%, transparent);z-index:199" onClick="{{ closeCart }}"></div>
+  <div role="dialog" aria-modal="true" aria-label="Кошик" style="{{ cartPanelStyle }}">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-weight:400;font-size:22px;margin:0">Кошик</h2>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="Закрити кошик" onClick="{{ closeCart }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <sc-if value="{{ cartEmpty }}">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.35"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <p style="font-size:14px;opacity:.7;margin:0">Кошик порожній</p>
+        <button type="button" class="btn btn-secondary" onClick="{{ closeCart }}">Продовжити покупки</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ !cartEmpty }}">
+      <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column">
+        <sc-for list="{{ cartLines }}" as="l" hint-placeholder-count="2">
+          <div style="display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--color-divider)">
+            <div style="width:48px;height:48px;flex:none;border-radius:var(--radius-md);background:var(--color-accent-100);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond', Georgia, serif;color:var(--color-accent-700);font-size:18px">{{ l.initial }}</div>
+            <div style="flex:1;min-width:0">
+              <p style="margin:0 0 4px;font-size:13.5px;line-height:1.3">{{ l.name }}</p>
+              <span style="font-size:12px;opacity:.6">{{ l.unitLabel }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+              <span style="font-weight:700;font-size:13.5px">{{ l.lineTotal }}</span>
+              <div style="display:flex;align-items:center;gap:8px">
+                <button type="button" class="btn btn-icon btn-ghost" aria-label="Зменшити кількість" onClick="{{ l.onDec }}" style="width:26px;height:26px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <span style="font-size:13px;min-width:14px;text-align:center">{{ l.qty }}</span>
+                <button type="button" class="btn btn-icon btn-ghost" aria-label="Збільшити кількість" onClick="{{ l.onInc }}" style="width:26px;height:26px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <button type="button" class="btn btn-icon btn-ghost" aria-label="Видалити товар" onClick="{{ l.onRemove }}" style="width:26px;height:26px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="padding-top:16px">
+        <div style="display:flex;justify-content:space-between;font-size:15px;margin-bottom:14px"><span>Разом</span><strong>{{ cartSubtotalLabel }}</strong></div>
+        <a href="/oformlennya/" class="btn btn-primary btn-block">Оформити замовлення</a>
+      </div>
+    </sc-if>
+  </div>
+</sc-if>
+
+<sc-if value="{{ callbackOpen }}">
+  <div class="dialog-backdrop" onClick="{{ closeCallback }}">
+    <div class="dialog" role="dialog" aria-modal="true" aria-label="Передзвоніть мені" onClick="{{ stopClick }}" style="{{ dialogStyle }}">
+      <sc-if value="{{ !callbackSubmitted }}">
+        <h2 class="dialog-title" style="font-family:'Cormorant Garamond', Georgia, serif;font-weight:500">Передзвоніть мені</h2>
+        <p class="dialog-body" style="margin:0 0 4px">Залиште номер — менеджер зв'яжеться протягом робочого дня.</p>
+        <form onSubmit="{{ submitCallback }}" style="display:flex;flex-direction:column;gap:14px">
+          <div class="field">
+            <label for="cb-name">Ім'я</label>
+            <input id="cb-name" class="input" type="text" placeholder="Ваше ім'я" value="{{ callbackName }}" onChange="{{ onNameChange }}" required=""/>
+          </div>
+          <div class="field">
+            <label for="cb-phone">Телефон</label>
+            <input id="cb-phone" class="input" type="tel" placeholder="+380 __ ___ __ __" value="{{ callbackPhone }}" onChange="{{ onPhoneChange }}" required=""/>
+          </div>
+          <div class="dialog-actions">
+            <button type="button" class="btn btn-ghost" onClick="{{ closeCallback }}">Скасувати</button>
+            <button type="submit" class="btn btn-primary">Надіслати</button>
+          </div>
+        </form>
+      </sc-if>
+      <sc-if value="{{ callbackSubmitted }}">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:8px 0">
+          <div style="width:48px;height:48px;border-radius:10px;background:var(--color-accent-2-200);display:flex;align-items:center;justify-content:center;color:var(--color-accent-2-800)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <p class="dialog-title" style="margin:0;font-family:'Cormorant Garamond', Georgia, serif;font-weight:500">Дякуємо!</p>
+          <p class="dialog-body" style="margin:0">Менеджер зв'яжеться з вами найближчим часом.</p>
+          <button type="button" class="btn btn-secondary" onClick="{{ closeCallback }}">Закрити</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;layoutStyle&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;scroll&quot;,&quot;tsType&quot;:&quot;'scroll' | 'grid'&quot;,&quot;options&quot;:[&quot;scroll&quot;,&quot;grid&quot;],&quot;section&quot;:&quot;Product sections&quot;},
+  &quot;glassIntensity&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;subtle&quot;,&quot;tsType&quot;:&quot;'off' | 'subtle' | 'bold'&quot;,&quot;options&quot;:[&quot;off&quot;,&quot;subtle&quot;,&quot;bold&quot;],&quot;section&quot;:&quot;Surfaces&quot;},
+  &quot;accentMood&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;warm&quot;,&quot;tsType&quot;:&quot;'warm' | 'sage'&quot;,&quot;options&quot;:[&quot;warm&quot;,&quot;sage&quot;],&quot;section&quot;:&quot;Color&quot;}
+}">
+const PRODUCTS = [
+  { id: 'p1', name: 'Сироватка з вітаміном C 10%, 30 мл', price: 890, oldPrice: 1090, badge: 'Хіт', inStock: true },
+  { id: 'p2', name: 'Крем-філер з гіалуроновою кислотою, 50 мл', price: 1250, oldPrice: null, badge: 'Хіт', inStock: true },
+  { id: 'p3', name: 'Нічний крем-відновлювач з ретинолом, 50 мл', price: 980, oldPrice: null, badge: 'Хіт', inStock: true },
+  { id: 'p4', name: 'Мицелярна вода Delicate, 400 мл', price: 420, oldPrice: null, badge: 'Хіт', inStock: true },
+  { id: 'p5', name: 'Пілінг-гель AHA/BHA, 100 мл', price: 650, oldPrice: 790, badge: 'Хіт', inStock: false },
+  { id: 'p6', name: 'Крем для контуру очей, 15 мл', price: 720, oldPrice: null, badge: 'Хіт', inStock: true },
+  { id: 'p7', name: 'Сонцезахисний флюїд SPF50, 40 мл', price: 890, oldPrice: null, badge: 'Хіт', inStock: true },
+  { id: 'p8', name: 'Маска-плівка з глиною, 75 мл', price: 480, oldPrice: null, badge: 'Хіт', inStock: true },
+];
+
+const NEWCOMERS = [
+  { id: 'n1', name: 'Есенція з ніацинамідом 5%, 30 мл', price: 750, oldPrice: null, badge: 'Новинка', inStock: true },
+  { id: 'n2', name: 'Бальзам для губ з пептидами, 10 мл', price: 340, oldPrice: null, badge: 'Новинка', inStock: true },
+  { id: 'n3', name: 'Крем-бар\u02BCєр Cica Repair, 50 мл', price: 890, oldPrice: null, badge: 'Новинка', inStock: true },
+  { id: 'n4', name: 'Тонік з центелою, 200 мл', price: 560, oldPrice: null, badge: 'Новинка', inStock: true },
+  { id: 'n5', name: 'Олія для волосся й кінчиків, 50 мл', price: 610, oldPrice: null, badge: 'Новинка', inStock: false },
+  { id: 'n6', name: 'Скраб для тіла з кавою, 200 мл', price: 470, oldPrice: null, badge: 'Новинка', inStock: true },
+];
+
+const HERO_SLIDES = [
+  { id: 1, imgId: 'hero-1', imgSrc: 'uploads/pexels-annpoan-5798000.jpg', title: 'Догляд, який відчувається на шкірі', sub: 'Косметологічні формули для дому — концентрати активних компонентів у чистому вигляді.', cta: 'Перейти в каталог', href: '/katalog/' },
+  { id: 2, imgId: 'hero-2', imgSrc: 'uploads/pexels-deepa-nishad-1620501673-27544682.jpg', title: 'Сезон оновлення шкіри', sub: 'Кислотні пілінги та сироватки для делікатного відновлення без роздратування.', cta: 'Дивитись хіти', href: '#bestsellers' },
+  { id: 3, imgId: 'hero-3', imgSrc: 'uploads/pexels-cup-of-couple-8015765.jpg', title: 'OGEMED for you: краса, якій довіряють', sub: 'Косметика, розроблена косметологами для салонного результату вдома.', cta: 'Про бренд', href: '/pro-nas/' },
+];
+
+const NAV_LINKS = [
+  { label: 'Каталог', href: '/katalog/' },
+  { label: 'Про нас', href: '/pro-nas/' },
+  { label: 'Контакти', href: '/kontakty/' },
+];
+
+const FOOTER_CATALOG = [
+  { label: 'Догляд за обличчям', href: '/katalog/oblychchya/' },
+  { label: 'Догляд за тілом', href: '/katalog/tilo/' },
+  { label: 'Волосся', href: '/katalog/volossya/' },
+  { label: 'Апаратна косметологія', href: '/katalog/aparatna/' },
+  { label: 'Аксесуари', href: '/katalog/aksesuary/' },
+];
+
+const FOOTER_INFO = [
+  { label: 'Про нас', href: '/pro-nas/' },
+  { label: 'Доставка і оплата', href: '/dostavka-i-oplata/' },
+  { label: 'Повернення', href: '/povernennya/' },
+  { label: 'Контакти', href: '/kontakty/' },
+  { label: 'Політика конфіденційності', href: '/privacy/' },
+  { label: 'Публічна оферта', href: '/oferta/' },
+];
+
+class Component extends DCLogic {
+  state = {
+    heroIndex: 0,
+    heroFade: false,
+    heroPaused: false,
+    isMobile: typeof window !== 'undefined' && window.innerWidth < 680,
+    isTablet: typeof window !== 'undefined' && window.innerWidth >= 680 && window.innerWidth < 1060,
+    scrolled: false,
+    mobileMenuOpen: false,
+    lang: 'ua',
+    searchQuery: '',
+    searchFocused: false,
+    cartOpen: false,
+    cartItems: [ { key: 'p2', id: 'p2', qty: 1 }, { key: 'p1', id: 'p1', qty: 2 } ],
+    callbackOpen: false,
+    callbackName: '',
+    callbackPhone: '',
+    callbackSubmitted: false,
+    visible: {},
+    newsletterEmail: '',
+    newsletterSubmitted: false,
+  };
+
+  componentDidMount() {
+    this._els = {};
+    this._io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          const key = en.target.dataset.revealKey;
+          if (key) this.setState((s) => ({ visible: { ...s.visible, [key]: true } }));
+          this._io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.15 }) : null;
+
+    this._heroTimer = setInterval(() => {
+      if (!this.state.heroPaused && !this.state.mobileMenuOpen && !this.state.cartOpen) this.nextSlide();
+    }, 5000);
+
+    this._onResize = () => this.setState({
+      isMobile: window.innerWidth < 680,
+      isTablet: window.innerWidth >= 680 && window.innerWidth < 1060,
+    });
+    window.addEventListener('resize', this._onResize);
+
+    this._onScroll = () => this.setState({ scrolled: window.scrollY > 8 });
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+
+    this._onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (this.state.mobileMenuOpen) this.setState({ mobileMenuOpen: false });
+      if (this.state.cartOpen) this.setState({ cartOpen: false });
+      if (this.state.callbackOpen) this.closeCallback();
+    };
+    document.addEventListener('keydown', this._onKey);
+
+    this._revealFallback = setTimeout(() => {
+      this.setState((s) => {
+        const visible = { ...s.visible };
+        Object.keys(this._els || {}).forEach((k) => { visible[k] = true; });
+        return { visible };
+      });
+    }, 1500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._heroTimer);
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('scroll', this._onScroll);
+    document.removeEventListener('keydown', this._onKey);
+    if (this._io) this._io.disconnect();
+    clearTimeout(this._revealFallback);
+    clearTimeout(this._heroFadeTimer);
+  }
+
+  registerCard(key, el) {
+    if (!el) return;
+    if (!this.state.visible[key]) {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        this.setState((s) => ({ visible: { ...s.visible, [key]: true } }));
+        return;
+      }
+    }
+    if (!this._io) { this.setState((s) => ({ visible: { ...s.visible, [key]: true } })); return; }
+    el.dataset.revealKey = key;
+    this._els[key] = el;
+    this._io.observe(el);
+  }
+
+  getCardRef(key) {
+    if (!this._refs) this._refs = {};
+    if (!this._refs[key]) this._refs[key] = (el) => this.registerCard(key, el);
+    return this._refs[key];
+  }
+
+  _resetHeroFade() {
+    clearTimeout(this._heroFadeTimer);
+    this._heroFadeTimer = setTimeout(() => this.setState({ heroFade: false }), 30);
+  }
+  goToSlide(i) { this.setState({ heroIndex: i, heroFade: true }); this._resetHeroFade(); }
+  nextSlide() { this.setState((s) => ({ heroIndex: (s.heroIndex + 1) % HERO_SLIDES.length, heroFade: true })); this._resetHeroFade(); }
+  prevSlide() { this.setState((s) => ({ heroIndex: (s.heroIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length, heroFade: true })); this._resetHeroFade(); }
+
+  setLang(l) { this.setState({ lang: l }); }
+  toggleMobileMenu() { this.setState((s) => ({ mobileMenuOpen: !s.mobileMenuOpen })); }
+  closeMobileMenu() { this.setState({ mobileMenuOpen: false }); }
+
+  onSearchInput(e) { this.setState({ searchQuery: e.target.value }); }
+  onSearchFocus() { this.setState({ searchFocused: true }); }
+  onSearchBlur() { setTimeout(() => this.setState({ searchFocused: false }), 150); }
+
+  addToCart(id) {
+    this.setState((s) => {
+      const existing = s.cartItems.find((it) => it.id === id);
+      if (existing) return { cartItems: s.cartItems.map((it) => (it.id === id ? { ...it, qty: it.qty + 1 } : it)) };
+      return { cartItems: [...s.cartItems, { key: id, id, qty: 1 }] };
+    });
+  }
+  incQty(key) { this.setState((s) => ({ cartItems: s.cartItems.map((it) => (it.key === key ? { ...it, qty: it.qty + 1 } : it)) })); }
+  decQty(key) { this.setState((s) => ({ cartItems: s.cartItems.map((it) => (it.key === key ? { ...it, qty: Math.max(0, it.qty - 1) } : it)).filter((it) => it.qty > 0) })); }
+  removeItem(key) { this.setState((s) => ({ cartItems: s.cartItems.filter((it) => it.key !== key) })); }
+  openCart() { this.setState({ cartOpen: true }); }
+  closeCart() { this.setState({ cartOpen: false }); }
+
+  openCallback() { this.setState({ callbackOpen: true, callbackSubmitted: false, callbackName: '', callbackPhone: '' }); }
+  closeCallback() { this.setState({ callbackOpen: false }); }
+  onNameChange(e) { this.setState({ callbackName: e.target.value }); }
+  onPhoneChange(e) {
+    const digits = e.target.value.replace(/\D/g, '').replace(/^380/, '').slice(0, 9);
+    this.setState({ callbackPhone: digits });
+  }
+  submitCallback(e) {
+    e.preventDefault();
+    if (this.state.callbackName.trim().length < 2 || this.state.callbackPhone.length < 9) return;
+    this.setState({ callbackSubmitted: true });
+  }
+
+  formatPhone(digits) {
+    let out = '+380';
+    if (digits.length) out += ' ' + digits.slice(0, 2);
+    if (digits.length > 2) out += ' ' + digits.slice(2, 5);
+    if (digits.length > 5) out += ' ' + digits.slice(5, 7);
+    if (digits.length > 7) out += ' ' + digits.slice(7, 9);
+    return out;
+  }
+
+  onNewsletterChange(e) { this.setState({ newsletterEmail: e.target.value }); }
+  submitNewsletter(e) {
+    e.preventDefault();
+    if (!this.state.newsletterEmail.includes('@')) return;
+    this.setState({ newsletterSubmitted: true });
+  }
+
+  findProduct(id) { return PRODUCTS.find((p) => p.id === id) || NEWCOMERS.find((p) => p.id === id); }
+
+  mapCard(p, prefix, layoutStyle, tint, text) {
+    const visible = !!this.state.visible[prefix + p.id];
+    return {
+      ...p,
+      priceLabel: p.price + ' \u20B4',
+      oldPriceLabel: p.oldPrice ? p.oldPrice + ' \u20B4' : null,
+      stockLabel: p.inStock ? 'В наявності' : 'Немає в наявності',
+      stockColor: p.inStock ? 'var(--color-neutral-600)' : 'var(--color-neutral-500)',
+      notInStock: !p.inStock,
+      imgId: prefix + p.id,
+      href: '/tovar/' + p.id + '/',
+      cardRef: this.getCardRef(prefix + p.id),
+      onAdd: () => this.addToCart(p.id),
+      style: {
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(22px)',
+        transition: 'opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1)',
+        display: 'flex', flexDirection: 'column', gap: '12px',
+        background: 'transparent', boxShadow: 'none', padding: 0, borderRadius: 0,
+        height: '100%',
+        ...(layoutStyle === 'grid' ? { width: '100%' } : { flex: '0 0 clamp(200px, 42vw, 260px)', scrollSnapAlign: 'start' }),
+      },
+      nameStyle: {
+        fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '19px', lineHeight: '1.3',
+        color: 'var(--color-text)', marginTop: '4px', display: '-webkit-box', WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '2.6em',
+      },
+      badgeStyle: {
+        position: 'absolute', top: '10px', left: '10px',
+        background: 'color-mix(in srgb, ' + tint + ' 65%, white)',
+        backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+        color: text, fontSize: '10.5px', letterSpacing: '0.06em',
+        textTransform: 'uppercase', padding: '5px 12px', borderRadius: '4px', fontWeight: 600,
+      },
+      ctaStyle: {
+        display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'none', border: 'none',
+        borderBottom: '1px solid currentColor', color: p.inStock ? 'var(--color-text)' : 'var(--color-neutral-500)',
+        fontSize: '12px', letterSpacing: '0.09em', textTransform: 'uppercase', padding: '4px 0 3px',
+        cursor: p.inStock ? 'pointer' : 'not-allowed', marginTop: 'auto', alignSelf: 'flex-start',
+        opacity: p.inStock ? 1 : 0.5, transition: 'color .3s ease',
+      },
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const layoutStyle = this.props.layoutStyle ?? 'scroll';
+    const glass = this.props.glassIntensity ?? 'subtle';
+    const mood = this.props.accentMood ?? 'warm';
+    const moodTint = mood === 'sage' ? 'var(--color-accent-2-100)' : 'var(--color-accent-100)';
+    const moodText = mood === 'sage' ? 'var(--color-accent-2-800)' : 'var(--color-accent-800)';
+    const moodKicker = mood === 'sage' ? 'var(--color-accent-2-700)' : 'var(--color-accent-700)';
+    const moodSectionBg = mood === 'sage' ? 'color-mix(in srgb, var(--color-accent-2-100) 45%, white)' : 'color-mix(in srgb, var(--color-neutral-200) 55%, white)';
+
+    const glassBlur = glass === 'off' ? 'none' : glass === 'bold' ? 'blur(28px) saturate(180%)' : 'blur(14px) saturate(150%)';
+    const panelBg = (opaque, translucent) => (glass === 'off' ? opaque : glass === 'bold' ? translucent.bold : translucent.subtle);
+
+    const bestsellers = PRODUCTS.map((p) => this.mapCard(p, 'b-', layoutStyle, 'var(--color-accent-100)', 'var(--color-accent-800)'));
+    const newcomers = NEWCOMERS.map((p) => this.mapCard(p, 'n-', layoutStyle, moodTint, moodText));
+
+    const query = s.searchQuery.trim().toLowerCase();
+    const searchResults = query.length > 0
+      ? [...PRODUCTS, ...NEWCOMERS].filter((p) => p.name.toLowerCase().includes(query)).slice(0, 5)
+        .map((p) => ({ ...p, priceLabel: p.price + ' \u20B4', href: '/tovar/' + p.id + '/' }))
+      : [];
+    const searchNoResults = query.length > 0 && searchResults.length === 0;
+
+    const cartLines = s.cartItems.map((it) => {
+      const p = this.findProduct(it.id);
+      if (!p) return null;
+      return {
+        key: it.key, name: p.name, qty: it.qty,
+        lineTotal: (p.price * it.qty) + ' \u20B4', unitLabel: p.price + ' \u20B4 / шт',
+        initial: p.name.charAt(0),
+        onInc: () => this.incQty(it.key), onDec: () => this.decQty(it.key), onRemove: () => this.removeItem(it.key),
+      };
+    }).filter(Boolean);
+    const cartCount = cartLines.reduce((sum, l) => sum + l.qty, 0);
+    const cartSubtotal = cartLines.reduce((sum, l) => sum + l.qty * Number(l.lineTotal.replace(/\D/g, '')) / l.qty, 0);
+
+    const hero = HERO_SLIDES[s.heroIndex];
+    const heroDots = HERO_SLIDES.map((h, i) => ({
+      key: h.id,
+      onClick: () => this.goToSlide(i),
+      style: {
+        width: i === s.heroIndex ? '22px' : '8px', height: '3px', borderRadius: '1px',
+        border: 'none', padding: 0, cursor: 'pointer',
+        background: i === s.heroIndex ? '#fff' : 'rgba(255,255,255,0.5)',
+        transition: 'width .3s ease, background .3s ease',
+      },
+    }));
+
+    return {
+      navLinks: NAV_LINKS,
+      isMobile: s.isMobile,
+      mobileMenuOpen: s.mobileMenuOpen,
+      toggleMobileMenu: () => this.toggleMobileMenu(),
+      closeMobileMenu: () => this.closeMobileMenu(),
+      headerStyle: {
+        position: 'sticky', top: 0, zIndex: 100,
+        background: panelBg('color-mix(in srgb, var(--color-bg) 12%, white)', { subtle: 'color-mix(in srgb, var(--color-bg) 22%, transparent)', bold: 'color-mix(in srgb, var(--color-bg) 12%, transparent)' }),
+        backdropFilter: glassBlur, WebkitBackdropFilter: glassBlur,
+        borderBottom: 'none',
+        boxShadow: s.scrolled ? '0 1px 0 color-mix(in srgb, var(--color-text) 10%, transparent), var(--shadow-sm)' : 'none',
+        transition: 'box-shadow .35s ease',
+      },
+      compact: false,
+      mobileMenuStyle: {
+        position: 'fixed', inset: 0, zIndex: 150, overflowY: 'auto', padding: '18px 20px calc(24px + env(safe-area-inset-bottom,0px))',
+        background: panelBg('color-mix(in srgb, var(--color-bg) 12%, white)', { subtle: 'color-mix(in srgb, var(--color-bg) 25%, white)', bold: 'color-mix(in srgb, var(--color-bg) 45%, transparent)' }),
+        backdropFilter: glassBlur, WebkitBackdropFilter: glassBlur,
+      },
+      cartPanelStyle: {
+        position: 'fixed', top: 0, right: 0, height: '100dvh', width: 'min(420px,100vw)', zIndex: 200,
+        display: 'flex', flexDirection: 'column', padding: '20px', paddingBottom: 'calc(20px + env(safe-area-inset-bottom,0px))',
+        boxShadow: 'var(--shadow-lg)',
+        background: panelBg('color-mix(in srgb, var(--color-bg) 8%, white)', { subtle: 'color-mix(in srgb, var(--color-bg) 20%, white)', bold: 'color-mix(in srgb, var(--color-bg) 35%, transparent)' }),
+        backdropFilter: glassBlur, WebkitBackdropFilter: glassBlur,
+      },
+      dialogStyle: {
+        background: panelBg('var(--color-surface)', { subtle: 'color-mix(in srgb, var(--color-surface) 78%, transparent)', bold: 'color-mix(in srgb, var(--color-surface) 55%, transparent)' }),
+        backdropFilter: glassBlur, WebkitBackdropFilter: glassBlur,
+      },
+      moodKicker, moodSectionBg,
+      langUa: s.lang === 'ua', langRu: s.lang === 'ru',
+      setLangUa: () => this.setLang('ua'), setLangRu: () => this.setLang('ru'),
+      langUaBtnStyle: { border: 'none', background: 'none', cursor: 'pointer', font: 'inherit', fontSize: 'inherit', padding: 0, color: s.lang === 'ua' ? 'var(--color-accent-700)' : 'var(--color-text)', opacity: s.lang === 'ua' ? 1 : 0.5, fontWeight: s.lang === 'ua' ? 600 : 400, transition: 'opacity .25s ease, color .25s ease' },
+      langRuBtnStyle: { border: 'none', background: 'none', cursor: 'pointer', font: 'inherit', fontSize: 'inherit', padding: 0, color: s.lang === 'ru' ? 'var(--color-accent-700)' : 'var(--color-text)', opacity: s.lang === 'ru' ? 1 : 0.5, fontWeight: s.lang === 'ru' ? 600 : 400, transition: 'opacity .25s ease, color .25s ease' },
+      searchQuery: s.searchQuery,
+      onSearchInput: (e) => this.onSearchInput(e),
+      onSearchFocus: () => this.onSearchFocus(),
+      onSearchBlur: () => this.onSearchBlur(),
+      searchActive: s.searchFocused && query.length > 0,
+      searchResults, searchNoResults,
+      cartOpen: s.cartOpen, openCart: () => this.openCart(), closeCart: () => this.closeCart(),
+      cartLines, cartCount, cartEmpty: cartLines.length === 0,
+      cartSubtotalLabel: cartSubtotal + ' \u20B4',
+      hero, heroDots, prevSlide: () => this.prevSlide(), nextSlide: () => this.nextSlide(),
+      onHeroEnter: () => this.setState({ heroPaused: true }),
+      onHeroLeave: () => this.setState({ heroPaused: false }),
+      heroTextStyle: {
+        position: 'absolute', left: 0, top: 0, bottom: 0, zIndex: 2, display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', padding: '0 clamp(20px, 6vw, 80px)', maxWidth: '760px',
+        opacity: s.heroFade ? 0 : 1, transform: s.heroFade ? 'translateY(10px)' : 'translateY(0)',
+        transition: 'opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1)',
+      },
+      bestsellers, newcomers,
+      scrollRowStyle: layoutStyle === 'grid'
+        ? { display: 'grid', gridTemplateColumns: 'repeat(' + (s.isMobile ? 2 : s.isTablet ? 3 : 4) + ', 1fr)', gap: '20px' }
+        : { display: 'flex', gap: '20px', overflowX: 'auto', scrollSnapType: 'x mandatory', paddingBottom: '10px', scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' },
+      footerCatalog: FOOTER_CATALOG, footerInfo: FOOTER_INFO,
+      newsletterEmail: s.newsletterEmail, newsletterSubmitted: s.newsletterSubmitted,
+      onNewsletterChange: (e) => this.onNewsletterChange(e), submitNewsletter: (e) => this.submitNewsletter(e),
+      callbackOpen: s.callbackOpen, openCallback: () => this.openCallback(), closeCallback: () => this.closeCallback(),
+      stopClick: (e) => e.stopPropagation(),
+      callbackName: s.callbackName, callbackPhone: this.formatPhone(s.callbackPhone),
+      onNameChange: (e) => this.onNameChange(e), onPhoneChange: (e) => this.onPhoneChange(e),
+      callbackSubmitted: s.callbackSubmitted, submitCallback: (e) => this.submitCallback(e),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

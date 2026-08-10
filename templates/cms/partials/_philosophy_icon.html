@@ -1,0 +1,38 @@
+{% if n == 1 %}
+{# Листя — турбота #}
+<svg class="about-value__icon" viewBox="0 0 48 48" width="24" height="24" aria-hidden="true" focusable="false">
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    d="M24 38c0-10 6-18 16-22-2 12-8 20-16 22Z"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    d="M24 38c0-10-6-18-16-22 2 12 8 20 16 22Z"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+    d="M24 38V22"/>
+</svg>
+{% elif n == 2 %}
+{# Щит — довіра #}
+<svg class="about-value__icon" viewBox="0 0 48 48" width="24" height="24" aria-hidden="true" focusable="false">
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"
+    d="M24 8 36 13v10c0 9-5.5 15.5-12 18-6.5-2.5-12-9-12-18V13L24 8Z"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    d="m18.5 24 4 4 8-9"/>
+</svg>
+{% elif n == 3 %}
+{# Терези — баланс #}
+<svg class="about-value__icon" viewBox="0 0 48 48" width="24" height="24" aria-hidden="true" focusable="false">
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+    d="M24 10v26M16 36h16"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    d="M10 18h28M14 18l-4 8a6 6 0 0 0 12 0l-4-8M34 18l-4 8a6 6 0 0 0 12 0l-4-8"/>
+</svg>
+{% else %}
+{# Хвиля / вплив #}
+<svg class="about-value__icon" viewBox="0 0 48 48" width="24" height="24" aria-hidden="true" focusable="false">
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+    d="M8 28c3.5-4 7-4 10.5 0s7 4 10.5 0 7-4 10.5 0"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+    d="M8 20c3.5-4 7-4 10.5 0s7 4 10.5 0 7-4 10.5 0"/>
+  <circle cx="14" cy="34" r="1.6" fill="currentColor"/>
+  <circle cx="24" cy="34" r="1.6" fill="currentColor"/>
+  <circle cx="34" cy="34" r="1.6" fill="currentColor"/>
+</svg>
+{% endif %}

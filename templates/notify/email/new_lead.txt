@@ -1,0 +1,5 @@
+Заявка: {{ lead.get_lead_type_display }}
+Імʼя: {{ lead.name }}
+Телефон: {{ lead.phone }}
+Email: {{ lead.email|default:"—" }}
+Повідомлення: {{ lead.message|default:"—" }}

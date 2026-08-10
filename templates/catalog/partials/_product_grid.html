@@ -1,0 +1,38 @@
+{% load i18n %}
+{% if products %}
+<div class="product-grid" data-product-grid data-view="{{ current_view|default:'grid' }}">
+  {% include "catalog/partials/_product_cards.html" %}
+</div>
+<div id="catalog-more">
+  {% if page_obj and page_obj.has_next %}
+  <div class="catalog-more">
+    <button
+      type="button"
+      class="btn btn--ghost catalog-more__btn"
+      hx-get="{{ list_url|default:request.path }}?{% if filter_query %}{{ filter_query }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}&more=1"
+      hx-target="[data-product-grid]"
+      hx-swap="beforeend"
+      hx-indicator="this"
+    >{% trans "Показати ще" %}</button>
+    <p class="catalog-more__meta">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</p>
+  </div>
+  {% endif %}
+</div>
+{% if page_obj and page_obj.has_other_pages %}
+<nav class="pagination pagination--fallback" aria-label="{% trans 'Пагінація' %}">
+  {% if page_obj.has_previous %}
+    <a
+      href="?{% if filter_query %}{{ filter_query }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}"
+    >{% trans "Назад" %}</a>
+  {% endif %}
+  <span>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+    <a
+      href="?{% if filter_query %}{{ filter_query }}&{% endif %}{% if request.GET.q %}q={{ request.GET.q|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}"
+    >{% trans "Далі" %}</a>
+  {% endif %}
+</nav>
+{% endif %}
+{% else %}
+<p class="catalog__empty">{% if empty_text %}{{ empty_text }}{% else %}{% trans "Нічого не знайдено" %}{% endif %}</p>
+{% endif %}

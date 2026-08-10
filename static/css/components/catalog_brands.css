@@ -1,0 +1,147 @@
+.brand-filter {
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+.brand-filter__title {
+  margin: 0 0 16px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-accent-700);
+}
+
+/* Один рядок із горизонтальним скролом: смуга прокрутки прихована,
+   свайп/трекпад працюють, клавіатурна навігація по радіо теж */
+.brand-filter__row {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 4px;
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.brand-filter__row::-webkit-scrollbar {
+  display: none;
+}
+
+.brand-filter__item {
+  flex: 0 0 158px;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.brand-card {
+  display: block;
+  /* Contains the clipped radio so it cannot widen the document */
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.brand-card__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.brand-card__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-neutral-200);
+  border: 1px solid transparent;
+  outline: 1px solid var(--color-divider);
+  outline-offset: -1px;
+  transition: outline-color 0.2s ease, outline-width 0.2s ease;
+}
+
+.brand-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brand-card__logo {
+  object-fit: contain;
+  padding: 14%;
+  background: var(--color-neutral-100);
+}
+
+.brand-card__placeholder {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4vw, 28px);
+  color: var(--color-accent-700);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.brand-card__name {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-700);
+  transition: color 0.2s ease;
+}
+
+.brand-card:hover .brand-card__media {
+  outline-color: var(--color-neutral-500);
+}
+
+.brand-card__input:checked ~ .brand-card__media {
+  outline: 2px solid var(--color-text);
+  outline-offset: -2px;
+}
+
+.brand-card__input:checked ~ .brand-card__name {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.brand-card__input:focus-visible ~ .brand-card__media {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .brand-filter__row {
+    gap: 16px;
+  }
+
+  .brand-filter__item {
+    flex-basis: 182px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-filter__row {
+    gap: 20px;
+  }
+
+  .brand-filter__item {
+    flex-basis: 202px;
+  }
+}
+
+/* iOS Safari renders hover styles as sticky after tap — disable them there */
+@media (hover: none) {
+  .brand-card:hover .brand-card__media {
+    outline-color: var(--color-divider);
+  }
+}

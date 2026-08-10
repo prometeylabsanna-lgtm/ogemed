@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/cabinet.css' %}">
+{% endblock %}
+
+{% block body_class %}page-cabinet{% endblock %}
+
+{% block content %}
+<section class="cabinet-page container section-gap" aria-labelledby="cabinet-title">
+  <header class="cabinet-page__head">
+    <p class="cabinet-page__kicker">{% trans "Замовлення" %}</p>
+    <h1 class="cabinet-page__title" id="cabinet-title">№{{ order.order_number }}</h1>
+    <p class="cabinet-page__meta">
+      <span class="cabinet-page__status">{{ order.get_status_display }}</span>
+      <span>{{ order.created_at|date:"d.m.Y H:i" }}</span>
+    </p>
+  </header>
+
+  {% include "accounts/partials/_cabinet_nav.html" with nav_active="orders" %}
+
+  <div class="cabinet-page__layout">
+    <div class="cabinet-page__main">
+      <h2 class="cabinet-page__section">{% trans "Склад" %}</h2>
+      <ul class="cabinet-lines" aria-label="{% trans 'Товари в замовленні' %}">
+        {% for item in order.items.all %}
+        <li class="cabinet-line">
+          <div class="cabinet-line__media">
+            {% if item.product and item.product.main_image %}
+              <img
+                src="{{ item.product.main_image.image.url }}"
+                alt="{{ item.name }}"
+                width="72"
+                height="90"
+                loading="lazy"
+              >
+            {% else %}
+              <span class="cabinet-line__placeholder" aria-hidden="true"></span>
+            {% endif %}
+          </div>
+          <div class="cabinet-line__body">
+            <div class="cabinet-line__info">
+              {% if item.product %}
+              <a class="cabinet-line__name" href="{{ item.product.get_absolute_url }}">{{ item.name }}</a>
+              {% else %}
+              <span class="cabinet-line__name">{{ item.name }}</span>
+              {% endif %}
+              <div class="cabinet-line__meta">
+                {% if item.variant_label %}<span>{{ item.variant_label }}</span>{% endif %}
+                {% if item.sku %}<span>{% trans "Артикул" %}: {{ item.sku }}</span>{% endif %}
+                <span>{{ item.unit_price }} ₴</span>
+              </div>
+            </div>
+            <div class="cabinet-line__side">
+              <span class="cabinet-line__qty">{% trans "Кількість" %}: {{ item.quantity }}</span>
+              <span class="cabinet-line__price">{{ item.line_total }} ₴</span>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <aside class="cabinet-page__summary" aria-labelledby="order-summary-title">
+      <h2 class="cabinet-page__summary-title" id="order-summary-title">{% trans "Підсумок" %}</h2>
+      <dl class="cabinet-page__rows">
+        <div class="cabinet-page__row">
+          <dt>{% trans "Сума" %}</dt>
+          <dd>{{ order.subtotal }} ₴</dd>
+        </div>
+        <div class="cabinet-page__row cabinet-page__row--stack">
+          <dt>{% trans "Доставка" %}</dt>
+          <dd>
+            {{ order.get_delivery_type_display }}
+            {% if order.delivery_type == "nova_poshta" %}
+              {% if order.np_city_name %}<br>{{ order.np_city_name }}{% endif %}
+              {% if order.np_warehouse_name %}<br>{{ order.np_warehouse_name }}{% endif %}
+            {% elif order.delivery_type == "courier" %}
+              <br>
+              {{ order.courier_city }}{% if order.courier_street %}, {{ order.courier_street }}{% endif %}{% if order.courier_building %} {{ order.courier_building }}{% endif %}{% if order.courier_apartment %}, кв. {{ order.courier_apartment }}{% endif %}
+            {% endif %}
+          </dd>
+        </div>
+        <div class="cabinet-page__row">
+          <dt>{% trans "Оплата" %}</dt>
+          <dd>{{ order.get_payment_type_display }}</dd>
+        </div>
+        <div class="cabinet-page__row cabinet-page__row--stack">
+          <dt>{% trans "Контакт" %}</dt>
+          <dd>
+            {{ order.customer_name }}
+            <br>{{ order.customer_phone }}
+            {% if order.customer_email %}<br>{{ order.customer_email }}{% endif %}
+          </dd>
+        </div>
+      </dl>
+
+      <p class="cabinet-page__total">
+        <span>{% trans "Разом" %}</span>
+        <span class="cabinet-page__total-value">{{ order.total }} ₴</span>
+      </p>
+
+      {% if show_pay %}
+      <form method="post" action="{% url 'payments:liqpay_retry' %}">
+        {% csrf_token %}
+        <input type="hidden" name="t" value="{{ order.access_token }}">
+        <button type="submit" class="btn btn--primary cabinet-page__cta">{% trans "Оплатити" %}</button>
+      </form>
+      {% endif %}
+    </aside>
+  </div>
+
+  <p class="cabinet-page__back">
+    <a href="{% url 'accounts:orders' %}">{% trans "До списку замовлень" %}</a>
+  </p>
+</section>
+{% endblock %}

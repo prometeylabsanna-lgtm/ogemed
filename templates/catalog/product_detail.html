@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/label_icons.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/pdp.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/pdp_variants.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/pdp_zoom.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/slider_bars.css' %}">
+{% endblock %}
+
+{% block body_class %}page-pdp{% endblock %}
+
+{% block content %}
+<article class="pdp container section-gap">
+  <div class="pdp__info">
+    {% if product.brand %}<p class="pdp__brand">{{ product.brand.name }}</p>{% endif %}
+    <h1 class="pdp__title">{{ product.name }}</h1>
+
+    <div id="pdp-price" class="pdp__price">
+      {% include "catalog/partials/_variant_price.html" %}
+    </div>
+
+    {% if product.short_description and product.short_description != product.name %}
+    <p class="pdp__subtitle">{{ product.short_description }}</p>
+    {% endif %}
+
+    <div id="pdp-variants" class="pdp__variants-wrap">
+      {% include "catalog/partials/_variant_options.html" %}
+    </div>
+
+    <div id="pdp-cta" class="pdp__cta">
+      {% include "catalog/partials/_variant_cta.html" %}
+    </div>
+
+    {% with labels=product.labels %}
+    {% if labels %}
+    <ul class="pdp-labels">
+      {% for label in labels %}
+      {% comment %}Підпис — підказка: hover/фокус на desktop, тап або затискання на тачі{% endcomment %}
+      <li class="pdp-label">
+        <button
+          type="button"
+          class="pdp-label__trigger"
+          aria-label="{{ label.title }}"
+          aria-expanded="false"
+        >
+          {% include "catalog/partials/_label_icon.html" with icon=label.icon %}
+        </button>
+        <span class="pdp-label__text" aria-hidden="true">{{ label.title }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  <div id="pdp-gallery" class="pdp__gallery">
+    {% include "catalog/partials/_gallery.html" with images=gallery product=product %}
+  </div>
+
+  {% if product.description %}
+  <div class="pdp__description">{{ product.description|linebreaks }}</div>
+  {% endif %}
+
+  {% with attrs=product.attribute_values.all %}
+  {% if attrs %}
+  <div class="pdp__attrs">
+    <h2 class="pdp__attrs-title">{% trans "Характеристики" %}</h2>
+    <dl class="pdp__attrs-list">
+      {% for av in attrs %}
+        <div class="pdp__attrs-row">
+          <dt>{{ av.attribute.name }}</dt>
+          <dd>{{ av.name }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </div>
+  {% endif %}
+  {% endwith %}
+</article>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% vstatic 'js/pdp-zoom.js' %}" defer></script>
+<script src="{% vstatic 'js/pdp-labels.js' %}" defer></script>
+{% endblock %}

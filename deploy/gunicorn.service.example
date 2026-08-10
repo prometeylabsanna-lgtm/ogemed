@@ -1,0 +1,18 @@
+[Unit]
+Description=OGEMED for you (Gunicorn)
+After=network.target postgresql.service
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/ogemed
+EnvironmentFile=/var/www/ogemed/.env
+ExecStart=/var/www/ogemed/.venv/bin/gunicorn \
+    --config /var/www/ogemed/gunicorn.conf.py \
+    config.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+Оновлення замовлення {{ order.order_number }}
+
+Було: {{ previous_status_label }}
+Стало: {{ order.get_status_display }}
+Сума: {{ order.total }} грн

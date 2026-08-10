@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block title %}{% if order %}{% trans "Дякуємо за замовлення" %}{% else %}{% trans "Замовлення не знайдено" %}{% endif %} — OGEMED for you{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/checkout_thankyou.css' %}">
+{% endblock %}
+
+{% block body_class %}page-thankyou{% endblock %}
+
+{% block content %}
+<section class="thankyou container section-gap" aria-labelledby="thankyou-title">
+  {% if order %}
+  <header class="thankyou__head">
+    <p class="thankyou__kicker">{% trans "Замовлення" %}</p>
+    <h1 class="thankyou__title" id="thankyou-title">{% trans "Дякуємо за замовлення!" %}</h1>
+    <p class="thankyou__lead">
+      {% blocktrans with num=order.order_number %}Номер замовлення <strong>{{ num }}</strong>{% endblocktrans %}
+    </p>
+  </header>
+
+  <div class="thankyou__layout">
+    <div class="thankyou__panel">
+      <p class="thankyou__status">
+        <span class="thankyou__status-label">{% trans "Статус" %}</span>
+        <span class="thankyou__status-value">{{ order.get_status_display }}</span>
+      </p>
+
+      {% if order.status == 'paid' %}
+        <p class="thankyou__ok">{% trans "Оплату успішно підтверджено." %}</p>
+      {% elif order.status == 'awaiting_payment' %}
+        <p class="thankyou__wait">{% trans "Замовлення очікує оплати." %}</p>
+        {% if show_retry %}
+          <form class="thankyou__retry" method="post" action="{% url 'payments:liqpay_retry' %}">
+            {% csrf_token %}
+            <input type="hidden" name="t" value="{{ order.access_token }}">
+            <button type="submit" class="btn btn--primary thankyou__btn">{% trans "Сплатити знову" %}</button>
+          </form>
+        {% endif %}
+      {% elif order.status == 'processing' %}
+        <p class="thankyou__note">{% trans "Замовлення прийнято в обробку." %}</p>
+      {% endif %}
+
+      <ul class="thankyou__items" aria-label="{% trans 'Товари в замовленні' %}">
+        {% for item in order.items.all %}
+          <li class="thankyou__item">
+            <span class="thankyou__item-name">
+              {{ item.name }}{% if item.variant_label %} ({{ item.variant_label }}){% endif %}
+              <span class="thankyou__item-qty">× {{ item.quantity }}</span>
+            </span>
+            <span class="thankyou__item-price">{{ item.line_total }} ₴</span>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <p class="thankyou__total">
+        <span class="thankyou__total-label">{% trans "Разом" %}</span>
+        <span class="thankyou__total-value">{{ order.total }} ₴</span>
+      </p>
+    </div>
+
+    <div class="thankyou__actions">
+      <a class="btn btn--primary thankyou__btn" href="{% url 'catalog:list' %}">{% trans "Продовжити покупки" %}</a>
+      <a class="thankyou__link" href="{% url 'core:home' %}">{% trans "На головну" %}</a>
+    </div>
+  </div>
+
+  {% else %}
+  <header class="thankyou__head">
+    <p class="thankyou__kicker">404</p>
+    <h1 class="thankyou__title" id="thankyou-title">{% trans "Замовлення не знайдено" %}</h1>
+    <p class="thankyou__lead">
+      {% trans "Перевірте посилання або зверніться до менеджера." %}
+    </p>
+  </header>
+  <div class="thankyou__actions">
+    <a class="btn btn--primary thankyou__btn" href="{% url 'core:home' %}">{% trans "На головну" %}</a>
+    <a class="thankyou__link" href="{% url 'cms:contacts' %}">{% trans "Контакти" %}</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/cabinet.css' %}">
+{% endblock %}
+
+{% block body_class %}page-cabinet{% endblock %}
+
+{% block content %}
+<section class="cabinet-page container section-gap" aria-labelledby="cabinet-title">
+  <header class="cabinet-page__head">
+    <p class="cabinet-page__kicker">{% trans "Кабінет" %}</p>
+    <h1 class="cabinet-page__title" id="cabinet-title">{% trans "Замовлення" %}</h1>
+  </header>
+
+  {% include "accounts/partials/_cabinet_nav.html" with nav_active="orders" %}
+
+  {% if orders %}
+  <div class="cabinet-orders__head" aria-hidden="true">
+    <span>{% trans "Номер" %}</span>
+    <span>{% trans "Дата" %}</span>
+    <span>{% trans "Статус" %}</span>
+    <span>{% trans "Сума" %}</span>
+  </div>
+  <ul class="cabinet-orders">
+    {% for order in orders %}
+    <li class="cabinet-orders__item">
+      <a class="cabinet-orders__link" href="{% url 'accounts:order_detail' order.pk %}">
+        <span class="cabinet-orders__number">№{{ order.order_number }}</span>
+        <span class="cabinet-orders__date">{{ order.created_at|date:"d.m.Y" }}</span>
+        <span class="cabinet-orders__status">{{ order.get_status_display }}</span>
+        <span class="cabinet-orders__total">{{ order.total }} ₴</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="cabinet-empty">
+    <p class="cabinet-empty__title">{% trans "Замовлень поки немає" %}</p>
+    <p class="cabinet-empty__text">{% trans "Коли оформити перше замовлення — воно з’явиться тут." %}</p>
+    <a class="btn btn--primary" href="{% url 'catalog:list' %}">{% trans "До каталогу" %}</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

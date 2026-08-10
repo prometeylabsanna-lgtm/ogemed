@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/info-page.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/info_page_cta_sheet.css' %}">
+{% endblock %}
+
+{% block body_class %}page-info page-returns{% endblock %}
+
+{% block content %}
+<section class="info-page container section-gap">
+  <div class="info-page__layout">
+    <div class="info-page__col">
+      <header class="info-page__head">
+        <p class="info-page__kicker">{% trans "Сервіс" %}</p>
+        <h1 class="info-page__title">{{ page.title }}</h1>
+        {% if page.body %}
+        <div class="info-page__intro">
+          {{ page.body|linebreaks }}
+        </div>
+        {% endif %}
+      </header>
+
+      <ul class="info-page__list" role="list">
+        {% for item in info_sections %}
+        <li class="info-page__item">
+          <span class="info-page__label">{{ item.label }}</span>
+          <p class="info-page__value">{{ item.value }}</p>
+          <div class="info-page__text">{{ item.text|linebreaks }}</div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <aside class="info-page__aside">
+      {% include "cms/partials/_info_page_cta.html" with cta_title=cta_title cta_text=cta_text %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

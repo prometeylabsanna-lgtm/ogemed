@@ -1,0 +1,72 @@
+/* Індикатори слайдерів: активна риска довша, неактивні — короткі */
+.slider-bars {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  z-index: 3;
+}
+
+.slider-bars__item {
+  position: relative;
+  width: 14px;
+  height: 3px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: color-mix(in srgb, #fff 45%, transparent);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: width 0.28s ease, background-color 0.28s ease;
+}
+
+/* Збільшена зона натискання, візуально риска лишається тонкою */
+.slider-bars__item::after {
+  content: "";
+  position: absolute;
+  inset: -11px -4px;
+}
+
+.slider-bars__item.is-active {
+  width: 34px;
+  background: #fff;
+}
+
+.slider-bars__item:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* Варіант для світлих фото (галерея товару) */
+.slider-bars--ink .slider-bars__item {
+  background: color-mix(in srgb, var(--color-text) 28%, transparent);
+}
+
+.slider-bars--ink .slider-bars__item.is-active {
+  background: var(--color-text);
+}
+
+.slider-bars--ink .slider-bars__item:focus-visible {
+  outline-color: var(--color-text);
+}
+
+@media (max-width: 480px) {
+  .slider-bars {
+    bottom: 12px;
+    gap: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider-bars__item {
+    transition: none;
+  }
+}

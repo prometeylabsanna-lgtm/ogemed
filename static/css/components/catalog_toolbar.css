@@ -1,0 +1,473 @@
+.catalog-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.catalog-bar__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.catalog-bar__reset {
+  flex: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+  border-bottom: 1px solid currentColor;
+  padding-block: 12px;
+}
+
+/* Активна мітка з головної: чіп зі скла, хрестик знімає фільтр */
+.cat-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-divider);
+  background: color-mix(in srgb, #fff 52%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  color: var(--color-accent-700);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  --label-icon-size: 18px;
+}
+
+.cat-chip:hover {
+  background: color-mix(in srgb, #fff 64%, transparent);
+  border-color: var(--color-text);
+}
+
+/* Знятий чекбокс = фільтр уже скинуто (HTMX перемалював лише сітку) */
+.cat-chip:has(.cat-chip__input:not(:checked)) {
+  display: none;
+}
+
+.cat-chip__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.cat-chip__text {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.cat-chip__x {
+  display: flex;
+  color: var(--color-neutral-600);
+  transition: color 0.2s ease;
+}
+
+.cat-chip:hover .cat-chip__x {
+  color: var(--color-text);
+}
+
+.cat-chip__input:focus-visible ~ .cat-chip__x,
+.cat-chip:focus-within {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+/* --- dropdown --- */
+
+.cat-dd {
+  position: relative;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+/* Матове скло, як панель кошика: заливка напівпрозора, межу тримає divider,
+   бо біла рамка на світлому фоні сторінки не читалася б */
+.cat-dd__toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  background: color-mix(in srgb, #fff 52%, transparent);
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 80%, transparent) inset;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  font: inherit;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cat-dd__toggle:hover,
+.cat-dd.is-open .cat-dd__toggle {
+  background: color-mix(in srgb, #fff 64%, transparent);
+  border-color: var(--color-text);
+}
+
+.cat-dd__toggle:focus-visible {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+.cat-dd__label {
+  flex: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  white-space: nowrap;
+}
+
+.cat-dd__value {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cat-dd__chevron {
+  flex: none;
+  color: var(--color-neutral-600);
+  transition: transform 0.2s ease;
+}
+
+.cat-dd.is-open .cat-dd__chevron {
+  transform: rotate(180deg);
+}
+
+.cat-dd__panel {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% - 1px);
+  left: 0;
+  right: 0;
+  min-width: 100%;
+  max-height: min(60dvh, 380px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0;
+  background: color-mix(in srgb, #fff 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 34%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 80%, transparent) inset,
+    var(--shadow-md);
+  backdrop-filter: blur(36px) saturate(165%);
+  -webkit-backdrop-filter: blur(36px) saturate(165%);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Без підтримки backdrop-filter панель мусить лишатися непрозорою */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cat-dd__toggle {
+    background: var(--color-neutral-100);
+  }
+
+  .cat-dd__panel {
+    background: var(--color-neutral-100);
+  }
+}
+
+.cat-dd__panel[hidden] {
+  display: none;
+}
+
+.cat-dd__list,
+.cat-dd__sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cat-dd__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--color-text);
+  transition: background 0.15s ease;
+}
+
+/* напівпрозорий сірий, щоб підсвітка не читалась як інший колір на матовому склі */
+.cat-dd__link:hover {
+  background: color-mix(in srgb, var(--color-neutral-900) 7%, transparent);
+  color: var(--color-text);
+}
+
+.cat-dd__link--child {
+  padding-left: 32px;
+  font-size: 13px;
+  color: var(--color-neutral-700);
+}
+
+.cat-dd__link.is-selected {
+  background: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
+  font-weight: 600;
+}
+
+.cat-dd__check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.15s ease;
+}
+
+.cat-dd__check:hover {
+  background: color-mix(in srgb, var(--color-neutral-900) 7%, transparent);
+}
+
+.cat-dd__check input {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--color-text);
+}
+
+.cat-dd__panel--price {
+  padding: 14px 16px;
+}
+
+.cat-dd__price-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cat-dd__price-row input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  background: color-mix(in srgb, #fff 62%, transparent);
+  font: inherit;
+  /* 16px keeps iOS Safari from zooming the viewport on focus */
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.cat-dd__dash {
+  flex: none;
+  color: var(--color-neutral-600);
+}
+
+.cat-dd__apply {
+  width: auto;
+  max-width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+}
+
+/* --- sort rail --- */
+
+.catalog-sort {
+  min-width: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.catalog-sort__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.catalog-sort__form {
+  margin: 0;
+}
+
+.catalog-sort__title {
+  margin: 0 0 12px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-neutral-600);
+}
+
+.catalog-sort__list,
+.catalog-view__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.catalog-sort__list::-webkit-scrollbar,
+.catalog-view__list::-webkit-scrollbar {
+  display: none;
+}
+
+.catalog-sort__item,
+.catalog-view__item {
+  flex: none;
+  /* Contains the clipped radio so it cannot widen the document */
+  position: relative;
+}
+
+.catalog-sort__input,
+.catalog-view__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.catalog-sort__option,
+.catalog-view__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-divider);
+  font-size: 13px;
+  color: var(--color-neutral-700);
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.catalog-sort__input:checked + .catalog-sort__option,
+.catalog-view__input:checked + .catalog-view__option {
+  border-color: var(--color-text);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.catalog-sort__input:focus-visible + .catalog-sort__option,
+.catalog-view__input:focus-visible + .catalog-view__option {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+.catalog-view__icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  background: currentColor;
+  opacity: 0.85;
+}
+
+.catalog-view__icon--grid {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='1' width='6' height='6'/%3E%3Crect x='9' y='1' width='6' height='6'/%3E%3Crect x='1' y='9' width='6' height='6'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='1' width='6' height='6'/%3E%3Crect x='9' y='1' width='6' height='6'/%3E%3Crect x='1' y='9' width='6' height='6'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.catalog-view__icon--list {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='14' height='3'/%3E%3Crect x='1' y='6.5' width='14' height='3'/%3E%3Crect x='1' y='11' width='14' height='3'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='14' height='3'/%3E%3Crect x='1' y='6.5' width='14' height='3'/%3E%3Crect x='1' y='11' width='14' height='3'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+@media (min-width: 640px) {
+  /* Keep the controls compact instead of stretching across the whole row */
+  .cat-dd {
+    flex: 0 1 260px;
+  }
+}
+
+@media (min-width: 900px) {
+  .catalog-sort {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 0 0 28px;
+    border-bottom: 0;
+    border-left: 1px solid var(--color-text);
+  }
+
+  .catalog-sort__inner {
+    position: sticky;
+    top: calc(var(--header-height) + 16px);
+    gap: 28px;
+  }
+
+  .catalog-sort__list,
+  .catalog-view__list {
+    flex-direction: column;
+    gap: 2px;
+    overflow: visible;
+  }
+
+  .catalog-sort__option,
+  .catalog-view__option {
+    min-height: 36px;
+    padding: 6px 0;
+    border: 0;
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  .catalog-sort__input:checked + .catalog-sort__option,
+  .catalog-view__input:checked + .catalog-view__option {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+  }
+}
+
+/* iOS Safari keeps :hover active after a tap — neutralise it on touch devices */
+@media (hover: none) {
+  .cat-dd__toggle:hover {
+    border-color: var(--color-divider);
+    background: color-mix(in srgb, #fff 52%, transparent);
+  }
+
+  .cat-dd.is-open .cat-dd__toggle:hover {
+    background: color-mix(in srgb, #fff 64%, transparent);
+    border-color: var(--color-text);
+  }
+
+  .cat-dd__link:hover,
+  .cat-dd__check:hover {
+    background: transparent;
+  }
+
+  .cat-dd__link.is-selected:hover {
+    background: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
+  }
+}

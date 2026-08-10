@@ -1,0 +1,19 @@
+<li class="brand-tiles__item">
+  <a class="brand-tile" href="{{ brand.get_absolute_url }}">
+    <span class="brand-tile__media">
+      {% if brand.cover_image %}
+        <img
+          class="brand-tile__cover"
+          src="{{ brand.cover_image.url }}"
+          alt="{{ brand.name }}"
+          loading="lazy"
+          width="320"
+          height="240"
+        >
+      {% else %}
+        {% include "catalog/partials/_brand_logo.html" with brand=brand %}
+      {% endif %}
+    </span>
+    <span class="brand-tile__name">{{ brand.name }}</span>
+  </a>
+</li>

@@ -1,0 +1,14 @@
+{% comment %}
+HTMX-відповідь при зміні модифікації: основний swap у #pdp-price,
+плюс out-of-band оновлення селекторів, кнопки та галереї.
+{% endcomment %}
+{% include "catalog/partials/_variant_price.html" %}
+<div id="pdp-variants" class="pdp__variants-wrap" hx-swap-oob="innerHTML">
+  {% include "catalog/partials/_variant_options.html" %}
+</div>
+<div id="pdp-cta" class="pdp__cta" hx-swap-oob="innerHTML">
+  {% include "catalog/partials/_variant_cta.html" %}
+</div>
+<div id="pdp-gallery" class="pdp__gallery" hx-swap-oob="innerHTML">
+  {% include "catalog/partials/_gallery.html" with images=gallery product=product %}
+</div>

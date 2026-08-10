@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/cart_page.css' %}">
+{% endblock %}
+
+{% block body_class %}page-cart{% endblock %}
+
+{% block content %}
+<section class="cart-page container section-gap" aria-labelledby="cart-title">
+  <header class="cart-page__head">
+    <p class="cart-page__kicker">{% trans "Замовлення" %}</p>
+    <h1 class="cart-page__title" id="cart-title">{% trans "Кошик" %}</h1>
+  </header>
+  <div id="cart-panel" data-cart-panel>
+    {% include "cart/partials/_cart_panel.html" %}
+  </div>
+</section>
+{% endblock %}

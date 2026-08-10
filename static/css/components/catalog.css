@@ -1,0 +1,76 @@
+/* Сторінки каталогу світліші за решту сайту — в тон сторінки товару */
+body.page-catalog {
+  background: var(--color-bg-light);
+}
+
+.catalog__title {
+  margin: 0 0 24px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 400;
+}
+
+.catalog-controls {
+  display: block;
+  margin-bottom: clamp(20px, 3vw, 32px);
+}
+
+.catalog__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+.catalog__grid {
+  min-width: 0;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  max-width: 520px;
+}
+
+.search-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-divider);
+  background: var(--color-surface);
+  font: inherit;
+  /* 16px keeps iOS Safari from zooming the viewport on focus */
+  font-size: 16px;
+  color: var(--color-text);
+  border-radius: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (min-width: 900px) {
+  .catalog__layout {
+    grid-template-columns: minmax(0, 1fr) 216px;
+    /* повітря між сіткою та вертикальною лінією сортування;
+       поля сторінки не змінюються — відступ усередині контейнера */
+    column-gap: clamp(24px, 3vw, 40px);
+    align-items: stretch;
+  }
+
+  .catalog__grid {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* No sort rail to place beside the grid */
+  .catalog__layout--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

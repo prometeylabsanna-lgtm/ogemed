@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/components/contacts.css' %}">
+{% endblock %}
+
+{% block body_class %}page-contacts{% endblock %}
+
+{% block content %}
+<section class="contacts container section-gap">
+  <header class="contacts__head">
+    <div class="contacts__head-main">
+      <p class="contacts__kicker">{% trans "Звʼязок" %}</p>
+      <h1 class="contacts__title">{{ page.title }}</h1>
+      {% if page.body %}
+      <div class="contacts__intro">
+        {{ page.body|linebreaks }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="contacts__cta-col">
+      <p class="contacts__kicker contacts__kicker--spacer" aria-hidden="true">&nbsp;</p>
+      <div class="contacts__cta">
+        <div class="contacts__cta-panel">
+          <h2 class="contacts__cta-title">{% trans "Передзвоніть мені" %}</h2>
+          <p class="contacts__cta-text">{% trans "Залиште номер — менеджер звʼяжеться з вами найближчим часом." %}</p>
+          <button type="button" class="contacts__cta-btn" data-callback-trigger>
+            {% trans "Залишити заявку" %}
+          </button>
+          {% if site_settings.telegram_consultant_url or site_settings.telegram_url %}
+          <a
+            class="contacts__cta-secondary"
+            href="{% firstof site_settings.telegram_consultant_url site_settings.telegram_url %}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{% trans "Або написати в Telegram" %}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="contacts__layout">
+    <div class="contacts__col contacts__col--info">
+      <ul class="contacts__list" role="list">
+        {% if site_settings.phone %}
+        <li class="contacts__item">
+          <span class="contacts__label">{% trans "Телефон" %}</span>
+          <a class="contacts__value contacts__value--link" href="tel:{{ site_settings.phone|cut:' '|cut:'-' }}">{{ site_settings.phone }}</a>
+        </li>
+        {% endif %}
+
+        {% if site_settings.email %}
+        <li class="contacts__item">
+          <span class="contacts__label">{% trans "Email" %}</span>
+          <a class="contacts__value contacts__value--link" href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>
+        </li>
+        {% endif %}
+
+        {% if site_settings.telegram_url or site_settings.telegram_consultant_url %}
+        <li class="contacts__item">
+          <span class="contacts__label">Telegram</span>
+          <a
+            class="contacts__value contacts__value--link"
+            href="{% firstof site_settings.telegram_consultant_url site_settings.telegram_url %}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{% trans "Написати консультанту" %}</a>
+        </li>
+        {% endif %}
+
+        {% if site_settings.address %}
+        <li class="contacts__item">
+          <span class="contacts__label">{% trans "Адреса" %}</span>
+          <p class="contacts__value">{{ site_settings.address }}</p>
+        </li>
+        {% endif %}
+
+        {% if site_settings.work_hours %}
+        <li class="contacts__item">
+          <span class="contacts__label">{% trans "Години роботи" %}</span>
+          <p class="contacts__value">{{ site_settings.work_hours }}</p>
+        </li>
+        {% endif %}
+      </ul>
+
+      {% if site_settings.instagram_url or site_settings.facebook_url %}
+      <div class="contacts__socials">
+        <span class="contacts__label">{% trans "Соцмережі" %}</span>
+        <div class="contacts__social-row">
+          {% if site_settings.instagram_url %}
+          <a
+            class="contacts__social"
+            href="{{ site_settings.instagram_url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Instagram</a>
+          {% endif %}
+          {% if site_settings.facebook_url %}
+          <a
+            class="contacts__social"
+            href="{{ site_settings.facebook_url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Facebook</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="contacts__col contacts__col--aside">
+      {% if site_settings.map_embed_url %}
+      <div class="contacts__map">
+        <iframe
+          class="contacts__map-frame"
+          src="{{ site_settings.map_embed_url }}"
+          title="{% trans 'Карта' %}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% load i18n %}
+<div class="callback-modal" id="callback-modal" hidden data-callback-modal>
+  <div class="callback-modal__backdrop" data-callback-close></div>
+  <div
+    class="callback-modal__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="callback-title"
+  >
+    <div class="callback-modal__panel">
+      <div class="callback-modal__header">
+        <h2 class="callback-modal__title" id="callback-title">{% trans "Передзвоніть мені" %}</h2>
+        <button type="button" class="callback-modal__close" data-callback-close aria-label="{% trans 'Закрити' %}">×</button>
+      </div>
+      <form
+        class="callback-modal__form"
+        method="post"
+        action="{% url 'cms:lead_create' %}"
+        hx-post="{% url 'cms:lead_create' %}"
+        hx-target="#callback-result"
+        hx-swap="innerHTML"
+      >
+        {% csrf_token %}
+        <input type="hidden" name="lead_type" value="callback">
+        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true">
+
+        <div class="callback-modal__field">
+          <label for="cb-name">{% trans "Імʼя" %}</label>
+          <input id="cb-name" name="name" required maxlength="120" autocomplete="name">
+        </div>
+
+        <div class="callback-modal__field">
+          <label for="cb-phone">{% trans "Телефон" %}</label>
+          <input id="cb-phone" name="phone" required maxlength="32" data-phone-mask inputmode="tel" autocomplete="tel">
+        </div>
+
+        <div class="callback-modal__field">
+          <label for="cb-email">{% trans "Email" %}</label>
+          <input id="cb-email" name="email" type="email" maxlength="254" autocomplete="email">
+        </div>
+
+        <div class="callback-modal__field">
+          <label for="cb-message">{% trans "Повідомлення" %}</label>
+          <textarea id="cb-message" name="message" rows="3" maxlength="2000"></textarea>
+        </div>
+
+        <div id="callback-result" class="callback-modal__result"></div>
+
+        <div class="callback-modal__actions">
+          <button type="submit" class="btn btn--primary">{% trans "Надіслати" %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
