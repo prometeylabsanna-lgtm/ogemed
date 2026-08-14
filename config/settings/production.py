@@ -1,4 +1,4 @@
-"""Production settings (DigitalOcean Droplet or Vercel + PostgreSQL)."""
+"""Production settings (DigitalOcean Droplet or Vercel demo + SQLite)."""
 import os
 
 from .base import *  # noqa: F401,F403
@@ -6,9 +6,13 @@ from .base import BASE_DIR, env
 
 DEBUG = False
 
-_ON_VERCEL = bool(os.environ.get("VERCEL"))
+_ON_VERCEL = bool(
+    os.environ.get("VERCEL")
+    or os.environ.get("VERCEL_ENV")
+    or os.environ.get("VERCEL_GIT_COMMIT_SHA")
+)
 _DEMO_SECRET = "vercel-demo-insecure-key-not-for-real-production"
-SECRET_KEY = env("SECRET_KEY", default=_DEMO_SECRET) if _ON_VERCEL else env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default=_DEMO_SECRET)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
@@ -29,6 +33,9 @@ if _ON_VERCEL:
         if origin not in CSRF_TRUSTED_ORIGINS:
             CSRF_TRUSTED_ORIGINS.append(origin)
 
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ["*"]
+
 _database_url = os.environ.get("DATABASE_URL", "")
 if _database_url:
     DATABASES = {"default": env.db("DATABASE_URL")}
@@ -37,7 +44,7 @@ if _database_url:
     if _ON_VERCEL:
         DATABASES["default"].setdefault("OPTIONS", {})
         DATABASES["default"]["OPTIONS"].setdefault("sslmode", "require")
-elif _ON_VERCEL:
+else:
     from config.vercel_sqlite import sqlite_name
 
     DATABASES = {
@@ -46,8 +53,6 @@ elif _ON_VERCEL:
             "NAME": sqlite_name(),
         }
     }
-else:
-    DATABASES = {"default": env.db("DATABASE_URL")}
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
@@ -90,11 +95,10 @@ if AWS_STORAGE_BUCKET_NAME:
     if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
-SERVE_MEDIA = False
+SERVE_MEDIA = not bool(_database_url)
+NOTIFY_USE_QUEUE = False if (_ON_VERCEL or not _database_url) else NOTIFY_USE_QUEUE
 
 if _ON_VERCEL:
-    NOTIFY_USE_QUEUE = False
-    SERVE_MEDIA = True
     _vercel_host = os.environ.get("VERCEL_URL", "")
     if _vercel_host:
         SITE_URL = env("SITE_URL", default=f"https://{_vercel_host}")
