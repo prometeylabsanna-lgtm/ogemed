@@ -14,10 +14,9 @@ _env_file = BASE_DIR / ".env"
 if _env_file.exists():
     environ.Env.read_env(_env_file)
 
-SECRET_KEY = env(
-    "SECRET_KEY",
-    default="vercel-demo-insecure-key-not-for-real-production",
-)
+SECRET_KEY = (
+    env("SECRET_KEY", default="vercel-demo-insecure-key-not-for-real-production") or ""
+).strip() or "vercel-demo-insecure-key-not-for-real-production"
 
 DEBUG = env("DEBUG")
 

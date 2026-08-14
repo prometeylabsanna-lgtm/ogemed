@@ -12,7 +12,7 @@ _ON_VERCEL = bool(
     or os.environ.get("VERCEL_GIT_COMMIT_SHA")
 )
 _DEMO_SECRET = "vercel-demo-insecure-key-not-for-real-production"
-SECRET_KEY = env("SECRET_KEY", default=_DEMO_SECRET)
+SECRET_KEY = (env("SECRET_KEY", default=_DEMO_SECRET) or "").strip() or _DEMO_SECRET
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])

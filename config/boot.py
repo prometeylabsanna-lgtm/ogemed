@@ -9,6 +9,8 @@ def configure_settings_module() -> None:
         or os.environ.get("VERCEL_GIT_COMMIT_SHA")
     ):
         os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.production"
+        if not (os.environ.get("SECRET_KEY") or "").strip():
+            os.environ["SECRET_KEY"] = "vercel-demo-insecure-key-not-for-real-production"
         return
     if not (os.environ.get("DJANGO_SETTINGS_MODULE") or "").strip():
         os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.local"

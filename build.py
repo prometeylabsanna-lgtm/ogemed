@@ -8,6 +8,8 @@ import traceback
 os.environ["VERCEL"] = "1"
 os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.production"
 os.environ.pop("DATABASE_URL", None)
+if not (os.environ.get("SECRET_KEY") or "").strip():
+    os.environ["SECRET_KEY"] = "vercel-demo-insecure-key-not-for-real-production"
 
 
 def main() -> None:
