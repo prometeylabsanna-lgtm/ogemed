@@ -10,9 +10,14 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, []),
 )
 
-environ.Env.read_env(BASE_DIR / ".env")
+_env_file = BASE_DIR / ".env"
+if _env_file.exists():
+    environ.Env.read_env(_env_file)
 
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env(
+    "SECRET_KEY",
+    default="vercel-demo-insecure-key-not-for-real-production",
+)
 
 DEBUG = env("DEBUG")
 

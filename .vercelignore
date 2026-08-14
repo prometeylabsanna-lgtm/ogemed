@@ -1,0 +1,17 @@
+.venv
+venv
+.env
+.env.local
+.git
+.cursor
+media/products
+media/hero
+media/site
+media/brands/covers
+media/brands/showcase
+staticfiles
+OGEMED Homepage Prototype
+htmlcov
+.pytest_cache
+.mypy_cache
+.ruff_cache

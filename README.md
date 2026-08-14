@@ -10,7 +10,7 @@
 - Admin: базова Django Admin
 - Email: Resend API · Notify: Telegram / Viber (best-effort)
 - Оплата: LiqPay + COD · Доставка: Нова Пошта + курʼєр
-- Deploy: DigitalOcean Droplet → Nginx + Gunicorn + PostgreSQL
+- Deploy: Vercel (Django Function) + PostgreSQL + S3/R2 media; або DigitalOcean Droplet → Nginx + Gunicorn + PostgreSQL
 
 **Фаза 2 інфраструктури — Redis + черга:** Django-Q2 підключено.
 Увімкнення: `NOTIFY_USE_QUEUE=True` (+ опційно `REDIS_URL`). Воркер: `python manage.py qcluster`.
@@ -50,7 +50,8 @@ python manage.py test
 
 ## Деплой
 
-Див. [deploy/DEPLOY.md](deploy/DEPLOY.md), `deploy/nginx.conf.example`, `deploy/gunicorn.service.example`, `gunicorn.conf.py`.
+- Vercel (вітрина без env): [deploy/VERCEL.md](deploy/VERCEL.md)
+- Droplet: [deploy/DEPLOY.md](deploy/DEPLOY.md), `deploy/nginx.conf.example`, `deploy/gunicorn.service.example`, `gunicorn.conf.py`.
 
 ## URL (SITE_MAP)
 

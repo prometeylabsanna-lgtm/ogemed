@@ -187,6 +187,11 @@ class Command(BaseCommand):
                 f"Done. New pages: {created_count}, updated: {updated_count}"
             )
         )
+        from django.conf import settings
         from django.core.management import call_command
 
         call_command("seed_catalog")
+        call_command("seed_brands")
+        sources = settings.BASE_DIR / "media" / "brands" / "sources"
+        if sources.is_dir():
+            call_command("import_brand_covers", src=str(sources))

@@ -1,0 +1,5 @@
+[tool.vercel]
+# Entrypoint: config.wsgi:application (via manage.py + WSGI_APPLICATION)
+
+[tool.vercel.scripts]
+build = "python manage.py migrate --noinput && python manage.py seed_demo"

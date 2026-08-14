@@ -3,7 +3,8 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.static import serve as serve_media
 
 from apps.core.views import health
 from apps.core.seo_views import robots_txt, sitemap_xml
@@ -33,3 +34,11 @@ handler404 = "apps.core.views.page_not_found"
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+elif getattr(settings, "SERVE_MEDIA", False):
+    urlpatterns += [
+        re_path(
+            r"^media/(?P<path>.*)$",
+            serve_media,
+            {"document_root": settings.MEDIA_ROOT},
+        ),
+    ]
