@@ -1,5 +1,24 @@
+[project]
+name = "ogemed"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "Django==5.2.16",
+    "django-environ==0.12.0",
+    "django-htmx==1.27.0",
+    "django-q2==1.10.0",
+    "Pillow==12.1.0",
+    "psycopg2-binary==2.9.11",
+    "gunicorn==24.1.0",
+    "django-storages==1.14.6",
+    "boto3==1.42.25",
+]
+
+[tool.uv]
+package = false
+
 [tool.vercel]
-# Entrypoint: config.wsgi:application (via manage.py + WSGI_APPLICATION)
+entrypoint = "config.wsgi:application"
 
 [tool.vercel.scripts]
 build = "python manage.py migrate --noinput && python manage.py seed_demo"
