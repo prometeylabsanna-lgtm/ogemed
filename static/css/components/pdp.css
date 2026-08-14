@@ -264,7 +264,7 @@ body.page-pdp {
   flex: 0 0 auto;
   /* колір маски-іконки (.label-icon) і підпису — один */
   color: var(--color-accent-700);
-  --label-icon-size: 38px;
+  --label-icon-size: 48px;
 }
 
 /* крайні підказки тримаються краю рамки, а не центру іконки — інакше зрізає */
@@ -377,7 +377,7 @@ body.page-pdp {
 
 @media (min-width: 480px) {
   .pdp-label {
-    --label-icon-size: 42px;
+    --label-icon-size: 56px;
   }
 
   .pdp-label__text {

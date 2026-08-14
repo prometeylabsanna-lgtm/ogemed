@@ -61,6 +61,9 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
+# Vercel: SQLite у /tmp не спільний між лямбдами — кошик зникав на /oformlennya/.
+if _ON_VERCEL:
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
