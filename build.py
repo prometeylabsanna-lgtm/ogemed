@@ -19,6 +19,8 @@ def main() -> None:
     execute_from_command_line(["manage.py", "migrate", "--noinput"])
     print("vercel_build: seed_demo", flush=True)
     execute_from_command_line(["manage.py", "seed_demo"])
+    print("vercel_build: collectstatic", flush=True)
+    execute_from_command_line(["manage.py", "collectstatic", "--noinput"])
     print("vercel_build: done", flush=True)
 
 

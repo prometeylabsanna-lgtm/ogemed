@@ -70,7 +70,7 @@ STORAGES = {
     },
     "staticfiles": {
         "BACKEND": (
-            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            "whitenoise.storage.CompressedStaticFilesStorage"
             if _ON_VERCEL
             else "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
         ),
