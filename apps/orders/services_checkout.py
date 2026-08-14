@@ -44,7 +44,7 @@ def create_order_from_cart(request, cleaned_data: dict) -> Order:
 
     subtotal = sum((line.line_total for line in lines), Decimal("0"))
     payment_type = cleaned_data["payment_type"]
-    if payment_type == PaymentType.LIQPAY:
+    if payment_type in (PaymentType.LIQPAY, PaymentType.FOP_CARD):
         initial_status = OrderStatus.AWAITING_PAYMENT
     else:
         initial_status = OrderStatus.PROCESSING

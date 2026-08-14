@@ -12,6 +12,7 @@ from apps.orders.models import Order, OrderStatus, PaymentType
 from apps.payments.views import start_liqpay_payment
 
 from .forms import CheckoutForm
+from .fop_payment import fop_payment_details
 from .services_checkout import InsufficientStockError, create_order_from_cart
 
 
@@ -149,4 +150,6 @@ class ThankYouView(TemplateView):
             order and order.status == OrderStatus.AWAITING_PAYMENT
             and order.payment_type == PaymentType.LIQPAY
         )
+        ctx["show_fop"] = bool(order and order.payment_type == PaymentType.FOP_CARD)
+        ctx["fop"] = fop_payment_details(order) if ctx["show_fop"] else None
         return ctx

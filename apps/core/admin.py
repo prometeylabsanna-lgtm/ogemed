@@ -43,6 +43,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                 ),
             },
         ),
+        (
+            "Реквізити ФОП (оплата на картку / IBAN)",
+            {
+                "fields": (
+                    "fop_recipient_name",
+                    "fop_iban",
+                    "fop_card_number",
+                    "fop_edrpou",
+                ),
+            },
+        ),
     )
 
     def has_add_permission(self, request) -> bool:

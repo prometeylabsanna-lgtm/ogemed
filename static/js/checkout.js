@@ -195,6 +195,20 @@
 })();
 
 (() => {
+  const paySelect = document.querySelector("#id_payment_type");
+  if (!paySelect) return;
+  const hints = document.querySelectorAll("[data-payment-hint]");
+  const syncPayHint = () => {
+    const value = paySelect.value;
+    hints.forEach((el) => {
+      el.hidden = el.getAttribute("data-payment-hint") !== value;
+    });
+  };
+  paySelect.addEventListener("change", syncPayHint);
+  syncPayHint();
+})();
+
+(() => {
   const form = document.querySelector("[data-checkout-form]");
   if (!form) return;
 

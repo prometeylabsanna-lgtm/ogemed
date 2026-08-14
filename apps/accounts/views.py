@@ -16,6 +16,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import FormView
 
 from apps.core.breadcrumbs import build_breadcrumbs
+from apps.orders.fop_payment import fop_payment_details
 from apps.orders.models import Order, OrderStatus, PaymentType
 
 from .forms import EmailAuthenticationForm, ProfileForm, RegisterForm
@@ -184,6 +185,10 @@ def order_detail(request, pk):
             "page_title": _("Замовлення №%(n)s") % {"n": order.order_number},
             "show_pay": order.status == OrderStatus.AWAITING_PAYMENT
             and order.payment_type == PaymentType.LIQPAY,
+            "show_fop": order.payment_type == PaymentType.FOP_CARD,
+            "fop": fop_payment_details(order)
+            if order.payment_type == PaymentType.FOP_CARD
+            else None,
             "breadcrumbs": build_breadcrumbs(
                 request,
                 (_("Кабінет"), reverse("accounts:cabinet")),

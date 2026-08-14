@@ -48,6 +48,27 @@ class NotifyTemplatesTests(TestCase):
         html = send_email.call_args_list[0][0][2]
         self.assertIn(self.order.order_number, html)
 
+    @override_settings(RESEND_API_KEY="test-key", FROM_EMAIL="shop@example.com")
+    @patch("apps.notify.services.send_email")
+    @patch("apps.notify.services.send_telegram")
+    @patch("apps.notify.services.send_viber")
+    def test_new_order_fop_includes_requisites(self, _viber, _tg, send_email):
+        from apps.core.models import SiteSettings
+
+        site = SiteSettings.load()
+        site.fop_recipient_name = "ФОП Тестова"
+        site.fop_iban = "UA111122223333444455556666777"
+        site.fop_edrpou = "1122334455"
+        site.save()
+        self.order.payment_type = PaymentType.FOP_CARD
+        self.order.save(update_fields=["payment_type"])
+        with self.captureOnCommitCallbacks(execute=True):
+            notify_new_order(self.order)
+        html = send_email.call_args_list[-1][0][2]
+        self.assertIn("Реквізити для оплати", html)
+        self.assertIn("ФОП Тестова", html)
+        self.assertIn(f"Оплата замовлення №{self.order.order_number}", html)
+
     def test_notify_false_skips_email(self):
         with patch("apps.notify.services.notify_order_status_changed") as mocked:
             OrderStatusService.transition(

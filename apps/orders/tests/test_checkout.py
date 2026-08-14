@@ -125,6 +125,50 @@ class CartCheckoutTests(TestCase):
         order = Order.objects.get()
         self.assertEqual(order.status, OrderStatus.AWAITING_PAYMENT)
 
+    def test_fop_checkout_awaits_payment_and_shows_requisites(self):
+        from apps.core.models import SiteSettings
+
+        site = SiteSettings.load()
+        site.fop_recipient_name = "ФОП Тестова"
+        site.fop_iban = "UA123456789012345678901234567"
+        site.fop_card_number = "5168755511112222"
+        site.fop_edrpou = "1234567890"
+        site.save()
+
+        self.client.post(reverse("cart:add"), {"variant_id": self.variant.pk})
+        r = self.client.post(
+            reverse("orders:checkout"),
+            {
+                "customer_name": "Іван",
+                "customer_phone": "+380501112233",
+                "delivery_type": DeliveryType.COURIER,
+                "courier_city": "Київ",
+                "courier_street": "Хрещатик",
+                "payment_type": PaymentType.FOP_CARD,
+            },
+        )
+        self.assertEqual(r.status_code, 302)
+        order = Order.objects.get()
+        self.assertEqual(order.payment_type, PaymentType.FOP_CARD)
+        self.assertEqual(order.status, OrderStatus.AWAITING_PAYMENT)
+
+        thank = self.client.get(
+            reverse("orders:thank_you"),
+            {"order": order.order_number, "t": order.access_token},
+        )
+        self.assertEqual(thank.status_code, 200)
+        self.assertContains(thank, "ФОП Тестова")
+        self.assertContains(thank, "UA123456789012345678901234567")
+        self.assertContains(thank, f"Оплата замовлення №{order.order_number}")
+        self.assertContains(thank, "Скопіювати реквізити")
+
+    def test_checkout_page_lists_fop_payment(self):
+        self.client.post(reverse("cart:add"), {"variant_id": self.variant.pk})
+        r = self.client.get(reverse("orders:checkout"))
+        self.assertContains(r, "fop_card")
+        self.assertContains(r, "Оплата на картку / рахунок ФОП")
+        self.assertContains(r, "ви отримаєте реквізити")
+
     def test_checkout_rejects_invalid_phone(self):
         self.client.post(reverse("cart:add"), {"variant_id": self.variant.pk})
         r = self.client.post(

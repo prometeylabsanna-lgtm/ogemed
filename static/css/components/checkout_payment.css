@@ -1,0 +1,21 @@
+.checkout-pay-hint {
+  margin-top: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-neutral-700);
+  background: color-mix(in srgb, var(--color-accent-100) 40%, white);
+  border: 1px solid color-mix(in srgb, var(--color-accent-400) 28%, transparent);
+}
+
+@media (max-width: 767px) {
+  .checkout-pay-hint {
+    font-size: 14px;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .checkout-pay-hint {
+    -webkit-text-size-adjust: 100%;
+  }
+}

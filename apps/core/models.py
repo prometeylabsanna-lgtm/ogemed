@@ -44,6 +44,19 @@ class SiteSettings(models.Model):
         blank=True,
         default="Косметика с заботой о вас",
     )
+    fop_recipient_name = models.CharField(
+        _("ФОП: одержувач"),
+        max_length=255,
+        blank=True,
+        help_text=_("ПІБ ФОП або назва для оплати за реквізитами"),
+    )
+    fop_iban = models.CharField(_("ФОП: IBAN"), max_length=34, blank=True)
+    fop_card_number = models.CharField(_("ФОП: номер картки"), max_length=32, blank=True)
+    fop_edrpou = models.CharField(
+        _("ФОП: ЄДРПОУ / ІПН"),
+        max_length=20,
+        blank=True,
+    )
     updated_at = models.DateTimeField(_("Оновлено"), auto_now=True)
 
     class Meta:

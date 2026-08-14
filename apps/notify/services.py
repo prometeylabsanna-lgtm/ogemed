@@ -126,17 +126,20 @@ def send_viber(text: str) -> None:
 
 
 def task_notify_new_order(order_id: int) -> None:
-    from apps.orders.models import Order
+    from apps.orders.fop_payment import fop_payment_details
+    from apps.orders.models import Order, PaymentType
 
     order = Order.objects.filter(pk=order_id).first()
     if not order:
         return
+
+    fop = fop_payment_details(order) if order.payment_type == PaymentType.FOP_CARD else None
     manager = _manager_email()
     admin_html, admin_text = _render_email(
-        "new_order", {"order": order, "for_customer": False}
+        "new_order", {"order": order, "for_customer": False, "fop": fop}
     )
     customer_html, customer_text = _render_email(
-        "new_order", {"order": order, "for_customer": True}
+        "new_order", {"order": order, "for_customer": True, "fop": fop}
     )
     subject_admin = f"Нове замовлення {order.order_number}"
     subject_customer = f"Ваше замовлення {order.order_number}"
@@ -144,6 +147,7 @@ def task_notify_new_order(order_id: int) -> None:
         f"Замовлення {order.order_number}\n"
         f"{order.customer_name}, {order.customer_phone}\n"
         f"Сума: {order.total} грн\n"
+        f"Оплата: {order.get_payment_type_display()}\n"
         f"Статус: {order.get_status_display()}"
     )
     if manager:

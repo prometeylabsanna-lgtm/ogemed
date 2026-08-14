@@ -7,3 +7,13 @@
 Оплата: {{ order.get_payment_type_display }}
 Доставка: {{ order.get_delivery_type_display }}
 Статус: {{ order.get_status_display }}
+{% if fop %}
+Реквізити для оплати
+{% if fop.configured %}{% if fop.recipient %}Одержувач: {{ fop.recipient }}
+{% endif %}{% if fop.card %}Картка: {{ fop.card }}
+{% endif %}{% if fop.iban %}IBAN: {{ fop.iban }}
+{% endif %}{% if fop.edrpou %}ЄДРПОУ / ІПН: {{ fop.edrpou }}
+{% endif %}Призначення платежу: {{ fop.purpose }}
+Сума до сплати: {{ fop.amount }} грн
+{% else %}Менеджер надішле реквізити та підтвердить оплату.
+{% endif %}{% endif %}

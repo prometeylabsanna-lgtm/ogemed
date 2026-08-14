@@ -14,6 +14,7 @@ ALLOWED_TRANSITIONS: dict[str, set[str]] = {
     },
     OrderStatus.AWAITING_PAYMENT: {
         OrderStatus.PAID,
+        OrderStatus.PROCESSING,
         OrderStatus.CANCELLED,
     },
     OrderStatus.PAID: {

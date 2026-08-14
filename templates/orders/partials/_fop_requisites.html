@@ -1,0 +1,53 @@
+{% load i18n %}
+<div class="fop-req" data-fop-requisites>
+  <h2 class="fop-req__title">{% trans "Реквізити для оплати" %}</h2>
+  {% if fop.configured %}
+  <dl class="fop-req__list">
+    {% if fop.recipient %}
+    <div class="fop-req__row">
+      <dt>{% trans "Одержувач" %}</dt>
+      <dd>{{ fop.recipient }}</dd>
+    </div>
+    {% endif %}
+    {% if fop.card %}
+    <div class="fop-req__row">
+      <dt>{% trans "Номер картки" %}</dt>
+      <dd>{{ fop.card }}</dd>
+    </div>
+    {% endif %}
+    {% if fop.iban %}
+    <div class="fop-req__row">
+      <dt>IBAN</dt>
+      <dd>{{ fop.iban }}</dd>
+    </div>
+    {% endif %}
+    {% if fop.edrpou %}
+    <div class="fop-req__row">
+      <dt>{% trans "ЄДРПОУ / ІПН" %}</dt>
+      <dd>{{ fop.edrpou }}</dd>
+    </div>
+    {% endif %}
+    <div class="fop-req__row">
+      <dt>{% trans "Призначення платежу" %}</dt>
+      <dd>{{ fop.purpose }}</dd>
+    </div>
+    <div class="fop-req__row">
+      <dt>{% trans "Сума до сплати" %}</dt>
+      <dd>{{ fop.amount }} ₴</dd>
+    </div>
+  </dl>
+  <button
+    type="button"
+    class="btn btn--primary fop-req__copy"
+    data-fop-copy
+    data-copied-label="{% trans 'Скопійовано' %}"
+  >
+    {% trans "Скопіювати реквізити" %}
+  </button>
+  <textarea class="fop-req__src" readonly hidden>{{ fop.copy_text }}</textarea>
+  {% else %}
+  <p class="fop-req__wait">
+    {% trans "Менеджер надішле реквізити та звʼяжеться для підтвердження оплати." %}
+  </p>
+  {% endif %}
+</div>

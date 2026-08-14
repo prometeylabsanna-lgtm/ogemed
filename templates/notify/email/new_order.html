@@ -20,4 +20,19 @@
 <p style="margin:0 0 8px;font-size:14px;"><strong>Оплата:</strong> {{ order.get_payment_type_display }}</p>
 <p style="margin:0 0 8px;font-size:14px;"><strong>Доставка:</strong> {{ order.get_delivery_type_display }}</p>
 <p style="margin:0 0 8px;font-size:14px;"><strong>Статус:</strong> {{ order.get_status_display }}</p>
+{% if fop %}
+  <div style="margin:16px 0 0;padding:14px;border:1px solid #e8ddd8;">
+    <p style="margin:0 0 8px;font-size:15px;font-weight:600;">Реквізити для оплати</p>
+    {% if fop.configured %}
+      {% if fop.recipient %}<p style="margin:0 0 6px;font-size:14px;"><strong>Одержувач:</strong> {{ fop.recipient }}</p>{% endif %}
+      {% if fop.card %}<p style="margin:0 0 6px;font-size:14px;"><strong>Картка:</strong> {{ fop.card }}</p>{% endif %}
+      {% if fop.iban %}<p style="margin:0 0 6px;font-size:14px;"><strong>IBAN:</strong> {{ fop.iban }}</p>{% endif %}
+      {% if fop.edrpou %}<p style="margin:0 0 6px;font-size:14px;"><strong>ЄДРПОУ / ІПН:</strong> {{ fop.edrpou }}</p>{% endif %}
+      <p style="margin:0 0 6px;font-size:14px;"><strong>Призначення платежу:</strong> {{ fop.purpose }}</p>
+      <p style="margin:0;font-size:14px;"><strong>Сума до сплати:</strong> {{ fop.amount }} ₴</p>
+    {% else %}
+      <p style="margin:0;font-size:14px;">Менеджер надішле реквізити та підтвердить оплату.</p>
+    {% endif %}
+  </div>
+{% endif %}
 {% endblock %}

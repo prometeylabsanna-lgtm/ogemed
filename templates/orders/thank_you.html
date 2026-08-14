@@ -5,6 +5,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% vstatic 'css/components/checkout_thankyou.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/thankyou_fop.css' %}">
 {% endblock %}
 
 {% block body_class %}page-thankyou{% endblock %}
@@ -40,6 +41,10 @@
         {% endif %}
       {% elif order.status == 'processing' %}
         <p class="thankyou__note">{% trans "Замовлення прийнято в обробку." %}</p>
+      {% endif %}
+
+      {% if show_fop %}
+        {% include "orders/partials/_fop_requisites.html" %}
       {% endif %}
 
       <ul class="thankyou__items" aria-label="{% trans 'Товари в замовленні' %}">
@@ -80,4 +85,10 @@
   </div>
   {% endif %}
 </section>
+{% endblock %}
+
+{% block extra_js %}
+{% if show_fop %}
+<script src="{% vstatic 'js/thankyou-fop.js' %}" defer></script>
+{% endif %}
 {% endblock %}

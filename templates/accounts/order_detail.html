@@ -3,6 +3,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% vstatic 'css/components/cabinet.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/components/thankyou_fop.css' %}">
 {% endblock %}
 
 {% block body_class %}page-cabinet{% endblock %}
@@ -101,6 +102,10 @@
         <span class="cabinet-page__total-value">{{ order.total }} ₴</span>
       </p>
 
+      {% if show_fop %}
+        {% include "orders/partials/_fop_requisites.html" %}
+      {% endif %}
+
       {% if show_pay %}
       <form method="post" action="{% url 'payments:liqpay_retry' %}">
         {% csrf_token %}
@@ -115,4 +120,10 @@
     <a href="{% url 'accounts:orders' %}">{% trans "До списку замовлень" %}</a>
   </p>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+{% if show_fop %}
+<script src="{% vstatic 'js/thankyou-fop.js' %}" defer></script>
+{% endif %}
 {% endblock %}
