@@ -1,0 +1,28 @@
+"""Vercel build: migrate + demo seed. Always SQLite, unbuffered logs."""
+from __future__ import annotations
+
+import os
+import sys
+import traceback
+
+os.environ["VERCEL"] = "1"
+os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.production"
+os.environ.pop("DATABASE_URL", None)
+
+
+def main() -> None:
+    print("vercel_build: migrate", flush=True)
+    from django.core.management import execute_from_command_line
+
+    execute_from_command_line(["manage.py", "migrate", "--noinput"])
+    print("vercel_build: seed_demo", flush=True)
+    execute_from_command_line(["manage.py", "seed_demo"])
+    print("vercel_build: done", flush=True)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception:
+        traceback.print_exc()
+        sys.exit(1)

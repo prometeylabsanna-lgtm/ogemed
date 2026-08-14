@@ -36,7 +36,7 @@ if _ON_VERCEL:
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ["*"]
 
-_database_url = os.environ.get("DATABASE_URL", "")
+_database_url = "" if _ON_VERCEL else os.environ.get("DATABASE_URL", "")
 if _database_url:
     DATABASES = {"default": env.db("DATABASE_URL")}
     DATABASES["default"]["CONN_MAX_AGE"] = 0 if _ON_VERCEL else 60
@@ -69,7 +69,11 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            if _ON_VERCEL
+            else "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+        ),
     },
 }
 

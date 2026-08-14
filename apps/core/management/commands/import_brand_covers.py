@@ -103,8 +103,17 @@ class Command(BaseCommand):
                 skipped += 1
                 continue
 
+            try:
+                cover_bytes = _to_cover(path)
+            except Exception as exc:
+                self.stdout.write(
+                    self.style.WARNING(f"× {path.name}: не відкрилось ({exc})")
+                )
+                skipped += 1
+                continue
+
             brand.cover_image.save(
-                f"{brand.slug}.webp", ContentFile(_to_cover(path)), save=True
+                f"{brand.slug}.webp", ContentFile(cover_bytes), save=True
             )
             imported += 1
             self.stdout.write(self.style.SUCCESS(f"✓ {brand.slug} → {brand.cover_image.name}"))
