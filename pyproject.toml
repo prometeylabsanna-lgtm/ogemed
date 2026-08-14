@@ -8,10 +8,6 @@ dependencies = [
     "django-htmx==1.27.0",
     "django-q2==1.10.0",
     "Pillow==12.1.0",
-    "psycopg2-binary==2.9.11",
-    "gunicorn==24.1.0",
-    "django-storages==1.14.6",
-    "boto3==1.42.25",
 ]
 
 [tool.uv]
@@ -21,4 +17,4 @@ package = false
 entrypoint = "config.wsgi:application"
 
 [tool.vercel.scripts]
-build = "python -u deploy/vercel_build.py"
+build = "python -u build.py"
