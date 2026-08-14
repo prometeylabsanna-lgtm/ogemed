@@ -3,12 +3,11 @@
 import os
 import sys
 
+from config.boot import configure_settings_module
+
 
 def main() -> None:
-    os.environ.setdefault(
-        "DJANGO_SETTINGS_MODULE",
-        "config.settings.production" if os.environ.get("VERCEL") else "config.settings.local",
-    )
+    configure_settings_module()
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
