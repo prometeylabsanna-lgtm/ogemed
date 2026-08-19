@@ -12,6 +12,7 @@ CARE_BRANDS = [
     ("lamic", "Lamic"),
     ("tebiskin", "Tebiskin"),
     ("sesderma", "Sesderma"),
+    ("cure-skin", "Cure Skin"),
     ("renew", "Renew"),
     ("pelart-laboratory", "Pelart Laboratory"),
     ("dr-kadir", "Dr.Kadir"),
