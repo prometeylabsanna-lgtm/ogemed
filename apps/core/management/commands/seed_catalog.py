@@ -484,7 +484,7 @@ class Command(BaseCommand):
                 "sku": "OGM-AMP-CB7",
                 "price": "1450.00",
                 "old_price": "1690.00",
-                "label_uk": "7×2 мл",
+                "label_uk": "10 мл",
                 "image": "novinka-v5-ampoules-collagen.png",
             },
             {

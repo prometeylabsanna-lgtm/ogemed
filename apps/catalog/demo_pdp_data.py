@@ -14,13 +14,20 @@ from apps.catalog.models import (
 )
 
 
-def _attr(slug: str, name_uk: str, name_ru: str, sort_order: int) -> Attribute:
+def _attr(
+    slug: str,
+    name_uk: str,
+    name_ru: str,
+    sort_order: int,
+    *,
+    is_filterable: bool = True,
+) -> Attribute:
     obj, _ = Attribute.objects.update_or_create(
         slug=slug,
         defaults={
             "name_uk": name_uk,
             "name_ru": name_ru,
-            "is_filterable": True,
+            "is_filterable": is_filterable,
             "sort_order": sort_order,
         },
     )
@@ -51,9 +58,11 @@ def _value(
 def seed_catalog_attributes() -> dict[str, AttributeValue]:
     """Shared attribute dictionary for filters + PDP characteristics."""
     obyem = _attr("obyem", "Обʼєм", "Объём", 10)
-    kolir = _attr("kolir", "Колір", "Цвет", 20)
+    # Колір лишаємо в БД для старих даних, але не показуємо у фільтрах/PDP.
+    _attr("kolir", "Колір", "Цвет", 20, is_filterable=False)
     rozmir = _attr("rozmir", "Розмір", "Размер", 30)
     kraina = _attr("kraina", "Країна виробник", "Страна производитель", 40)
+    care = _attr("typ-doglyadu", "Тип догляду", "Тип ухода", 45)
     typ = _attr("typ-shkiry", "Тип шкіри", "Тип кожи", 50)
     ingredients = _attr(
         "aktyvni-ingredienty",
@@ -63,21 +72,34 @@ def seed_catalog_attributes() -> dict[str, AttributeValue]:
     )
 
     values = {
-        "vol_30": _value(obyem, "30-ml", "30 мл", "30 мл", 1),
-        "vol_50": _value(obyem, "50-ml", "50 мл", "50 мл", 2),
-        "vol_75": _value(obyem, "75-ml", "75 мл", "75 мл", 3),
-        "vol_100": _value(obyem, "100-ml", "100 мл", "100 мл", 4),
-        "vol_200": _value(obyem, "200-ml", "200 мл", "200 мл", 5),
-        "vol_7x2": _value(obyem, "7x2-ml", "7×2 мл", "7×2 мл", 6),
-        "color_clear": _value(
-            kolir, "bezbarvnyy", "Безбарвний", "Бесцветный", 1, "#F3F6F4"
-        ),
-        "color_green": _value(kolir, "zelenyy", "Зелений", "Зелёный", 2, "#3D6B4F"),
+        "vol_1": _value(obyem, "1-ml", "1 мл", "1 мл", 1),
+        "vol_3": _value(obyem, "3-ml", "3 мл", "3 мл", 2),
+        "vol_5": _value(obyem, "5-ml", "5 мл", "5 мл", 3),
+        "vol_9": _value(obyem, "9-ml", "9 мл", "9 мл", 4),
+        "vol_10": _value(obyem, "10-ml", "10 мл", "10 мл", 5),
+        "vol_30": _value(obyem, "30-ml", "30 мл", "30 мл", 6),
+        "vol_50": _value(obyem, "50-ml", "50 мл", "50 мл", 7),
+        "vol_75": _value(obyem, "75-ml", "75 мл", "75 мл", 8),
+        "vol_100": _value(obyem, "100-ml", "100 мл", "100 мл", 9),
+        "vol_200": _value(obyem, "200-ml", "200 мл", "200 мл", 10),
+        "vol_225": _value(obyem, "225-ml", "225 мл", "225 мл", 11),
+        "vol_250": _value(obyem, "250-ml", "250 мл", "250 мл", 12),
+        "vol_500": _value(obyem, "500-ml", "500 мл", "500 мл", 13),
+        "vol_887": _value(obyem, "887-ml", "887 мл", "887 мл", 14),
+        "vol_1000": _value(obyem, "1000-ml", "1000 мл", "1000 мл", 15),
+        "vol_2000": _value(obyem, "2000-ml", "2000 мл", "2000 мл", 16),
         "size_s": _value(rozmir, "s", "S", "S", 1),
         "size_m": _value(rozmir, "m", "M", "M", 2),
         "country_ua": _value(kraina, "ukrayina", "Україна", "Украина", 1),
         "country_kr": _value(kraina, "koreya", "Корея", "Корея", 2),
         "country_fr": _value(kraina, "frantsiya", "Франція", "Франция", 3),
+        "care_home": _value(
+            care,
+            "dlya-domashnogo-doglyadu",
+            "Для домашнього догляду",
+            "Для домашнего ухода",
+            1,
+        ),
         "skin_sensitive": _value(typ, "chutlyva", "Чутлива", "Чувствительная", 1),
         "skin_dry": _value(typ, "sukha", "Суха", "Сухая", 2),
         "skin_normal": _value(typ, "normalna", "Нормальна", "Нормальная", 3),
@@ -155,6 +177,8 @@ def seed_catalog_attributes() -> dict[str, AttributeValue]:
             10,
         ),
     }
+    AttributeValue.objects.filter(attribute=obyem, slug="7x2-ml").delete()
+    AttributeValue.objects.filter(attribute__slug="kolir").delete()
     return values
 
 
@@ -209,7 +233,7 @@ def _upsert_variant(
 
 
 def seed_pure_active_pdp(values: dict[str, AttributeValue] | None = None) -> None:
-    """Matrix 2×2 (обʼєм × колір) для serum-pure-active."""
+    """Варіанти лише за обʼємом для serum-pure-active (без кольору)."""
     values = values or seed_catalog_attributes()
     product = Product.objects.filter(slug="serum-pure-active").first()
     if product is None:
@@ -221,50 +245,29 @@ def seed_pure_active_pdp(values: dict[str, AttributeValue] | None = None) -> Non
     matrix = [
         {
             "sku": "OGM-SER-PA50",
-            "label_uk": "50 мл / Безбарвний",
-            "label_ru": "50 мл / Бесцветный",
+            "label_uk": "50 мл",
+            "label_ru": "50 мл",
             "price": "980.00",
             "old_price": None,
             "stock": 20,
             "sort_order": 0,
-            "attrs": [values["vol_50"], values["color_clear"]],
-        },
-        {
-            "sku": "OGM-SER-PA50-G",
-            "label_uk": "50 мл / Зелений",
-            "label_ru": "50 мл / Зелёный",
-            "price": "980.00",
-            "old_price": None,
-            "stock": 12,
-            "sort_order": 1,
-            "attrs": [values["vol_50"], values["color_green"]],
+            "attrs": [values["vol_50"]],
         },
         {
             "sku": "OGM-SER-PA100",
-            "label_uk": "100 мл / Безбарвний",
-            "label_ru": "100 мл / Бесцветный",
+            "label_uk": "100 мл",
+            "label_ru": "100 мл",
             "price": "1450.00",
             "old_price": "1590.00",
             "stock": 8,
-            "sort_order": 2,
-            "attrs": [values["vol_100"], values["color_clear"]],
-        },
-        {
-            "sku": "OGM-SER-PA100-G",
-            "label_uk": "100 мл / Зелений",
-            "label_ru": "100 мл / Зелёный",
-            "price": "1450.00",
-            "old_price": "1590.00",
-            "stock": 5,
-            "sort_order": 3,
-            "attrs": [values["vol_100"], values["color_green"]],
+            "sort_order": 1,
+            "attrs": [values["vol_100"]],
         },
     ]
 
     keep_skus = set()
-    variants_by_sku: dict[str, ProductVariant] = {}
     for row in matrix:
-        variant = _upsert_variant(
+        _upsert_variant(
             product,
             sku=row["sku"],
             label_uk=row["label_uk"],
@@ -276,29 +279,14 @@ def seed_pure_active_pdp(values: dict[str, AttributeValue] | None = None) -> Non
             attr_values=row["attrs"],
         )
         keep_skus.add(row["sku"])
-        variants_by_sku[row["sku"]] = variant
 
     product.variants.exclude(sku__in=keep_skus).update(is_active=False)
 
     images = list(product.images.order_by("-is_main", "sort_order", "id"))
-    if not images:
-        return
-    ProductImage.objects.filter(pk=images[0].pk).update(variant=None)
-    if len(images) < 2:
-        return
-    source = images[1]
-    for sku in ("OGM-SER-PA50-G", "OGM-SER-PA100-G"):
-        variant = variants_by_sku[sku]
-        img, _ = ProductImage.objects.update_or_create(
-            product=product,
-            variant=variant,
-            defaults={
-                "is_main": False,
-                "sort_order": 10,
-                "alt_uk": f"{product.name_uk} — {variant.label_uk}",
-                "alt_ru": f"{product.name_ru} — {variant.label_ru}",
-            },
-        )
-        if not img.image or img.image.name != source.image.name:
-            img.image = source.image
-            img.save(update_fields=["image", "updated_at"])
+    if images:
+        ProductImage.objects.filter(pk=images[0].pk).update(variant=None)
+    # Кольорові варіанти прибрані — відвʼязуємо їхні зображення.
+    ProductImage.objects.filter(
+        product=product,
+        variant__sku__in=("OGM-SER-PA50-G", "OGM-SER-PA100-G"),
+    ).update(variant=None)

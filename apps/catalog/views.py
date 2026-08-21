@@ -61,6 +61,7 @@ class CatalogListView(ListView):
         ctx["current_view"] = resolve_catalog_view(self.request.GET)
         ctx["selected_attrs"] = self.request.GET.getlist("attr")
         ctx["selected_brand"] = self.request.GET.get("brand", "")
+        ctx["selected_availability"] = self.request.GET.get("availability", "")
         ctx["selected_label"] = label_by_slug(self.request.GET.get("label"))
         skin_type = (self.request.GET.get("skin_type") or "").strip()
         ctx["selected_skin_type"] = (

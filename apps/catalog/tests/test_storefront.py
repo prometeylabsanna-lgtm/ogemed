@@ -216,6 +216,41 @@ class CatalogStorefrontTests(TestCase):
         self.assertContains(r, "Сироватка тест")
         self.assertNotContains(r, "Крем тест")
 
+    def test_availability_filter_and_stock_on_card(self):
+        other = Product.objects.create(
+            slug="serum-order",
+            name_uk="Сироватка під замовлення",
+            name_ru="Сыворотка под заказ",
+            brand=self.brand,
+            primary_category=self.cat,
+            availability=Availability.ON_ORDER,
+            is_active=True,
+        )
+        ProductVariant.objects.create(
+            product=other,
+            sku="ORDER-001",
+            label_uk="30 мл",
+            price=Decimal("120.00"),
+            stock=0,
+            is_active=True,
+        )
+
+        qs = apply_catalog_filters(
+            published_products(), {"availability": Availability.IN_STOCK}
+        )
+        self.assertEqual(list(qs.values_list("slug", flat=True)), ["serum-test"])
+        self.assertTrue(has_active_filters({"availability": "in_stock"}))
+
+        r = self.client.get(
+            reverse("catalog:list"), {"availability": Availability.IN_STOCK}
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Сироватка тест")
+        self.assertContains(r, "В наявності")
+        self.assertContains(r, "5 шт")
+        self.assertNotContains(r, "Сироватка під замовлення")
+        self.assertContains(r, 'name="availability"')
+
     def test_home_quick_categories(self):
         self.cat.show_on_home = True
         self.cat.save(update_fields=["show_on_home"])

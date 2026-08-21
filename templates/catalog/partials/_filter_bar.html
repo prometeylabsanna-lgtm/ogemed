@@ -100,6 +100,38 @@
       </div>
     </div>
     {% endfor %}
+
+    <div class="cat-dd" data-dropdown>
+      <button type="button" class="cat-dd__toggle" data-dropdown-toggle aria-expanded="false">
+        <span class="cat-dd__label">{% trans "Наявність" %}</span>
+        <span class="cat-dd__value" data-dropdown-value data-empty="{% trans 'Усі' %}">{% trans "Усі" %}</span>
+        <svg class="cat-dd__chevron" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+          <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+      </button>
+      <div class="cat-dd__panel" data-dropdown-panel hidden>
+        <ul class="cat-dd__list" role="list">
+          <li>
+            <label class="cat-dd__check">
+              <input type="radio" name="availability" value=""
+                     data-label="{% trans 'Усі' %}"
+                     {% if not selected_availability %}checked{% endif %}>
+              <span>{% trans "Усі" %}</span>
+            </label>
+          </li>
+          {% for value, label in availability_choices %}
+          <li>
+            <label class="cat-dd__check">
+              <input type="radio" name="availability" value="{{ value }}"
+                     data-label="{{ label }}"
+                     {% if value == selected_availability %}checked{% endif %}>
+              <span>{{ label }}</span>
+            </label>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
   </div>
 
   {% if selected_label %}

@@ -6,6 +6,7 @@
   {% if variant.old_price %}<span class="pdp__price-old">{{ variant.old_price }} ₴</span>{% endif %}
   <span class="pdp__availability pdp__availability--{{ variant.effective_availability }}">
     {{ variant.get_effective_availability_display }}
+    · {{ variant.stock }} {% trans "шт" %}
   </span>
 </div>
 {% endif %}

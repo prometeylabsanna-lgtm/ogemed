@@ -7,7 +7,7 @@ from django.db.models import Min, Prefetch, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 
 from .labels import label_by_slug
-from .models import Attribute, Brand, Category, Product, ProductVariant
+from .models import Attribute, Availability, Brand, Category, Product, ProductVariant
 
 CATALOG_SORT_OPTIONS = (
     ("novelty", _("Новизна")),
@@ -82,7 +82,7 @@ def apply_catalog_filters(qs: QuerySet[Product], params) -> QuerySet[Product]:
         qs = qs.distinct()
 
     availability = params.get("availability")
-    if availability:
+    if availability in Availability.values:
         qs = qs.filter(availability=availability)
 
     label = label_by_slug(params.get("label"))
@@ -186,6 +186,7 @@ def catalog_controls_context() -> dict:
         "filter_attributes": Attribute.objects.filter(is_filterable=True).prefetch_related(
             "values"
         ),
+        "availability_choices": Availability.choices,
         "sort_options": CATALOG_SORT_OPTIONS,
         "view_options": CATALOG_VIEW_OPTIONS,
     }

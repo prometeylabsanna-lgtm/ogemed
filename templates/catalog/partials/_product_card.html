@@ -42,7 +42,14 @@
         {% endif %}
       {% else %}—{% endif %}
     </p>
-    <p class="product-card__stock">{{ product.get_availability_display }}</p>
+    <p class="product-card__stock">
+      {% if variant %}
+        {{ variant.get_effective_availability_display }}
+        · {{ variant.stock }} {% trans "шт" %}
+      {% else %}
+        {{ product.get_availability_display }}
+      {% endif %}
+    </p>
     {% if variant and variant.is_purchasable %}
     <form
       class="product-card__add"
