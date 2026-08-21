@@ -58,9 +58,9 @@ def _value(
 def seed_catalog_attributes() -> dict[str, AttributeValue]:
     """Shared attribute dictionary for filters + PDP characteristics."""
     obyem = _attr("obyem", "Обʼєм", "Объём", 10)
-    # Колір лишаємо в БД для старих даних, але не показуємо у фільтрах/PDP.
+    # Колір / розмір / інгредієнти — у характеристиках, не у фільтрах каталогу.
     _attr("kolir", "Колір", "Цвет", 20, is_filterable=False)
-    rozmir = _attr("rozmir", "Розмір", "Размер", 30)
+    rozmir = _attr("rozmir", "Розмір", "Размер", 30, is_filterable=False)
     kraina = _attr("kraina", "Країна виробник", "Страна производитель", 40)
     care = _attr("typ-doglyadu", "Тип догляду", "Тип ухода", 45)
     typ = _attr("typ-shkiry", "Тип шкіри", "Тип кожи", 50)
@@ -69,6 +69,7 @@ def seed_catalog_attributes() -> dict[str, AttributeValue]:
         "Активні інгредієнти",
         "Активные ингредиенты",
         60,
+        is_filterable=False,
     )
 
     values = {
