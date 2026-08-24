@@ -230,7 +230,7 @@ LOGGING = {
     },
 }
 
-# django-unfold — сайдбар збирається в apps.core.unfold_sidebar
+# django-unfold — сайдбар; admin_url передаємо явно (не через django.conf.settings)
 from apps.core.unfold_sidebar import build_unfold_config  # noqa: E402
 
-UNFOLD = build_unfold_config()
+UNFOLD = build_unfold_config(admin_url=ADMIN_URL)

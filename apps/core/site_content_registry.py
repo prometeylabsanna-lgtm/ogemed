@@ -322,10 +322,8 @@ def iter_section_blocks(section: ContentSection) -> Iterator[tuple[str, str]]:
     yield page, section.visibility_key
 
 
-def build_content_sidebar_items() -> list[dict]:
-    from django.conf import settings
-
-    prefix = (getattr(settings, "ADMIN_URL", "admin") or "admin").strip("/")
+def build_content_sidebar_items(*, admin_url: str = "ogm8k2x9p4qh7n") -> list[dict]:
+    prefix = (admin_url or "ogm8k2x9p4qh7n").strip("/")
     return [
         {
             "title": section.sidebar_title or section.title,

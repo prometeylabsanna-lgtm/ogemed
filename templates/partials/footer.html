@@ -146,12 +146,16 @@
     <span class="site-footer__copy">&copy; {% now "Y" %} OGEMED for you</span>
     <p class="site-footer__credit">
       {% trans "Від команди" %}
+      {% if request.resolver_match.url_name == 'home' %}
       <a
-        href="https://www.prometeylabs.com/"
+        class="site-footer__credit-link"
+        href="https://www.prometeylabs.com/internet-shop-v2/"
         target="_blank"
-        rel="noopener noreferrer"
-        class="prometey-link"
+        rel="nofollow noopener noreferrer"
       >PrometeyLabs</a>
+      {% else %}
+      <span class="site-footer__credit-name">PrometeyLabs</span>
+      {% endif %}
     </p>
   </div>
 </footer>

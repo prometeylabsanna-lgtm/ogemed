@@ -1,28 +1,96 @@
-"""UNFOLD sidebar для OGEMED.
+"""UNFOLD sidebar + тема OGEMED (кольори сайту, favicon).
 
-Лінки — звичайні рядки (не reverse_lazy): Vercel серіалізує settings у JSON
-і __str__ у Promise ламає AppRegistryNotReady.
-Префікс береться з settings.ADMIN_URL.
+Лінки — рядки (не reverse_lazy): Vercel серіалізує settings у JSON.
+Префікс admin_url передавати явно з settings.base.
 """
 from __future__ import annotations
 
-from django.conf import settings
-
 from apps.core.site_content_registry import build_content_sidebar_items
 
+# Палітра з static/css/base.css — Unfold чекає "R G B" або "#hex"
+_OGEMED_PRIMARY = {
+    "50": "253 248 247",
+    "100": "251 238 236",
+    "200": "246 220 216",
+    "300": "239 195 189",
+    "400": "227 161 153",
+    "500": "206 138 131",  # --color-accent
+    "600": "178 104 96",
+    "700": "140 79 73",  # --color-accent-700
+    "800": "100 56 53",
+    "900": "64 35 34",
+    "950": "42 22 21",
+}
 
-def _admin_link(*parts: str) -> str:
-    prefix = (getattr(settings, "ADMIN_URL", "admin") or "admin").strip("/")
+_OGEMED_BASE = {
+    "50": "252 250 247",
+    "100": "249 244 237",  # --color-neutral-100 / cream
+    "200": "238 231 219",
+    "300": "220 211 196",
+    "400": "192 182 165",
+    "500": "161 151 134",
+    "600": "130 121 106",
+    "700": "100 92 80",
+    "800": "71 66 56",
+    "900": "46 43 37",
+    "950": "32 30 29",  # --color-text
+}
+
+
+def _admin_link(prefix: str, *parts: str) -> str:
+    base = (prefix or "ogm8k2x9p4qh7n").strip("/")
     path = "/".join(p.strip("/") for p in parts if p)
-    return f"/{prefix}/{path}/" if path else f"/{prefix}/"
+    return f"/{base}/{path}/" if path else f"/{base}/"
 
 
-def build_unfold_config() -> dict:
+def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
+    prefix = (admin_url or "ogm8k2x9p4qh7n").strip("/")
     return {
         "SITE_TITLE": "OGEMED Admin",
         "SITE_HEADER": "OGEMED for you",
-        "SITE_SYMBOL": "spa",
+        "SITE_SUBHEADER": "Панель керування",
+        "SITE_URL": "/",
         "SHOW_HISTORY": True,
+        "SHOW_VIEW_ON_SITE": True,
+        "SITE_ICON": {
+            "light": "/static/img/logo.png",
+            "dark": "/static/img/logo.png",
+        },
+        "SITE_FAVICONS": [
+            {
+                "rel": "icon",
+                "sizes": "any",
+                "type": "image/x-icon",
+                "href": "/static/img/favicon.ico",
+            },
+            {
+                "rel": "icon",
+                "sizes": "32x32",
+                "type": "image/png",
+                "href": "/static/img/favicon-32.png",
+            },
+            {
+                "rel": "apple-touch-icon",
+                "sizes": "180x180",
+                "type": "image/png",
+                "href": "/static/img/apple-touch-icon.png",
+            },
+        ],
+        "COLORS": {
+            "primary": _OGEMED_PRIMARY,
+            "base": _OGEMED_BASE,
+            "font": {
+                "subtle-light": "var(--color-base-500)",
+                "subtle-dark": "var(--color-base-400)",
+                "default-light": "var(--color-base-700)",
+                "default-dark": "var(--color-base-300)",
+                "important-light": "var(--color-base-950)",
+                "important-dark": "var(--color-base-100)",
+            },
+        },
+        "STYLES": [
+            "/static/css/admin/ogemed_theme.css",
+        ],
         "SIDEBAR": {
             "show_search": True,
             "command_search": True,
@@ -35,7 +103,7 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Налаштування сайту",
                             "icon": "settings",
-                            "link": _admin_link("core", "sitesettings"),
+                            "link": _admin_link(prefix, "core", "sitesettings"),
                         },
                     ],
                 },
@@ -43,7 +111,7 @@ def build_unfold_config() -> dict:
                     "title": "Вміст сторінок",
                     "separator": True,
                     "collapsible": True,
-                    "items": build_content_sidebar_items(),
+                    "items": build_content_sidebar_items(admin_url=prefix),
                 },
                 {
                     "title": "Про нас (детально)",
@@ -52,12 +120,12 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Контент «Про нас»",
                             "icon": "info",
-                            "link": _admin_link("cms", "aboutcontent"),
+                            "link": _admin_link(prefix, "cms", "aboutcontent"),
                         },
                         {
                             "title": "CMS-сторінки",
                             "icon": "article",
-                            "link": _admin_link("cms", "cmspage"),
+                            "link": _admin_link(prefix, "cms", "cmspage"),
                         },
                     ],
                 },
@@ -69,27 +137,27 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Товари",
                             "icon": "inventory_2",
-                            "link": _admin_link("catalog", "product"),
+                            "link": _admin_link(prefix, "catalog", "product"),
                         },
                         {
                             "title": "Категорії",
                             "icon": "category",
-                            "link": _admin_link("catalog", "category"),
+                            "link": _admin_link(prefix, "catalog", "category"),
                         },
                         {
                             "title": "Бренди",
                             "icon": "sell",
-                            "link": _admin_link("catalog", "brand"),
+                            "link": _admin_link(prefix, "catalog", "brand"),
                         },
                         {
                             "title": "Атрибути / фільтри",
                             "icon": "tune",
-                            "link": _admin_link("catalog", "attribute"),
+                            "link": _admin_link(prefix, "catalog", "attribute"),
                         },
                         {
                             "title": "Варіанти",
                             "icon": "qr_code_2",
-                            "link": _admin_link("catalog", "productvariant"),
+                            "link": _admin_link(prefix, "catalog", "productvariant"),
                         },
                     ],
                 },
@@ -101,12 +169,12 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Замовлення",
                             "icon": "shopping_cart",
-                            "link": _admin_link("orders", "order"),
+                            "link": _admin_link(prefix, "orders", "order"),
                         },
                         {
                             "title": "Ліди",
                             "icon": "support_agent",
-                            "link": _admin_link("cms", "lead"),
+                            "link": _admin_link(prefix, "cms", "lead"),
                         },
                     ],
                 },
@@ -117,7 +185,7 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Користувачі",
                             "icon": "group",
-                            "link": _admin_link("auth", "user"),
+                            "link": _admin_link(prefix, "auth", "user"),
                         },
                     ],
                 },

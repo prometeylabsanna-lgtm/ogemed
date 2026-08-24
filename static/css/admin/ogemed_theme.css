@@ -1,0 +1,36 @@
+/* OGEMED Admin — світла кремова тема в тон вітрини */
+
+html {
+  color-scheme: light;
+}
+
+/* Фон логіну / полотна — як --color-bg сайту */
+body {
+  background-color: #f8f3ea;
+}
+
+/* Сайдбар і шапка — теплі нейтралі */
+[data-theme="dark"],
+.dark {
+  /* якщо користувач увімкнув dark — тримаємо теплі тони, не фіолет */
+  color-scheme: dark;
+}
+
+/* Логотип у сайдбарі */
+.border-b.flex.items-center.h-\[65px\] img {
+  height: 1.75rem;
+  width: auto;
+  max-width: 9rem;
+  object-fit: contain;
+}
+
+/* Кнопки primary вже з COLORS; підсилюємо читабельність на кремі */
+/* CMS editor — узгодити з вітриною */
+.site-content-editor__title {
+  color: #201e1d;
+}
+
+.cms-lang-switch__btn.is-active {
+  background: rgb(140 79 73);
+  color: #fff;
+}
