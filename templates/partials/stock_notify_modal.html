@@ -1,0 +1,46 @@
+{% load i18n %}
+<div class="callback-modal" id="stock-notify-modal" hidden data-stock-notify-modal>
+  <div class="callback-modal__backdrop" data-stock-notify-close></div>
+  <div
+    class="callback-modal__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="stock-notify-title"
+  >
+    <div class="callback-modal__panel">
+      <div class="callback-modal__header">
+        <h2 class="callback-modal__title" id="stock-notify-title">{% trans "Повідомити про надходження" %}</h2>
+        <button type="button" class="callback-modal__close" data-stock-notify-close aria-label="{% trans 'Закрити' %}">×</button>
+      </div>
+      <form
+        class="callback-modal__form"
+        method="post"
+        action="{% url 'cms:lead_create' %}"
+        hx-post="{% url 'cms:lead_create' %}"
+        hx-target="#stock-notify-result"
+        hx-swap="innerHTML"
+        data-stock-notify-form
+      >
+        {% csrf_token %}
+        <input type="hidden" name="lead_type" value="stock_notify">
+        <input type="hidden" name="name" value="">
+        <input type="hidden" name="product_label" value="" data-stock-notify-label>
+        <input type="hidden" name="product_url" value="" data-stock-notify-url>
+        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true">
+
+        <p class="callback-modal__hint" data-stock-notify-hint></p>
+
+        <div class="callback-modal__field">
+          <label for="sn-phone">{% trans "Телефон" %}</label>
+          <input id="sn-phone" name="phone" required maxlength="32" data-phone-mask inputmode="tel" autocomplete="tel">
+        </div>
+
+        <div id="stock-notify-result" class="callback-modal__result"></div>
+
+        <div class="callback-modal__actions">
+          <button type="submit" class="btn btn--primary">{% trans "Надіслати" %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

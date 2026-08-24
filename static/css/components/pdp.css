@@ -349,6 +349,10 @@ body.page-pdp {
 
 .pdp__add {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .btn.pdp__add-btn {

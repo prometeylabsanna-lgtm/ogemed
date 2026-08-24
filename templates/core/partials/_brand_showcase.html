@@ -1,10 +1,11 @@
-{% load i18n %}
-{% if featured_brands %}
+{% load i18n ogemed_content %}
+{% section_visible "home" "brands_section_visible" as brands_ok %}
+{% if brands_ok and featured_brands %}
 <section class="brand-showcase" data-brand-showcase>
   <div class="brand-showcase__scroll" data-brand-scroll>
     <div class="brand-showcase__sticky">
       <div class="brand-showcase-intro container">
-        <h2 class="home-section__kicker brand-showcase-intro__title">{% trans "Бренди" %}</h2>
+        <h2 class="home-section__kicker brand-showcase-intro__title">{% block_text "home" "brands_section_title" "Бренди" %}</h2>
       </div>
 
       <div class="brand-showcase__stage" data-brand-stage>

@@ -1,11 +1,14 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from unfold.admin import ModelAdmin
 
 from .about_content import AboutContent
-from .models import CMSPage, HeroSlide, Lead
+from .models import CMSPage, Lead
 
 
 @admin.register(CMSPage)
-class CMSPageAdmin(admin.ModelAdmin):
+class CMSPageAdmin(ModelAdmin):
     list_display = ("title_uk", "slug", "page_key", "is_published", "sort_order")
     list_filter = ("is_published", "page_key")
     search_fields = ("title_uk", "title_ru", "slug", "page_key")
@@ -18,7 +21,7 @@ class CMSPageAdmin(admin.ModelAdmin):
 
 
 @admin.register(AboutContent)
-class AboutContentAdmin(admin.ModelAdmin):
+class AboutContentAdmin(ModelAdmin):
     fieldsets = (
         (
             "Hero",
@@ -111,17 +114,19 @@ class AboutContentAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None) -> bool:
         return False
 
-
-@admin.register(HeroSlide)
-class HeroSlideAdmin(admin.ModelAdmin):
-    list_display = ("title_uk", "is_active", "sort_order", "cta_url")
-    list_filter = ("is_active",)
-    list_editable = ("is_active", "sort_order")
+    def changelist_view(self, request, extra_context=None):
+        obj = AboutContent.load()
+        return HttpResponseRedirect(
+            reverse("admin:cms_aboutcontent_change", args=[obj.pk])
+        )
 
 
 @admin.register(Lead)
-class LeadAdmin(admin.ModelAdmin):
+class LeadAdmin(ModelAdmin):
     list_display = ("name", "phone", "lead_type", "is_processed", "created_at")
     list_filter = ("lead_type", "is_processed")
     search_fields = ("name", "phone", "email")
     readonly_fields = ("created_at", "honeypot")
+
+
+# HeroSlide — лише через CMS «Головна — Hero» (formset), не як окремий ModelAdmin.

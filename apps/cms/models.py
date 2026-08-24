@@ -119,6 +119,7 @@ class Lead(models.Model):
     class LeadType(models.TextChoices):
         CALLBACK = "callback", _("Передзвоніть мені")
         FEEDBACK = "feedback", _("Зворотний звʼязок")
+        STOCK_NOTIFY = "stock_notify", _("Повідомити про надходження")
 
     lead_type = models.CharField(
         max_length=32, choices=LeadType.choices, default=LeadType.CALLBACK

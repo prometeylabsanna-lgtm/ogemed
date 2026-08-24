@@ -23,12 +23,19 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 INSTALLED_APPS = [
+    # Unfold — завжди перед django.contrib.admin
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # modeltranslation — перед власними apps
+    "modeltranslation",
+    "tinymce",
     "django_htmx",
     "django_q",
     "apps.core",
@@ -70,6 +77,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.site_settings",
+                "apps.core.context_processors.site_blocks_context",
                 "apps.cart.context_processors.cart",
             ],
         },
@@ -99,7 +107,20 @@ LANGUAGES = [
     ("ru", "Русский"),
 ]
 
+MODELTRANSLATION_DEFAULT_LANGUAGE = "uk"
+MODELTRANSLATION_LANGUAGES = ("uk", "ru")
+MODELTRANSLATION_FALLBACK_LANGUAGES = {"default": ("uk", "ru")}
+
 LOCALE_PATHS = [BASE_DIR / "locale"]
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": 400,
+    "menubar": False,
+    "plugins": "link lists image code",
+    "toolbar": "undo redo | bold italic underline | bullist numlist | link image | code",
+    "content_css": False,
+    "skin": "oxide",
+}
 
 TIME_ZONE = "Europe/Kyiv"
 
@@ -205,3 +226,8 @@ LOGGING = {
         },
     },
 }
+
+# django-unfold — сайдбар збирається в apps.core.unfold_sidebar
+from apps.core.unfold_sidebar import build_unfold_config  # noqa: E402
+
+UNFOLD = build_unfold_config()

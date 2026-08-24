@@ -142,6 +142,17 @@
   display: none;
 }
 
+.callback-modal__hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-neutral-700);
+}
+
+.callback-modal__hint:empty {
+  display: none;
+}
+
 .callback-modal__actions {
   display: flex;
   flex-wrap: wrap;

@@ -23,6 +23,20 @@ class SiteSettings(models.Model):
         blank=True,
         help_text=_("Посилання для iframe, напр. OpenStreetMap embed"),
     )
+    map_latitude = models.DecimalField(
+        _("Широта"),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+    )
+    map_longitude = models.DecimalField(
+        _("Довгота"),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+    )
     telegram_url = models.URLField(_("Telegram"), blank=True)
     instagram_url = models.URLField(_("Instagram"), blank=True)
     facebook_url = models.URLField(_("Facebook"), blank=True)
@@ -104,3 +118,164 @@ class SiteSettings(models.Model):
         if lang == "ru" and self.work_hours_ru:
             return self.work_hours_ru
         return self.work_hours_uk or self.work_hours_ru
+
+
+class SiteBlock(models.Model):
+    """Один ключ контенту (page, key) — текст / фото / url."""
+
+    class ContentType(models.TextChoices):
+        TEXT = "text", _("Текст")
+        IMAGE = "image", _("Фото")
+        URL = "url", _("URL")
+
+    class Page(models.TextChoices):
+        HOME = "home", _("Головна")
+        CATALOG = "catalog", _("Каталог")
+        ABOUT = "about", _("Про нас")
+        SHIPPING = "shipping", _("Доставка")
+        CONTACTS = "contacts", _("Контакти")
+        SITE = "site", _("Сайт")
+
+    page = models.CharField(max_length=32, choices=Page.choices, verbose_name=_("Сторінка"))
+    key = models.CharField(max_length=64, verbose_name=_("Ключ блоку"))
+    label = models.CharField(max_length=128, verbose_name=_("Назва в адмінці"))
+    content_type = models.CharField(
+        max_length=16,
+        choices=ContentType.choices,
+        default=ContentType.TEXT,
+        verbose_name=_("Тип контенту"),
+    )
+    text_html = models.TextField(blank=True, verbose_name=_("Текст"))
+    image = models.ImageField(upload_to="blocks/", blank=True, verbose_name=_("Зображення"))
+    sort_order = models.PositiveSmallIntegerField(default=0, verbose_name=_("Порядок"))
+    is_active = models.BooleanField(default=True, verbose_name=_("Активний"))
+
+    class Meta:
+        ordering = ["page", "sort_order", "key"]
+        verbose_name = _("Блок контенту")
+        verbose_name_plural = _("Блоки контенту")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["page", "key"],
+                name="unique_site_block_page_key",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.get_page_display()} · {self.label}"
+
+    @property
+    def cache_key(self) -> str:
+        return f"{self.page}.{self.key}"
+
+    def localized_text(self) -> str:
+        from django.utils.translation import get_language
+
+        lang = (get_language() or "uk")[:2]
+        uk = getattr(self, "text_html_uk", None)
+        ru = getattr(self, "text_html_ru", None)
+        if uk is None and ru is None:
+            return self.text_html or ""
+        uk_val = uk if uk is not None else (self.text_html or "")
+        ru_val = ru if ru is not None else ""
+        if lang == "ru" and ru_val:
+            return ru_val
+        return uk_val or ru_val
+
+
+class HomeHeroSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Головна — Hero")
+        verbose_name_plural = _("Головна — Hero")
+
+
+class HomeBenefitsSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Головна — Переваги")
+        verbose_name_plural = _("Головна — Переваги")
+
+
+class HomeCategoriesSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Головна — Категорії")
+        verbose_name_plural = _("Головна — Категорії")
+
+
+class HomeProductsSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Головна — Товари")
+        verbose_name_plural = _("Головна — Товари")
+
+
+class HomeBrandsSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Головна — Бренди")
+        verbose_name_plural = _("Головна — Бренди")
+
+
+class HomeCareSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Головна — Підбір догляду")
+        verbose_name_plural = _("Головна — Підбір догляду")
+
+
+class HomePromoSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Головна — Промо")
+        verbose_name_plural = _("Головна — Промо")
+
+
+class CatalogSeoSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Каталог — SEO")
+        verbose_name_plural = _("Каталог — SEO")
+
+
+class CatalogFiltersSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Каталог — Фільтри")
+        verbose_name_plural = _("Каталог — Фільтри")
+
+
+class ShippingMethodsSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Доставка — Методи")
+        verbose_name_plural = _("Доставка — Методи")
+
+
+class ShippingPaymentSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Доставка — Оплата")
+        verbose_name_plural = _("Доставка — Оплата")
+
+
+class ContactsIntroSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Контакти — Intro")
+        verbose_name_plural = _("Контакти — Intro")
+
+
+class SiteHeaderSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Шапка сайту")
+        verbose_name_plural = _("Шапка сайту")
+
+
+class SiteFooterSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = _("Підвал сайту")
+        verbose_name_plural = _("Підвал сайту")

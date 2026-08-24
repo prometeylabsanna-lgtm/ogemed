@@ -80,9 +80,45 @@
   });
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
-    const modal = document.querySelector("[data-callback-modal]");
-    if (modal && !modal.hasAttribute("hidden")) {
-      modal.setAttribute("hidden", "");
+    const callbackModal = document.querySelector("[data-callback-modal]");
+    if (callbackModal && !callbackModal.hasAttribute("hidden")) {
+      callbackModal.setAttribute("hidden", "");
+    }
+    const stockModal = document.querySelector("[data-stock-notify-modal]");
+    if (stockModal && !stockModal.hasAttribute("hidden")) {
+      stockModal.setAttribute("hidden", "");
+    }
+  });
+
+  const openStockNotifyModal = (trigger) => {
+    const modal = document.querySelector("[data-stock-notify-modal]");
+    if (!modal) return;
+    const label = trigger.getAttribute("data-product-label") || "";
+    const url = trigger.getAttribute("data-product-url") || "";
+    const labelInput = modal.querySelector("[data-stock-notify-label]");
+    const urlInput = modal.querySelector("[data-stock-notify-url]");
+    const hint = modal.querySelector("[data-stock-notify-hint]");
+    const result = modal.querySelector("#stock-notify-result");
+    const phone = modal.querySelector("#sn-phone");
+    if (labelInput) labelInput.value = label;
+    if (urlInput) urlInput.value = url;
+    if (hint) hint.textContent = label;
+    if (result) result.innerHTML = "";
+    if (phone) phone.value = "";
+    modal.removeAttribute("hidden");
+    if (phone) phone.focus({ preventScroll: true });
+  };
+
+  document.body.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-stock-notify-trigger]");
+    if (trigger) {
+      event.preventDefault();
+      openStockNotifyModal(trigger);
+      return;
+    }
+    if (event.target.closest("[data-stock-notify-close]")) {
+      const modal = document.querySelector("[data-stock-notify-modal]");
+      if (modal) modal.setAttribute("hidden", "");
     }
   });
 

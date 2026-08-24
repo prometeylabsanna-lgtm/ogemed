@@ -1,12 +1,13 @@
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+from unfold.admin import ModelAdmin, TabularInline
 
 from .models import Order, OrderItem, OrderStatus
 from .services_status import OrderStatusService
 
 
-class OrderItemInline(admin.TabularInline):
+class OrderItemInline(TabularInline):
     model = OrderItem
     extra = 0
     readonly_fields = (
@@ -23,7 +24,7 @@ class OrderItemInline(admin.TabularInline):
 
 
 @admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(ModelAdmin):
     list_display = (
         "order_number",
         "customer_name",

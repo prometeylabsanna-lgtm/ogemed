@@ -196,6 +196,8 @@ def task_notify_new_lead(lead_id: int) -> None:
         f"Заявка {lead.get_lead_type_display()}: "
         f"{lead.name}, {lead.phone}, {lead.email or '—'}"
     )
+    if lead.message:
+        messenger_text = f"{messenger_text}\n{lead.message}"
     manager = _manager_email()
     if manager:
         send_email(manager, subject, html_body, text_body)

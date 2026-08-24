@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static vstatic %}
+{% load i18n static vstatic ogemed_content %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% vstatic 'css/components/product_card.css' %}">
@@ -12,6 +12,8 @@
 {% endblock %}
 
 {% block content %}
+{% section_visible "home" "hero_section_visible" as hero_ok %}
+{% if hero_ok %}
 {% if hero_slides %}
 <section class="home-hero-slider" data-hero-slider>
   {% for slide in hero_slides %}
@@ -46,30 +48,34 @@
 <section class="home-hero">
   <div class="home-hero__inner container">
     <p class="home-hero__kicker">OGEMED for you</p>
-    <h1 class="home-hero__title">{% trans "Краса з турботою" %}</h1>
-    <p class="home-hero__text">{% trans "Інтернет-магазин косметики OGEMED for you" %}</p>
+    <h1 class="home-hero__title">{% block_text "home" "hero_fallback_title" "Краса з турботою" %}</h1>
+    <p class="home-hero__text">{% block_text "home" "hero_fallback_subtitle" "Інтернет-магазин косметики OGEMED for you" %}</p>
     <a class="btn btn--primary" href="{% url 'catalog:list' %}">{% trans "До каталогу" %}</a>
   </div>
 </section>
 {% endif %}
+{% endif %}
 
 {% include "core/partials/_quick_categories.html" %}
 
-{% if new_items %}
+{% section_visible "home" "products_section_visible" as products_ok %}
+{% if products_ok and new_items %}
 <section class="home-section container section-gap">
-  <h2 class="home-section__kicker">{% trans "Новинки" %}</h2>
+  <h2 class="home-section__kicker">{% block_text "home" "products_new_title" "Новинки" %}</h2>
   {% include "catalog/partials/_product_slider.html" with products=new_items %}
 </section>
 {% endif %}
 
+{% section_visible "home" "care_section_visible" as care_ok %}
+{% if care_ok %}
 <section class="care-selection-section section-gap">
   <div class="care-selection">
     <div class="care-selection__inner">
-      <h3 class="care-selection__title">{% trans "Знайдіть свій ідеальний догляд" %}</h3>
-      <p class="care-selection__subtitle">{% trans "Дайте відповідь на декілька запитань або оберіть засіб із повної колекції професійної косметики" %}</p>
+      <h3 class="care-selection__title">{% block_text "home" "care_section_title" "Знайдіть свій ідеальний догляд" %}</h3>
+      <p class="care-selection__subtitle">{% block_text "home" "care_section_text" "Дайте відповідь на декілька запитань або оберіть засіб із повної колекції професійної косметики" %}</p>
       <div class="care-selection__actions">
         <a href="/catalog/" class="btn btn--primary care-selection__btn">
-          {% trans "Переглянути весь каталог" %} <span class="arrow" aria-hidden="true">→</span>
+          {% block_text "home" "care_cta_label" "Переглянути весь каталог" %} <span class="arrow" aria-hidden="true">→</span>
         </a>
         <a href="/catalog/?skin_type=select" class="btn btn--secondary care-selection__btn">
           {% trans "Підібрати за типом шкіри" %}
@@ -78,12 +84,13 @@
     </div>
   </div>
 </section>
+{% endif %}
 
 {% include "core/partials/_brand_showcase.html" %}
 
-{% if hits %}
+{% if products_ok and hits %}
 <section class="home-section container section-gap">
-  <h2 class="home-section__kicker">{% trans "Хіти продажу" %}</h2>
+  <h2 class="home-section__kicker">{% block_text "home" "products_hits_title" "Хіти продажу" %}</h2>
   {% include "catalog/partials/_product_slider.html" with products=hits %}
 </section>
 {% endif %}

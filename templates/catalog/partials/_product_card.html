@@ -64,6 +64,16 @@
       <input type="hidden" name="quantity" value="1">
       <button type="submit" class="product-card__btn">{% trans "До кошика" %}</button>
     </form>
+    {% elif variant and variant.effective_availability == "out_of_stock" %}
+    <div class="product-card__add">
+      <button
+        type="button"
+        class="product-card__btn"
+        data-stock-notify-trigger
+        data-product-label="{{ product.name }}{% if variant.label %} — {{ variant.label }}{% endif %}"
+        data-product-url="{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}"
+      >{% trans "Повідомити про надходження" %}</button>
+    </div>
     {% endif %}
     {% endwith %}
   </div>

@@ -27,6 +27,8 @@ class Category(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     name_uk = models.CharField(_("Назва (UK)"), max_length=255)
     name_ru = models.CharField(_("Назва (RU)"), max_length=255, blank=True)
     image = models.ImageField(_("Зображення"), upload_to="categories/", blank=True)
+    description_uk = models.TextField(_("Опис (UK)"), blank=True)
+    description_ru = models.TextField(_("Опис (RU)"), blank=True)
     is_active = models.BooleanField(_("Активна"), default=True)
     show_on_home = models.BooleanField(
         _("Швидкі категорії на головній"),
@@ -47,6 +49,10 @@ class Category(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     def name(self) -> str:
         return self.localized("name")
 
+    @property
+    def description(self) -> str:
+        return self.localized("description")
+
     def get_absolute_url(self) -> str:
         return reverse("catalog:category", kwargs={"slug": self.slug})
 
@@ -66,6 +72,15 @@ class Brand(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     tagline_uk = models.TextField(_("Короткий опис (UK)"), blank=True)
     tagline_ru = models.TextField(_("Короткий опис (RU)"), blank=True)
     logo = models.ImageField(_("Логотип"), upload_to="brands/", blank=True)
+    logo_dark = models.ImageField(
+        _("Логотип (темний)"),
+        upload_to="brands/",
+        blank=True,
+        help_text=_("Варіант для темного фону."),
+    )
+    website_url = models.URLField(_("Сайт бренду"), blank=True)
+    description_uk = models.TextField(_("Опис / історія (UK)"), blank=True)
+    description_ru = models.TextField(_("Опис / історія (RU)"), blank=True)
     cover_image = models.ImageField(
         _("Фото для каталогу"),
         upload_to="brands/covers/",
@@ -104,6 +119,10 @@ class Brand(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     def tagline(self) -> str:
         return self.localized("tagline")
 
+    @property
+    def description(self) -> str:
+        return self.localized("description")
+
     def get_absolute_url(self) -> str:
         return reverse("catalog:brand_detail", kwargs={"slug": self.slug})
 
@@ -112,6 +131,13 @@ class Attribute(TimeStampedModel, LocalizedCharMixin):
     slug = models.SlugField(_("Slug"), max_length=80, unique=True)
     name_uk = models.CharField(_("Назва (UK)"), max_length=120)
     name_ru = models.CharField(_("Назва (RU)"), max_length=120, blank=True)
+    categories = models.ManyToManyField(
+        "catalog.Category",
+        blank=True,
+        related_name="filter_attributes",
+        verbose_name=_("Категорії (фільтри)"),
+        help_text=_("У яких категоріях показувати цей атрибут у фільтрах."),
+    )
     is_filterable = models.BooleanField(_("У фільтрах"), default=True)
     sort_order = models.PositiveIntegerField(_("Порядок"), default=0)
 
@@ -157,7 +183,7 @@ class AttributeValue(TimeStampedModel, LocalizedCharMixin):
 
 class ProductQuerySet(models.QuerySet):
     def published(self):
-        return self.filter(is_active=True)
+        return self.filter(is_active=True, status="active")
 
     def with_price(self):
         return self.annotate(
@@ -169,6 +195,11 @@ class ProductQuerySet(models.QuerySet):
 
 
 class Product(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
+    class Status(models.TextChoices):
+        ACTIVE = "active", _("Активний")
+        DRAFT = "draft", _("Чернетка")
+        ARCHIVED = "archived", _("Архів")
+
     slug = models.SlugField(_("Slug"), max_length=160, unique=True)
     name_uk = models.CharField(_("Назва (UK)"), max_length=255)
     name_ru = models.CharField(_("Назва (RU)"), max_length=255, blank=True)
@@ -198,6 +229,13 @@ class Product(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
         related_name="products",
         verbose_name=_("Категорії"),
     )
+    related_products = models.ManyToManyField(
+        "self",
+        blank=True,
+        symmetrical=False,
+        related_name="related_from",
+        verbose_name=_("Схожі товари"),
+    )
     attribute_values = models.ManyToManyField(
         AttributeValue,
         blank=True,
@@ -209,6 +247,12 @@ class Product(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
         max_length=20,
         choices=Availability.choices,
         default=Availability.IN_STOCK,
+    )
+    status = models.CharField(
+        _("Статус"),
+        max_length=16,
+        choices=Status.choices,
+        default=Status.ACTIVE,
     )
     is_active = models.BooleanField(_("Активний"), default=True)
     is_hit = models.BooleanField(_("Хіт"), default=False)
@@ -312,11 +356,19 @@ class ProductVariant(TimeStampedModel):
         verbose_name=_("Товар"),
     )
     sku = models.CharField(_("Артикул"), max_length=64, unique=True)
+    barcode = models.CharField(_("Штрихкод"), max_length=64, blank=True)
     label_uk = models.CharField(_("Модифікація (UK)"), max_length=120, blank=True)
     label_ru = models.CharField(_("Модифікація (RU)"), max_length=120, blank=True)
     price = models.DecimalField(_("Ціна"), max_digits=10, decimal_places=2)
     old_price = models.DecimalField(
         _("Стара ціна"),
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    wholesale_price = models.DecimalField(
+        _("Оптова ціна"),
         max_digits=10,
         decimal_places=2,
         null=True,

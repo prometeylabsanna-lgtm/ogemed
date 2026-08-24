@@ -61,7 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--color-neutral-200);
   border: 1px solid transparent;
@@ -74,6 +74,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .brand-card__logo {

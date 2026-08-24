@@ -1,0 +1,84 @@
+"""Реєстрація proxy CMS-секцій."""
+from __future__ import annotations
+
+from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from unfold.admin import ModelAdmin
+
+from apps.core.admin_site_content import site_content_section_view
+from apps.core.models import (
+    CatalogFiltersSettings,
+    CatalogSeoSettings,
+    ContactsIntroSettings,
+    HomeBenefitsSettings,
+    HomeBrandsSettings,
+    HomeCareSettings,
+    HomeCategoriesSettings,
+    HomeHeroSettings,
+    HomeProductsSettings,
+    HomePromoSettings,
+    ShippingMethodsSettings,
+    ShippingPaymentSettings,
+    SiteFooterSettings,
+    SiteHeaderSettings,
+    SiteSettings,
+)
+
+
+class SingletonSettingsAdmin(ModelAdmin):
+    def has_add_permission(self, request) -> bool:
+        return not SiteSettings.objects.exists()
+
+    def has_delete_permission(self, request, obj=None) -> bool:
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        obj, _ = SiteSettings.objects.get_or_create(pk=1)
+        url_name = f"admin:core_{self.model._meta.model_name}_change"
+        return HttpResponseRedirect(reverse(url_name, args=[obj.pk]))
+
+
+class SiteContentSectionAdmin(SingletonSettingsAdmin):
+    page_slug: str = ""
+    section_slug: str = ""
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        return site_content_section_view(
+            request,
+            self.page_slug,
+            self.section_slug,
+            model_admin=self,
+        )
+
+
+_SECTION_MODELS: tuple[tuple[type[SiteSettings], str, str], ...] = (
+    (HomeHeroSettings, "home", "hero"),
+    (HomeBenefitsSettings, "home", "benefits"),
+    (HomeCategoriesSettings, "home", "categories"),
+    (HomeProductsSettings, "home", "products"),
+    (HomeBrandsSettings, "home", "brands"),
+    (HomeCareSettings, "home", "care"),
+    (HomePromoSettings, "home", "promo"),
+    (CatalogSeoSettings, "catalog", "seo"),
+    (CatalogFiltersSettings, "catalog", "filters"),
+    (ShippingMethodsSettings, "shipping", "methods"),
+    (ShippingPaymentSettings, "shipping", "payment"),
+    (ContactsIntroSettings, "contacts", "intro"),
+    (SiteHeaderSettings, "site", "header"),
+    (SiteFooterSettings, "site", "footer"),
+)
+
+
+def register_site_content_section_admins() -> None:
+    for model, page_slug, section_slug in _SECTION_MODELS:
+        class SectionAdmin(SiteContentSectionAdmin):
+            pass
+
+        SectionAdmin.__name__ = f"{model.__name__}Admin"
+        SectionAdmin.page_slug = page_slug
+        SectionAdmin.section_slug = section_slug
+        admin.site.register(model, SectionAdmin)
+
+
+register_site_content_section_admins()

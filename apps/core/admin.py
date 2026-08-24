@@ -1,10 +1,11 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from .models import SiteSettings
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
+class SiteSettingsAdmin(ModelAdmin):
     fieldsets = (
         (
             "Контакти",
@@ -18,6 +19,8 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                     "work_hours_uk",
                     "work_hours_ru",
                     "map_embed_url",
+                    "map_latitude",
+                    "map_longitude",
                 ),
             },
         ),
@@ -61,3 +64,16 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None) -> bool:
         return False
+
+    def changelist_view(self, request, extra_context=None):
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+
+        obj, _ = SiteSettings.objects.get_or_create(pk=1)
+        return HttpResponseRedirect(
+            reverse("admin:core_sitesettings_change", args=[obj.pk])
+        )
+
+
+# Proxy CMS sections
+from apps.core import admin_site_content_proxies  # noqa: E402, F401
