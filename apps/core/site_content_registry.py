@@ -4,8 +4,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Iterator
 
-from django.urls import reverse_lazy
-
 from apps.core.block_defaults import BLOCK_FIELD_LABELS
 
 
@@ -329,7 +327,7 @@ def build_content_sidebar_items() -> list[dict]:
         {
             "title": section.sidebar_title or section.title,
             "icon": section.sidebar_icon,
-            "link": reverse_lazy(f"admin:core_{section.admin_model_name}_changelist"),
+            "link": f"/admin/core/{section.admin_model_name}/",
         }
         for section in CONTENT_SECTIONS
     ]

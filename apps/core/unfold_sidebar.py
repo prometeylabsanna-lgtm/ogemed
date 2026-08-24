@@ -1,7 +1,9 @@
-"""UNFOLD sidebar для OGEMED."""
-from __future__ import annotations
+"""UNFOLD sidebar для OGEMED.
 
-from django.urls import reverse_lazy
+Лінки — звичайні рядки (не reverse_lazy): Vercel серіалізує settings у JSON
+і __str__ у Promise ламає AppRegistryNotReady.
+"""
+from __future__ import annotations
 
 from apps.core.site_content_registry import build_content_sidebar_items
 
@@ -24,7 +26,7 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Налаштування сайту",
                             "icon": "settings",
-                            "link": reverse_lazy("admin:core_sitesettings_changelist"),
+                            "link": "/admin/core/sitesettings/",
                         },
                     ],
                 },
@@ -41,12 +43,12 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Контент «Про нас»",
                             "icon": "info",
-                            "link": reverse_lazy("admin:cms_aboutcontent_changelist"),
+                            "link": "/admin/cms/aboutcontent/",
                         },
                         {
                             "title": "CMS-сторінки",
                             "icon": "article",
-                            "link": reverse_lazy("admin:cms_cmspage_changelist"),
+                            "link": "/admin/cms/cmspage/",
                         },
                     ],
                 },
@@ -58,29 +60,27 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Товари",
                             "icon": "inventory_2",
-                            "link": reverse_lazy("admin:catalog_product_changelist"),
+                            "link": "/admin/catalog/product/",
                         },
                         {
                             "title": "Категорії",
                             "icon": "category",
-                            "link": reverse_lazy("admin:catalog_category_changelist"),
+                            "link": "/admin/catalog/category/",
                         },
                         {
                             "title": "Бренди",
                             "icon": "sell",
-                            "link": reverse_lazy("admin:catalog_brand_changelist"),
+                            "link": "/admin/catalog/brand/",
                         },
                         {
                             "title": "Атрибути / фільтри",
                             "icon": "tune",
-                            "link": reverse_lazy("admin:catalog_attribute_changelist"),
+                            "link": "/admin/catalog/attribute/",
                         },
                         {
                             "title": "Варіанти",
                             "icon": "qr_code_2",
-                            "link": reverse_lazy(
-                                "admin:catalog_productvariant_changelist"
-                            ),
+                            "link": "/admin/catalog/productvariant/",
                         },
                     ],
                 },
@@ -92,12 +92,12 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Замовлення",
                             "icon": "shopping_cart",
-                            "link": reverse_lazy("admin:orders_order_changelist"),
+                            "link": "/admin/orders/order/",
                         },
                         {
                             "title": "Ліди",
                             "icon": "support_agent",
-                            "link": reverse_lazy("admin:cms_lead_changelist"),
+                            "link": "/admin/cms/lead/",
                         },
                     ],
                 },
@@ -108,7 +108,7 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Користувачі",
                             "icon": "group",
-                            "link": reverse_lazy("admin:auth_user_changelist"),
+                            "link": "/admin/auth/user/",
                         },
                     ],
                 },
