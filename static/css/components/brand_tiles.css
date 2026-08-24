@@ -46,8 +46,8 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px 10px;
 }
 
 .brand-tiles__item {
@@ -58,17 +58,17 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #fff;
+  background: transparent;
   border: 0;
   color: var(--color-text);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: box-shadow 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .brand-tile:hover {
   color: var(--color-text);
-  box-shadow: var(--shadow-md);
+  opacity: 0.92;
 }
 
 .brand-tile:focus-visible {
@@ -79,10 +79,10 @@
 .brand-tile__media {
   position: relative;
   display: block;
-  aspect-ratio: 5 / 4;
+  aspect-ratio: 3 / 4;
   padding: 0;
   overflow: hidden;
-  background: transparent;
+  background: #fff;
   border: 0;
 }
 
@@ -94,8 +94,13 @@
   max-width: none;
   max-height: none;
   object-fit: cover;
-  object-position: center;
+  object-position: center bottom;
   border: 0;
+  outline: none;
+  transform: scale(1.08);
+  transform-origin: center bottom;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .brand-tile__media .brand-logo__img,
@@ -109,14 +114,14 @@
   height: auto;
   padding: 0;
   box-sizing: border-box;
+  transform: none;
 }
 
 .brand-tile__name {
-  padding: 12px 14px;
-  border: 1px solid var(--color-divider);
-  border-top: 0;
-  background: var(--color-neutral-100);
-  font-size: 14px;
+  padding: 10px 4px 0;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
@@ -135,11 +140,11 @@
   position: relative;
   display: block;
   width: 100%;
-  max-width: 240px;
-  aspect-ratio: 5 / 4;
+  max-width: 200px;
+  aspect-ratio: 3 / 4;
   padding: 0;
   overflow: hidden;
-  background: transparent;
+  background: #fff;
   border: 0;
 }
 
@@ -151,8 +156,10 @@
   max-width: none;
   max-height: none;
   object-fit: cover;
-  object-position: center;
+  object-position: center bottom;
   border: 0;
+  transform: scale(1.08);
+  transform-origin: center bottom;
 }
 
 .brand-page__logo .brand-logo__img,
@@ -199,14 +206,14 @@
 
 @media (min-width: 640px) {
   .brand-tiles {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px 12px;
   }
 }
 
 @media (min-width: 768px) {
   .brand-page__head {
-    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-columns: 200px minmax(0, 1fr);
     gap: 32px;
     align-items: center;
   }
@@ -214,14 +221,13 @@
 
 @media (min-width: 1024px) {
   .brand-tiles {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px 20px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 20px 14px;
   }
 }
 
-/* iOS Safari keeps :hover active after a tap — neutralise it on touch devices */
 @media (hover: none) {
   .brand-tile:hover {
-    box-shadow: none;
+    opacity: 1;
   }
 }

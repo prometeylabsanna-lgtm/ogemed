@@ -18,7 +18,7 @@
   margin: 0;
   padding: 0 0 4px;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
@@ -31,14 +31,14 @@
 }
 
 .brand-filter__item {
-  flex: 0 0 172px;
+  /* Вужчі портретні картки */
+  flex: 0 0 128px;
   min-width: 0;
   scroll-snap-align: start;
 }
 
 .brand-card {
   display: block;
-  /* Contains the clipped radio so it cannot widen the document */
   position: relative;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -59,12 +59,14 @@
 .brand-card__media {
   position: relative;
   display: block;
-  aspect-ratio: 5 / 4;
+  /* Вищі за ширину — вертикальні packshot + низ товару в кадрі */
+  aspect-ratio: 3 / 4;
   overflow: hidden;
-  background: transparent;
+  background: #fff;
   border: 0;
   outline: none;
   box-shadow: none;
+  border-radius: 0;
   transition: box-shadow 0.2s ease;
 }
 
@@ -76,8 +78,15 @@
   max-width: none;
   max-height: none;
   object-fit: cover;
-  object-position: center;
+  /* Низ упаковки (напр. «30 Peel») лишається в кадрі */
+  object-position: center bottom;
   border: 0;
+  outline: none;
+  /* Обрізає сіру рамку, вшиту в cover-файли */
+  transform: scale(1.08);
+  transform-origin: center bottom;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .brand-card__logo {
@@ -85,6 +94,7 @@
   padding: 12%;
   box-sizing: border-box;
   background: var(--color-neutral-100);
+  transform: none;
 }
 
 .brand-card__placeholder {
@@ -112,7 +122,7 @@
 }
 
 .brand-card:hover .brand-card__media {
-  box-shadow: 0 0 0 1px var(--color-neutral-500);
+  box-shadow: none;
 }
 
 .brand-card__input:checked ~ .brand-card__media {
@@ -130,25 +140,24 @@
 
 @media (min-width: 640px) {
   .brand-filter__row {
-    gap: 16px;
+    gap: 12px;
   }
 
   .brand-filter__item {
-    flex-basis: 196px;
+    flex-basis: 142px;
   }
 }
 
 @media (min-width: 1024px) {
   .brand-filter__row {
-    gap: 20px;
+    gap: 14px;
   }
 
   .brand-filter__item {
-    flex-basis: 216px;
+    flex-basis: 156px;
   }
 }
 
-/* iOS Safari renders hover styles as sticky after tap — disable them there */
 @media (hover: none) {
   .brand-card:hover .brand-card__media {
     box-shadow: none;
