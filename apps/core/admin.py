@@ -1,6 +1,8 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 
+from apps.core.map_embed import normalize_map_embed
+
 from .models import SiteSettings
 
 
@@ -19,8 +21,10 @@ class SiteSettingsAdmin(ModelAdmin):
                     "work_hours_uk",
                     "work_hours_ru",
                     "map_embed_url",
-                    "map_latitude",
-                    "map_longitude",
+                ),
+                "description": (
+                    "Карта: вставте посилання на точку Google Maps або код iframe — "
+                    "на сайті відобразиться автоматично."
                 ),
             },
         ),
@@ -58,6 +62,11 @@ class SiteSettingsAdmin(ModelAdmin):
             },
         ),
     )
+
+    def save_model(self, request, obj, form, change):
+        if "map_embed_url" in form.cleaned_data:
+            obj.map_embed_url = normalize_map_embed(form.cleaned_data["map_embed_url"])
+        super().save_model(request, obj, form, change)
 
     def has_add_permission(self, request) -> bool:
         return not SiteSettings.objects.exists()

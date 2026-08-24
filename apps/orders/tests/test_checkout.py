@@ -184,4 +184,4 @@ class CartCheckoutTests(TestCase):
         )
         self.assertEqual(r.status_code, 400)
         self.assertEqual(Order.objects.count(), 0)
-        self.assertContains(r, "телефон", status_code=400)
+        self.assertContains(r, "номер", status_code=400)

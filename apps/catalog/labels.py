@@ -1,12 +1,13 @@
 """Реєстр міток товару (чекбокси в адмінці → рядок іконок у картці товару).
 
-Тільки дані: жодних імпортів моделей, тому модуль вільно підключається будь-де.
+Тільки дані: жодних імпортів моделей на рівні модуля (окрім lazy в icon_url).
 Щоб додати нову мітку: додати запис у PRODUCT_LABELS + BooleanField з такою ж
-назвою в Product + маску static/img/labels/<icon>.png і правило в label_icons.css.
+назвою в Product + маску static/img/labels/<icon>.png.
 Значення icon — назва файлу маски без розширення, slug — значення ?label= в URL.
 """
 from dataclasses import dataclass
 
+from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
 
@@ -19,6 +20,10 @@ class ProductLabel:
     @property
     def slug(self) -> str:
         return self.field.removeprefix("label_").replace("_", "-")
+
+    @property
+    def icon_url(self) -> str:
+        return label_icon_url(self.icon)
 
 
 PRODUCT_LABELS: tuple[ProductLabel, ...] = (
@@ -34,7 +39,28 @@ PRODUCT_LABELS: tuple[ProductLabel, ...] = (
 
 LABEL_FIELDS: tuple[str, ...] = tuple(label.field for label in PRODUCT_LABELS)
 
+LABELS_BY_FIELD: dict[str, ProductLabel] = {
+    label.field: label for label in PRODUCT_LABELS
+}
 LABELS_BY_SLUG: dict[str, ProductLabel] = {label.slug: label for label in PRODUCT_LABELS}
+
+
+def label_icon_url(icon: str) -> str:
+    """URL маски: media-override або static/img/labels/<icon>.png."""
+    try:
+        from apps.catalog.models import LabelIcon
+
+        obj = (
+            LabelIcon.objects.filter(key=icon)
+            .exclude(image="")
+            .only("image")
+            .first()
+        )
+        if obj and obj.image:
+            return obj.image.url
+    except Exception:
+        pass
+    return static(f"img/labels/{icon}.png")
 
 
 def active_labels(product) -> list[ProductLabel]:

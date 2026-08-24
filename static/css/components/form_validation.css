@@ -1,0 +1,99 @@
+/* Спільні стани валідації форм (модалка, auth, checkout, кабінет) */
+
+:root {
+  --color-error: #8c2f2f;
+  --color-error-bg: color-mix(in srgb, #8c2f2f 8%, white);
+}
+
+.form-field--error input,
+.form-field--error textarea,
+.form-field--error select,
+.form-field.is-invalid input,
+.form-field.is-invalid textarea,
+.form-field.is-invalid select,
+.callback-modal__field.form-field--error input,
+.callback-modal__field.form-field--error textarea,
+.callback-modal__field.is-invalid input,
+.callback-modal__field.is-invalid textarea,
+input.is-invalid,
+textarea.is-invalid,
+select.is-invalid {
+  border-color: var(--color-error);
+  background-color: var(--color-error-bg);
+}
+
+.field-error-message,
+.callback-modal__field .field-error,
+.form-field .field-error,
+.form-field .field-error-message {
+  display: block;
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--color-error);
+}
+
+.field-error-message[hidden],
+.field-error[hidden] {
+  display: none;
+}
+
+.field-char-count {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--color-neutral-600);
+  text-align: right;
+}
+
+.btn.is-loading,
+button.is-loading {
+  position: relative;
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  vertical-align: -0.15em;
+  animation: form-btn-spin 0.7s linear infinite;
+}
+
+@keyframes form-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 767px) {
+  .field-error-message,
+  .callback-modal__field .field-error,
+  .form-field .field-error {
+    font-size: 12px;
+  }
+
+  .field-char-count {
+    font-size: 11px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .field-error-message {
+    font-size: 13px;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .callback-modal__field input,
+  .callback-modal__field textarea,
+  .form-field input,
+  .form-field textarea {
+    font-size: 16px;
+  }
+}

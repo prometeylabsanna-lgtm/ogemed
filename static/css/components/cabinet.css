@@ -324,9 +324,16 @@ body.page-cabinet .site-footer {
   border-color: var(--color-accent-400);
 }
 
+.cabinet-form .form-field--error input,
+.cabinet-form .form-field--error textarea,
+.cabinet-form input.is-invalid,
+.cabinet-form textarea.is-invalid {
+  border-color: var(--color-error);
+}
+
 .cabinet-form .field-error {
   font-size: 13px;
-  color: #8c2f2f;
+  color: var(--color-error);
 }
 
 .cabinet-form__actions {

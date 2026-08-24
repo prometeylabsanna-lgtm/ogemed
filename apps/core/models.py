@@ -1,15 +1,20 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.fields import OptimizedImageField
+from apps.core.image_processing import MAX_SIDE_HERO, MAX_SIDE_LOGO
+
 
 class SiteSettings(models.Model):
     """Singleton site settings (pk=1). API secrets must stay in env, never here."""
 
-    logo = models.ImageField(
+    logo = OptimizedImageField(
         _("Логотип"),
         upload_to="site/",
         blank=True,
         help_text=_("PNG/SVG з прозорим фоном. Порожньо = логотип із static/img/logo.png"),
+        max_side=MAX_SIDE_LOGO,
+        allow_svg=True,
     )
     phone = models.CharField(_("Телефон"), max_length=32, blank=True)
     email = models.EmailField(_("Email"), blank=True)
@@ -18,24 +23,29 @@ class SiteSettings(models.Model):
     address_ru = models.CharField(_("Адреса (RU)"), max_length=255, blank=True)
     work_hours_uk = models.CharField(_("Години роботи (UK)"), max_length=255, blank=True)
     work_hours_ru = models.CharField(_("Години роботи (RU)"), max_length=255, blank=True)
-    map_embed_url = models.URLField(
-        _("URL карти (iframe)"),
+    map_embed_url = models.TextField(
+        _("Карта Google"),
         blank=True,
-        help_text=_("Посилання для iframe, напр. OpenStreetMap embed"),
+        help_text=_(
+            "Вставте коротке посилання Google Maps (maps.app.goo.gl/…) "
+            "або повний HTML iframe — сайт сам зробить embed."
+        ),
     )
     map_latitude = models.DecimalField(
-        _("Широта"),
+        _("Широта (застаріле)"),
         max_digits=9,
         decimal_places=6,
         null=True,
         blank=True,
+        editable=False,
     )
     map_longitude = models.DecimalField(
-        _("Довгота"),
+        _("Довгота (застаріле)"),
         max_digits=9,
         decimal_places=6,
         null=True,
         blank=True,
+        editable=False,
     )
     telegram_url = models.URLField(_("Telegram"), blank=True)
     instagram_url = models.URLField(_("Instagram"), blank=True)
@@ -82,6 +92,9 @@ class SiteSettings(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         self.pk = 1
+        from apps.core.map_embed import normalize_map_embed
+
+        self.map_embed_url = normalize_map_embed(self.map_embed_url)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs) -> tuple[int, dict]:
@@ -146,7 +159,12 @@ class SiteBlock(models.Model):
         verbose_name=_("Тип контенту"),
     )
     text_html = models.TextField(blank=True, verbose_name=_("Текст"))
-    image = models.ImageField(upload_to="blocks/", blank=True, verbose_name=_("Зображення"))
+    image = OptimizedImageField(
+        upload_to="blocks/",
+        blank=True,
+        verbose_name=_("Зображення"),
+        max_side=MAX_SIDE_HERO,
+    )
     sort_order = models.PositiveSmallIntegerField(default=0, verbose_name=_("Порядок"))
     is_active = models.BooleanField(default=True, verbose_name=_("Активний"))
 

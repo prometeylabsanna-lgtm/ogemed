@@ -61,7 +61,7 @@
         {% endfor %}
       </ul>
 
-      <form method="post" class="checkout__form" id="checkout-form" novalidate data-checkout-form>
+      <form method="post" class="checkout__form" id="checkout-form" novalidate data-checkout-form data-validate-form>
         {% csrf_token %}
         {% if form.non_field_errors %}
           <div class="form-errors">{{ form.non_field_errors }}</div>
@@ -82,7 +82,7 @@
               <div class="form-field">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
-                {% if field.errors %}<div class="field-error">{{ field.errors.0 }}</div>{% endif %}
+                {% if field.errors %}<span class="field-error-message field-error">{{ field.errors.0 }}</span>{% endif %}
               </div>
               {% endif %}
             {% endfor %}

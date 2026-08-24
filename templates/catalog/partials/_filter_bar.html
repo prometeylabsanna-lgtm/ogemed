@@ -138,7 +138,7 @@
   {% comment %}Мітка з головної: чекбокс тримає ?label= у формі, знімається одним кліком{% endcomment %}
   <label class="cat-chip">
     <input class="cat-chip__input" type="checkbox" name="label" value="{{ selected_label.slug }}" checked>
-    {% include "catalog/partials/_label_icon.html" with icon=selected_label.icon %}
+    {% include "catalog/partials/_label_icon.html" with icon_url=selected_label.icon_url %}
     <span class="cat-chip__text">{{ selected_label.title }}</span>
     <span class="cat-chip__x" aria-hidden="true">
       <svg width="10" height="10" viewBox="0 0 10 10" focusable="false">

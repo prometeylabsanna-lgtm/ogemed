@@ -45,7 +45,7 @@
           aria-label="{{ label.title }}"
           aria-expanded="false"
         >
-          {% include "catalog/partials/_label_icon.html" with icon=label.icon %}
+          {% include "catalog/partials/_label_icon.html" with icon_url=label.icon_url %}
         </button>
         <span class="pdp-label__text" aria-hidden="true">{{ label.title }}</span>
       </li>

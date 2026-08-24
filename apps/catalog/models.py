@@ -3,6 +3,8 @@ from django.db.models import Min, Q
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.fields import OptimizedImageField
+from apps.core.image_processing import MAX_SIDE_LOGO, MAX_SIDE_PRODUCT
 from apps.core.mixins import LocalizedCharMixin, SeoFieldsMixin, TimeStampedModel
 
 from .labels import active_labels
@@ -26,7 +28,12 @@ class Category(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     slug = models.SlugField(_("Slug"), max_length=120, unique=True)
     name_uk = models.CharField(_("Назва (UK)"), max_length=255)
     name_ru = models.CharField(_("Назва (RU)"), max_length=255, blank=True)
-    image = models.ImageField(_("Зображення"), upload_to="categories/", blank=True)
+    image = OptimizedImageField(
+        _("Зображення"),
+        upload_to="categories/",
+        blank=True,
+        max_side=MAX_SIDE_PRODUCT,
+    )
     description_uk = models.TextField(_("Опис (UK)"), blank=True)
     description_ru = models.TextField(_("Опис (RU)"), blank=True)
     is_active = models.BooleanField(_("Активна"), default=True)
@@ -71,27 +78,37 @@ class Brand(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     name_ru = models.CharField(_("Назва (RU)"), max_length=255, blank=True)
     tagline_uk = models.TextField(_("Короткий опис (UK)"), blank=True)
     tagline_ru = models.TextField(_("Короткий опис (RU)"), blank=True)
-    logo = models.ImageField(_("Логотип"), upload_to="brands/", blank=True)
-    logo_dark = models.ImageField(
+    logo = OptimizedImageField(
+        _("Логотип"),
+        upload_to="brands/",
+        blank=True,
+        max_side=MAX_SIDE_LOGO,
+        allow_svg=True,
+    )
+    logo_dark = OptimizedImageField(
         _("Логотип (темний)"),
         upload_to="brands/",
         blank=True,
         help_text=_("Варіант для темного фону."),
+        max_side=MAX_SIDE_LOGO,
+        allow_svg=True,
     )
     website_url = models.URLField(_("Сайт бренду"), blank=True)
     description_uk = models.TextField(_("Опис / історія (UK)"), blank=True)
     description_ru = models.TextField(_("Опис / історія (RU)"), blank=True)
-    cover_image = models.ImageField(
+    cover_image = OptimizedImageField(
         _("Фото для каталогу"),
         upload_to="brands/covers/",
         blank=True,
         help_text=_("Плитка бренду у фільтрах каталогу."),
+        max_side=MAX_SIDE_PRODUCT,
     )
-    showcase_image = models.ImageField(
+    showcase_image = OptimizedImageField(
         _("Зображення для вітрини на головній"),
         upload_to="brands/showcase/",
         blank=True,
         help_text=_("PNG без фону. Якщо порожнє — візьметься фото для каталогу."),
+        max_side=MAX_SIDE_PRODUCT,
     )
     categories = models.ManyToManyField(
         "catalog.Category",
@@ -440,10 +457,11 @@ class ProductImage(TimeStampedModel):
         related_name="images",
         verbose_name=_("Варіант"),
     )
-    image = models.ImageField(
+    image = OptimizedImageField(
         _("Зображення"),
         upload_to="products/",
         help_text=_("Від 1600px по довгій стороні — фото збільшується на сторінці товару."),
+        max_side=MAX_SIDE_PRODUCT,
     )
     alt_uk = models.CharField(_("Alt (UK)"), max_length=255, blank=True)
     alt_ru = models.CharField(_("Alt (RU)"), max_length=255, blank=True)
@@ -459,12 +477,47 @@ class ProductImage(TimeStampedModel):
         return f"Image #{self.pk} for {self.product_id}"
 
 
+class LabelIcon(models.Model):
+    """Заміна PNG-маски мітки товару (ключ = ProductLabel.icon)."""
+
+    key = models.SlugField(_("Ключ іконки"), max_length=64, unique=True)
+    title = models.CharField(_("Назва"), max_length=120)
+    image = OptimizedImageField(
+        _("Зображення"),
+        upload_to="label_icons/",
+        blank=True,
+        help_text=_("PNG з прозорим фоном. Порожньо = дефолт із static/img/labels/"),
+        max_side=MAX_SIDE_LOGO,
+        allow_svg=True,
+    )
+    updated_at = models.DateTimeField(_("Оновлено"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("Іконка мітки")
+        verbose_name_plural = _("Іконки міток")
+        ordering = ["title"]
+
+    def __str__(self) -> str:
+        return self.title
+
+    @classmethod
+    def ensure_defaults(cls) -> None:
+        from apps.catalog.labels import PRODUCT_LABELS
+
+        for label in PRODUCT_LABELS:
+            cls.objects.get_or_create(
+                key=label.icon,
+                defaults={"title": str(label.title)},
+            )
+
+
 __all__ = [
     "Attribute",
     "AttributeValue",
     "Availability",
     "Brand",
     "Category",
+    "LabelIcon",
     "Product",
     "ProductImage",
     "ProductQuerySet",

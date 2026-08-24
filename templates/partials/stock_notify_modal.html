@@ -20,6 +20,8 @@
         hx-target="#stock-notify-result"
         hx-swap="innerHTML"
         data-stock-notify-form
+        data-validate-form
+        novalidate
       >
         {% csrf_token %}
         <input type="hidden" name="lead_type" value="stock_notify">
@@ -32,7 +34,7 @@
 
         <div class="callback-modal__field">
           <label for="sn-phone">{% trans "Телефон" %}</label>
-          <input id="sn-phone" name="phone" required maxlength="32" data-phone-mask inputmode="tel" autocomplete="tel">
+          <input id="sn-phone" name="phone" required maxlength="32" data-phone-mask data-validate="phone" inputmode="tel" autocomplete="tel">
         </div>
 
         <div id="stock-notify-result" class="callback-modal__result"></div>

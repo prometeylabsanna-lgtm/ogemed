@@ -143,16 +143,19 @@ body.page-auth .site-footer {
   box-shadow: 0 1px 0 0 var(--color-accent-700);
 }
 
-.auth-form .form-field--error input {
-  border-bottom-color: var(--color-accent-600);
-  box-shadow: 0 1px 0 0 var(--color-accent-600);
+.auth-form .form-field--error input,
+.auth-form input.is-invalid {
+  border-bottom-color: var(--color-error);
+  box-shadow: 0 1px 0 0 var(--color-error);
+  background-color: var(--color-error-bg, color-mix(in srgb, #8c2f2f 8%, white));
 }
 
-.auth-form .field-error {
+.auth-form .field-error,
+.auth-form .field-error-message {
   margin-top: 8px;
   font-size: 13px;
   line-height: 1.35;
-  color: #8c2f2f;
+  color: var(--color-error);
 }
 
 .auth-form__actions {

@@ -3,14 +3,24 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from unfold.admin import ModelAdmin
 
+from apps.core.admin_filters import (
+    DropdownFiltersMixin,
+    UkAllValuesDropdownFilter,
+    UkBooleanDropdownFilter,
+    UkChoicesDropdownFilter,
+)
+
 from .about_content import AboutContent
 from .models import CMSPage, Lead
 
 
 @admin.register(CMSPage)
-class CMSPageAdmin(ModelAdmin):
+class CMSPageAdmin(DropdownFiltersMixin, ModelAdmin):
     list_display = ("title_uk", "slug", "page_key", "is_published", "sort_order")
-    list_filter = ("is_published", "page_key")
+    list_filter = (
+        ("is_published", UkBooleanDropdownFilter),
+        ("page_key", UkAllValuesDropdownFilter),
+    )
     search_fields = ("title_uk", "title_ru", "slug", "page_key")
     prepopulated_fields = {"slug": ("title_uk",)}
     fieldsets = (
@@ -122,9 +132,12 @@ class AboutContentAdmin(ModelAdmin):
 
 
 @admin.register(Lead)
-class LeadAdmin(ModelAdmin):
+class LeadAdmin(DropdownFiltersMixin, ModelAdmin):
     list_display = ("name", "phone", "lead_type", "is_processed", "created_at")
-    list_filter = ("lead_type", "is_processed")
+    list_filter = (
+        ("lead_type", UkChoicesDropdownFilter),
+        ("is_processed", UkBooleanDropdownFilter),
+    )
     search_fields = ("name", "phone", "email")
     readonly_fields = ("created_at", "honeypot")
 

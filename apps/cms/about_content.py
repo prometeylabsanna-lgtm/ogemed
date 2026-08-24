@@ -1,6 +1,9 @@
 from django.db import models
 from django.utils.translation import get_language, gettext_lazy as _
 
+from apps.core.fields import OptimizedImageField
+from apps.core.image_processing import MAX_SIDE_HERO, MAX_SIDE_PRODUCT
+
 
 class AboutContent(models.Model):
     """Singleton content for /pro-nas/ — секції з окремими полями UK/RU."""
@@ -41,8 +44,11 @@ class AboutContent(models.Model):
             "спокойно, честно и с вниманием к вашей коже."
         ),
     )
-    hero_image = models.ImageField(
-        _("Hero зображення"), upload_to="about/", blank=True
+    hero_image = OptimizedImageField(
+        _("Hero зображення"),
+        upload_to="about/",
+        blank=True,
+        max_side=MAX_SIDE_HERO,
     )
 
     # —— Історія ——
@@ -75,8 +81,11 @@ class AboutContent(models.Model):
         blank=True,
         default="",
     )
-    history_image = models.ImageField(
-        _("Історія зображення"), upload_to="about/", blank=True
+    history_image = OptimizedImageField(
+        _("Історія зображення"),
+        upload_to="about/",
+        blank=True,
+        max_side=MAX_SIDE_PRODUCT,
     )
     history_card_1_title_uk = models.CharField(
         _("Картка 1 — заголовок (UK)"),
@@ -223,8 +232,11 @@ class AboutContent(models.Model):
         blank=True,
         default="Три принципа, из которых мы собираем каталог и сервис.",
     )
-    philosophy_image = models.ImageField(
-        _("Філософія зображення"), upload_to="about/", blank=True
+    philosophy_image = OptimizedImageField(
+        _("Філософія зображення"),
+        upload_to="about/",
+        blank=True,
+        max_side=MAX_SIDE_PRODUCT,
     )
     philosophy_thesis_1_title_uk = models.CharField(
         _("Теза 1 — заголовок (UK)"),

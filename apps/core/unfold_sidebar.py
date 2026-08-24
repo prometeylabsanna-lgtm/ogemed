@@ -47,9 +47,10 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
     prefix = (admin_url or "ogm8k2x9p4qh7n").strip("/")
     return {
         "SITE_TITLE": "OGEMED Admin",
-        "SITE_HEADER": "OGEMED for you",
-        "SITE_SUBHEADER": "Панель керування",
+        "SITE_HEADER": "",
+        "SITE_SUBHEADER": "",
         "SITE_URL": "/",
+        "THEME": "light",
         "SHOW_HISTORY": True,
         "SHOW_VIEW_ON_SITE": True,
         "SITE_ICON": {
@@ -90,6 +91,10 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
         },
         "STYLES": [
             "/static/css/admin/ogemed_theme.css",
+        ],
+        "SCRIPTS": [
+            "/static/js/admin/theme-init.js",
+            "/static/js/admin/filters.js",
         ],
         "SIDEBAR": {
             "show_search": True,
@@ -155,9 +160,9 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
                             "link": _admin_link(prefix, "catalog", "attribute"),
                         },
                         {
-                            "title": "Варіанти",
-                            "icon": "qr_code_2",
-                            "link": _admin_link(prefix, "catalog", "productvariant"),
+                            "title": "Іконки міток",
+                            "icon": "loyalty",
+                            "link": _admin_link(prefix, "catalog", "labelicon"),
                         },
                     ],
                 },

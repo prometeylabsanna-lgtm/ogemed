@@ -1,21 +1,20 @@
-import re
-
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.validators import (
+    NAME_MAX,
+    validate_email,
+    validate_name,
+    validate_password_register,
+    validate_phone,
+)
 from apps.orders.forms import PHONE_ATTRS
 
 from .models import Profile
 
 User = get_user_model()
-
-_NAME_RE = re.compile(
-    r"^[A-Za-zА-Яа-яЁёІіЇїЄєҐґʼ'`’.\-\s]+$",
-    re.UNICODE,
-)
-_EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
 
 class EmailAuthenticationForm(AuthenticationForm):
@@ -26,6 +25,7 @@ class EmailAuthenticationForm(AuthenticationForm):
                 "autocomplete": "email",
                 "inputmode": "email",
                 "placeholder": _("diana.k@example.org"),
+                "data-validate": "email",
             }
         ),
     )
@@ -36,20 +36,25 @@ class EmailAuthenticationForm(AuthenticationForm):
             attrs={
                 "autocomplete": "current-password",
                 "placeholder": _("Ваш пароль"),
+                "data-validate": "password_login",
             }
         ),
     )
+
+    def clean_username(self):
+        return validate_email(self.cleaned_data.get("username"), required=True)
 
 
 class RegisterForm(UserCreationForm):
     full_name = forms.CharField(
         label=_("Імʼя"),
-        max_length=255,
+        max_length=NAME_MAX,
         required=True,
         widget=forms.TextInput(
             attrs={
                 "autocomplete": "name",
                 "placeholder": _("Ваше імʼя"),
+                "data-validate": "name",
             }
         ),
     )
@@ -61,6 +66,7 @@ class RegisterForm(UserCreationForm):
                 "autocomplete": "email",
                 "inputmode": "email",
                 "placeholder": _("diana.k@example.org"),
+                "data-validate": "email",
             }
         ),
     )
@@ -71,6 +77,7 @@ class RegisterForm(UserCreationForm):
             attrs={
                 "autocomplete": "new-password",
                 "placeholder": _("Мінімум 8 символів"),
+                "data-validate": "password",
             }
         ),
     )
@@ -81,6 +88,8 @@ class RegisterForm(UserCreationForm):
             attrs={
                 "autocomplete": "new-password",
                 "placeholder": _("Повторіть пароль"),
+                "data-validate": "password_confirm",
+                "data-validate-match": "password1",
             }
         ),
     )
@@ -94,37 +103,33 @@ class RegisterForm(UserCreationForm):
         self.order_fields(["full_name", "email", "password1", "password2"])
 
     def clean_full_name(self):
-        name = (self.cleaned_data.get("full_name") or "").strip()
-        name = re.sub(r"\s+", " ", name)
-        if len(name) < 2:
-            raise forms.ValidationError(_("Вкажіть імʼя (мінімум 2 символи)"))
-        if len(name) > 255:
-            raise forms.ValidationError(_("Імʼя занадто довге"))
-        if not _NAME_RE.fullmatch(name):
-            raise forms.ValidationError(
-                _("Імʼя може містити лише літери, пробіли, дефіс і апостроф")
-            )
-        if not any(ch.isalpha() for ch in name):
-            raise forms.ValidationError(_("Вкажіть коректне імʼя"))
-        return name
+        return validate_name(self.cleaned_data.get("full_name"), required=True)
 
     def clean_email(self):
-        email = (self.cleaned_data.get("email") or "").lower().strip()
-        if not email or not _EMAIL_RE.fullmatch(email):
-            raise forms.ValidationError(_("Введіть коректну email-адресу"))
+        email = validate_email(self.cleaned_data.get("email"), required=True)
         if User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError(_("Користувач з таким email вже існує"))
         return email
 
     def clean_password1(self):
-        password = self.cleaned_data.get("password1") or ""
-        if len(password) < 8:
-            raise forms.ValidationError(_("Пароль має містити щонайменше 8 символів"))
-        if password.isdigit():
-            raise forms.ValidationError(_("Пароль не може складатися лише з цифр"))
-        if password.lower() == (self.data.get("email") or "").lower().strip():
-            raise forms.ValidationError(_("Пароль не повинен збігатися з email"))
-        return password
+        return validate_password_register(
+            self.cleaned_data.get("password1"),
+            email=self.data.get("email") or "",
+        )
+
+    def clean(self):
+        cleaned = super().clean()
+        password1 = cleaned.get("password1")
+        password2 = cleaned.get("password2")
+        if password1 and password2 and password1 != password2:
+            self.add_error(
+                "password2",
+                _(
+                    "Введені паролі не збігаються. "
+                    "Перевірте правильність повторного вводу."
+                ),
+            )
+        return cleaned
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -144,7 +149,17 @@ class RegisterForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    email = forms.EmailField(label=_("Email"), required=True)
+    email = forms.EmailField(
+        label=_("Email"),
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                "autocomplete": "email",
+                "inputmode": "email",
+                "data-validate": "email",
+            }
+        ),
+    )
 
     class Meta:
         model = Profile
@@ -157,6 +172,13 @@ class ProfileForm(forms.ModelForm):
             "default_apartment",
         )
         widgets = {
+            "full_name": forms.TextInput(
+                attrs={
+                    "autocomplete": "name",
+                    "data-validate": "name_optional",
+                    "maxlength": str(NAME_MAX),
+                }
+            ),
             "phone": forms.TextInput(attrs=PHONE_ATTRS),
         }
 
@@ -164,6 +186,19 @@ class ProfileForm(forms.ModelForm):
         self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
         self.fields["email"].initial = self.user.email
+        self.fields["full_name"].required = False
+        self.fields["phone"].required = False
+        phone_widget = self.fields["phone"].widget
+        phone_widget.attrs = {**phone_widget.attrs, "data-validate": "phone_optional"}
+
+    def clean_full_name(self):
+        return validate_name(self.cleaned_data.get("full_name"), required=False)
+
+    def clean_phone(self):
+        return validate_phone(self.cleaned_data.get("phone"), required=False)
+
+    def clean_email(self):
+        return validate_email(self.cleaned_data.get("email"), required=True)
 
     def save(self, commit=True):
         profile = super().save(commit=False)

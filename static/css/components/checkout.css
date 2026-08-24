@@ -280,10 +280,18 @@ body.page-checkout .site-footer {
 
 .field-error,
 .form-errors {
-  color: #8c2f2f;
+  color: var(--color-error, #8c2f2f);
   font-size: 13px;
   margin-top: 6px;
   line-height: 1.4;
+}
+
+.checkout .form-field--error input,
+.checkout .form-field--error textarea,
+.checkout .form-field--error select,
+.checkout input.is-invalid,
+.checkout textarea.is-invalid {
+  border-color: var(--color-error, #8c2f2f);
 }
 
 .checkout__actions {

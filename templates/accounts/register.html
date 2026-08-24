@@ -14,7 +14,7 @@
     </p>
   </header>
 
-  <form method="post" class="auth-form" novalidate>
+  <form method="post" class="auth-form" novalidate data-validate-form>
     {% csrf_token %}
 
     {% if form.non_field_errors %}
@@ -29,7 +29,7 @@
     <div class="form-field{% if field.errors %} form-field--error{% endif %}">
       <label for="{{ field.id_for_label }}">{{ field.label }}</label>
       {{ field }}
-      {% if field.errors %}<div class="field-error" id="{{ field.id_for_label }}-error">{{ field.errors.0 }}</div>{% endif %}
+      {% if field.errors %}<span class="field-error-message field-error" id="{{ field.id_for_label }}-error">{{ field.errors.0 }}</span>{% endif %}
     </div>
     {% endfor %}
 

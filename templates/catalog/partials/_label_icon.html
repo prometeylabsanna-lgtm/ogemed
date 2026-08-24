@@ -1,6 +1,6 @@
-{% comment %}Іконка мітки товару. Очікує змінну icon (ключ із labels.py).
-
-Малюнок static/img/labels/<icon>.png підключено як CSS-маска: колір і розмір
-задає батьківський блок. Правила масок — у label_icons.css.
-{% endcomment %}
-<span class="label-icon label-icon--{{ icon }}" aria-hidden="true"></span>
+{% comment %}Іконка мітки. Передати icon_url (або label з .icon_url).{% endcomment %}
+<span
+  class="label-icon"
+  style="--label-mask: url('{% firstof icon_url label.icon_url %}');"
+  aria-hidden="true"
+></span>

@@ -19,6 +19,8 @@
         hx-post="{% url 'cms:lead_create' %}"
         hx-target="#callback-result"
         hx-swap="innerHTML"
+        data-validate-form
+        novalidate
       >
         {% csrf_token %}
         <input type="hidden" name="lead_type" value="callback">
@@ -26,22 +28,22 @@
 
         <div class="callback-modal__field">
           <label for="cb-name">{% trans "Імʼя" %}</label>
-          <input id="cb-name" name="name" required maxlength="120" autocomplete="name">
+          <input id="cb-name" name="name" required maxlength="50" autocomplete="name" data-validate="name">
         </div>
 
         <div class="callback-modal__field">
           <label for="cb-phone">{% trans "Телефон" %}</label>
-          <input id="cb-phone" name="phone" required maxlength="32" data-phone-mask inputmode="tel" autocomplete="tel">
+          <input id="cb-phone" name="phone" required maxlength="32" data-phone-mask data-validate="phone" inputmode="tel" autocomplete="tel">
         </div>
 
         <div class="callback-modal__field">
           <label for="cb-email">{% trans "Email" %}</label>
-          <input id="cb-email" name="email" type="email" maxlength="254" autocomplete="email">
+          <input id="cb-email" name="email" type="email" maxlength="254" autocomplete="email" data-validate="email_optional">
         </div>
 
         <div class="callback-modal__field">
           <label for="cb-message">{% trans "Повідомлення" %}</label>
-          <textarea id="cb-message" name="message" rows="3" maxlength="2000"></textarea>
+          <textarea id="cb-message" name="message" rows="3" maxlength="2000" data-validate="message_optional" data-char-count></textarea>
         </div>
 
         <div id="callback-result" class="callback-modal__result"></div>

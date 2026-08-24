@@ -1,7 +1,13 @@
-import re
-
 from django import forms
 from django.utils.translation import gettext_lazy as _
+
+from apps.core.validators import (
+    NAME_MAX,
+    validate_email,
+    validate_message,
+    validate_name,
+    validate_phone,
+)
 
 from .models import DeliveryType, NPPointType, PaymentType
 
@@ -9,17 +15,38 @@ PHONE_ATTRS = {
     "data-phone-mask": "",
     "inputmode": "tel",
     "autocomplete": "tel",
+    "data-validate": "phone",
 }
 
 
 class CheckoutForm(forms.Form):
-    customer_name = forms.CharField(label=_("ПІБ"), max_length=255)
+    customer_name = forms.CharField(
+        label=_("ПІБ"),
+        max_length=NAME_MAX,
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "name",
+                "data-validate": "name",
+                "maxlength": str(NAME_MAX),
+            }
+        ),
+    )
     customer_phone = forms.CharField(
         label=_("Телефон"),
         max_length=32,
         widget=forms.TextInput(attrs=PHONE_ATTRS),
     )
-    customer_email = forms.EmailField(label=_("Email"), required=False)
+    customer_email = forms.EmailField(
+        label=_("Email"),
+        required=False,
+        widget=forms.EmailInput(
+            attrs={
+                "autocomplete": "email",
+                "inputmode": "email",
+                "data-validate": "email_optional",
+            }
+        ),
+    )
     delivery_type = forms.ChoiceField(
         label=_("Доставка"), choices=DeliveryType.choices
     )
@@ -37,7 +64,16 @@ class CheckoutForm(forms.Form):
     courier_building = forms.CharField(label=_("Будинок"), required=False, max_length=64)
     courier_apartment = forms.CharField(label=_("Квартира"), required=False, max_length=64)
     courier_comment = forms.CharField(
-        label=_("Коментар"), required=False, widget=forms.Textarea(attrs={"rows": 3})
+        label=_("Коментар"),
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "rows": 3,
+                "maxlength": "2000",
+                "data-validate": "message_optional",
+                "data-char-count": "",
+            }
+        ),
     )
     payment_type = forms.ChoiceField(label=_("Оплата"), choices=PaymentType.choices)
 
@@ -56,14 +92,17 @@ class CheckoutForm(forms.Form):
         "courier_comment",
     )
 
+    def clean_customer_name(self):
+        return validate_name(self.cleaned_data.get("customer_name"), required=True)
+
     def clean_customer_phone(self):
-        raw = self.cleaned_data.get("customer_phone", "")
-        digits = re.sub(r"\D", "", raw or "")
-        if digits.startswith("0") and len(digits) == 10:
-            digits = "380" + digits[1:]
-        if not re.match(r"^380\d{9}$", digits):
-            raise forms.ValidationError(_("Вкажіть телефон у форматі +380XXXXXXXXX"))
-        return "+" + digits
+        return validate_phone(self.cleaned_data.get("customer_phone"), required=True)
+
+    def clean_customer_email(self):
+        return validate_email(self.cleaned_data.get("customer_email"), required=False)
+
+    def clean_courier_comment(self):
+        return validate_message(self.cleaned_data.get("courier_comment"), required=False)
 
     def clean(self):
         cleaned = super().clean()

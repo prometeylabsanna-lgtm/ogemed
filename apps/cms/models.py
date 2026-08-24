@@ -3,6 +3,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import get_language, gettext_lazy as _
 
+from apps.core.fields import OptimizedImageField
+from apps.core.image_processing import MAX_SIDE_HERO
+
 from .about_content import AboutContent  # noqa: F401
 
 
@@ -82,7 +85,12 @@ class HeroSlide(models.Model):
         _("CTA (RU)"), max_length=80, blank=True, default="Смотреть"
     )
     cta_url = models.CharField(_("CTA URL"), max_length=255, blank=True, default="/katalog/")
-    image = models.ImageField(_("Зображення"), upload_to="hero/", blank=True)
+    image = OptimizedImageField(
+        _("Зображення"),
+        upload_to="hero/",
+        blank=True,
+        max_side=MAX_SIDE_HERO,
+    )
     is_active = models.BooleanField(_("Активний"), default=True)
     sort_order = models.PositiveIntegerField(_("Порядок"), default=0)
 
@@ -122,7 +130,10 @@ class Lead(models.Model):
         STOCK_NOTIFY = "stock_notify", _("Повідомити про надходження")
 
     lead_type = models.CharField(
-        max_length=32, choices=LeadType.choices, default=LeadType.CALLBACK
+        _("Тип"),
+        max_length=32,
+        choices=LeadType.choices,
+        default=LeadType.CALLBACK,
     )
     name = models.CharField(_("Імʼя"), max_length=120)
     phone = models.CharField(_("Телефон"), max_length=32)

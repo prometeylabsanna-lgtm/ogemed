@@ -18,7 +18,7 @@
 
   <div class="cabinet-page__layout">
     <div class="cabinet-page__main">
-      <form method="post" class="cabinet-form" novalidate>
+      <form method="post" class="cabinet-form" novalidate data-validate-form>
         {% csrf_token %}
 
         {% if form.non_field_errors %}
@@ -31,21 +31,21 @@
         <div class="form-field{% if f.errors %} form-field--error{% endif %}">
           <label for="{{ f.id_for_label }}">{{ f.label }}</label>
           {{ f }}
-          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+          {% if f.errors %}<span class="field-error-message field-error">{{ f.errors.0 }}</span>{% endif %}
         </div>
         {% endwith %}
         {% with f=form.phone %}
         <div class="form-field{% if f.errors %} form-field--error{% endif %}">
           <label for="{{ f.id_for_label }}">{{ f.label }}</label>
           {{ f }}
-          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+          {% if f.errors %}<span class="field-error-message field-error">{{ f.errors.0 }}</span>{% endif %}
         </div>
         {% endwith %}
         {% with f=form.email %}
         <div class="form-field{% if f.errors %} form-field--error{% endif %}">
           <label for="{{ f.id_for_label }}">{{ f.label }}</label>
           {{ f }}
-          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+          {% if f.errors %}<span class="field-error-message field-error">{{ f.errors.0 }}</span>{% endif %}
         </div>
         {% endwith %}
 
@@ -55,28 +55,28 @@
         <div class="form-field{% if f.errors %} form-field--error{% endif %}">
           <label for="{{ f.id_for_label }}">{{ f.label }}</label>
           {{ f }}
-          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+          {% if f.errors %}<span class="field-error-message field-error">{{ f.errors.0 }}</span>{% endif %}
         </div>
         {% endwith %}
         {% with f=form.default_street %}
         <div class="form-field{% if f.errors %} form-field--error{% endif %}">
           <label for="{{ f.id_for_label }}">{{ f.label }}</label>
           {{ f }}
-          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+          {% if f.errors %}<span class="field-error-message field-error">{{ f.errors.0 }}</span>{% endif %}
         </div>
         {% endwith %}
         {% with f=form.default_building %}
         <div class="form-field{% if f.errors %} form-field--error{% endif %}">
           <label for="{{ f.id_for_label }}">{{ f.label }}</label>
           {{ f }}
-          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+          {% if f.errors %}<span class="field-error-message field-error">{{ f.errors.0 }}</span>{% endif %}
         </div>
         {% endwith %}
         {% with f=form.default_apartment %}
         <div class="form-field{% if f.errors %} form-field--error{% endif %}">
           <label for="{{ f.id_for_label }}">{{ f.label }}</label>
           {{ f }}
-          {% if f.errors %}<div class="field-error">{{ f.errors.0 }}</div>{% endif %}
+          {% if f.errors %}<span class="field-error-message field-error">{{ f.errors.0 }}</span>{% endif %}
         </div>
         {% endwith %}
 
