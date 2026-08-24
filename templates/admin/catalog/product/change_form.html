@@ -1,0 +1,23 @@
+{% extends "admin/change_form.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin/site_content.css' %}">
+<script src="{% static 'js/admin/product_lang_tabs.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="product-admin-editor site-content-editor" data-product-lang-root>
+    <div class="product-admin-editor__langbar">
+        <div class="cms-lang-switch" data-cms-lang-switch role="group" aria-label="Мова контенту">
+            <button type="button" class="cms-lang-switch__btn is-active" data-cms-lang="uk">UA</button>
+            <button type="button" class="cms-lang-switch__btn" data-cms-lang="ru">RU</button>
+        </div>
+        <p class="product-admin-editor__langhint">
+            Перемикач показує поля назви й опису українською або російською.
+        </p>
+    </div>
+    {{ block.super }}
+</div>
+{% endblock %}

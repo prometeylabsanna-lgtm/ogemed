@@ -40,16 +40,14 @@ class CatalogStorefrontTests(TestCase):
             is_active=True,
             is_hit=True,
             is_new=True,
-        )
-        cls.product.categories.add(cls.cat)
-        cls.variant = ProductVariant.objects.create(
-            product=cls.product,
             sku="TEST-SKU-001",
-            label_uk="30 мл",
             price=Decimal("100.00"),
             stock=5,
-            is_active=True,
         )
+        cls.product.categories.add(cls.cat)
+        cls.variant = cls.product.variants.get(sku="TEST-SKU-001")
+        cls.variant.label_uk = "30 мл"
+        cls.variant.save(update_fields=["label_uk"])
         cls.variant_b = ProductVariant.objects.create(
             product=cls.product,
             sku="TEST-SKU-002",
@@ -150,8 +148,8 @@ class CatalogStorefrontTests(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, 'class="care-selection-section')
         self.assertContains(r, "Знайдіть свій ідеальний догляд")
-        self.assertContains(r, 'href="/catalog/"')
-        self.assertContains(r, 'href="/catalog/?skin_type=select"')
+        self.assertContains(r, 'href="/katalog/"')
+        self.assertContains(r, 'href="/katalog/?skin_type=select"')
 
     def test_catalog_alias_redirect_keeps_skin_type(self):
         r = self.client.get("/catalog/", {"skin_type": "select"})

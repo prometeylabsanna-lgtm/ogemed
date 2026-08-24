@@ -21,14 +21,10 @@ class CatalogQueryBudgetTests(TestCase):
                 availability=Availability.IN_STOCK,
                 is_active=True,
                 is_hit=True,
-            )
-            ProductVariant.objects.create(
-                product=product,
                 sku=f"QB-SKU-{i}",
                 price=Decimal("100.00"),
                 old_price=Decimal("120.00"),
                 stock=5,
-                is_active=True,
             )
             ProductImage.objects.create(
                 product=product,

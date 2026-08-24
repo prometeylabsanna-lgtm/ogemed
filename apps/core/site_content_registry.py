@@ -37,7 +37,10 @@ CONTENT_SECTIONS: tuple[ContentSection, ...] = (
         sidebar_icon="image",
         preview_url="/",
         admin_model_name="homeherosettings",
-        description="Fallback-тексти та слайди hero. Слайди — нижче на сторінці.",
+        description=(
+            "Текст, який показується на головній, коли немає жодного активного "
+            "слайда в каруселі. Слайди налаштовуються нижче на цій сторінці."
+        ),
         visibility_key="hero_section_visible",
         blocks=(
             ("home", "hero_fallback_title"),
@@ -45,7 +48,7 @@ CONTENT_SECTIONS: tuple[ContentSection, ...] = (
         ),
         field_groups=(
             FieldGroup(
-                "Fallback (якщо немає активних слайдів)",
+                "Текст, якщо немає слайдів",
                 ("hero_fallback_title", "hero_fallback_subtitle"),
             ),
         ),

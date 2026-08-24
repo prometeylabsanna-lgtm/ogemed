@@ -131,7 +131,7 @@ class ProductImageInline(TabularInline):
     form = ProductImageForm
     extra = 1
     readonly_fields = ("preview",)
-    fields = ("preview", "image", "variant", "alt_uk", "alt_ru", "is_main", "sort_order")
+    fields = ("preview", "image", "alt_uk", "alt_ru", "is_main", "sort_order")
 
     @admin.display(description="Превʼю")
     def preview(self, obj: ProductImage):
@@ -144,36 +144,17 @@ class ProductImageInline(TabularInline):
         )
 
 
-class ProductVariantInline(TabularInline):
-    model = ProductVariant
-    extra = 1
-    fields = (
-        "sku",
-        "barcode",
-        "label_uk",
-        "label_ru",
-        "price",
-        "old_price",
-        "wholesale_price",
-        "stock",
-        "availability",
-        "is_active",
-        "sort_order",
-    )
-
-
 @admin.register(Product)
 class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
+    change_form_template = "admin/catalog/product/change_form.html"
     list_display = (
         "name_uk",
-        "slug",
+        "sku",
+        "price",
+        "stock",
         "brand",
-        "primary_category",
         "status",
         "availability",
-        "is_hit",
-        "is_new",
-        "is_sale",
         "is_active",
     )
     list_filter = (
@@ -185,11 +166,29 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
         ("is_new", UkBooleanDropdownFilter),
         ("is_sale", UkBooleanDropdownFilter),
     )
-    search_fields = ("name_uk", "name_ru", "slug", "search_text")
+    search_fields = ("name_uk", "name_ru", "slug", "sku", "barcode", "search_text")
     prepopulated_fields = {"slug": ("name_uk",)}
     filter_horizontal = ("categories", "attribute_values", "related_products")
-    inlines = [ProductVariantInline, ProductImageInline]
+    inlines = [ProductImageInline]
     fieldsets = (
+        (
+            "Артикул і ціна",
+            {
+                "fields": (
+                    "sku",
+                    "barcode",
+                    "price",
+                    "old_price",
+                    "wholesale_price",
+                    "stock",
+                    "availability",
+                ),
+                "description": (
+                    "Один артикул на товар. Ціна й залишок зʼявляються на сайті "
+                    "та в кошику автоматично."
+                ),
+            },
+        ),
         (
             "Загальне",
             {
@@ -199,7 +198,6 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
                     "brand",
                     "primary_category",
                     "categories",
-                    "availability",
                     "is_active",
                     "is_hit",
                     "is_new",
@@ -211,29 +209,55 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
         ),
         (
             "Українська",
-            {"fields": ("name_uk", "short_description_uk", "description_uk")},
+            {
+                "classes": ("cms-lang-uk",),
+                "fields": ("name_uk", "short_description_uk", "description_uk"),
+            },
         ),
         (
             "Русский",
-            {"fields": ("name_ru", "short_description_ru", "description_ru")},
+            {
+                "classes": ("cms-lang-ru",),
+                "fields": ("name_ru", "short_description_ru", "description_ru"),
+            },
         ),
         (
             "Звʼязки",
             {"fields": ("attribute_values", "related_products")},
         ),
         (
-            "Мітки (іконки в картці товару)",
+            "Мітки на сторінці товару",
             {
+                "classes": ("labels-grid",),
                 "fields": LABEL_FIELDS,
                 "description": (
-                    "Позначені мітки виводяться рядком під описом товару. "
-                    "Превʼю іконки — під кожним перемикачем. "
-                    "Заміна файлів: розділ «Іконки міток» у меню."
+                    "Увімкнені мітки показуються <strong>іконками під описом</strong> "
+                    "на сторінці товару (PDP). Заміна малюнків — меню "
+                    "«Каталог → Іконки міток»."
                 ),
             },
         ),
         ("SEO", {"fields": ("seo_title", "seo_description"), "classes": ("collapse",)}),
     )
+
+    class Media:
+        css = {"all": ("css/admin/site_content.css",)}
+        js = ("js/admin/product_lang_tabs.js",)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        label_map = {
+            "name_uk": "Назва",
+            "name_ru": "Назва",
+            "short_description_uk": "Короткий опис",
+            "short_description_ru": "Короткий опис",
+            "description_uk": "Опис",
+            "description_ru": "Опис",
+        }
+        for name, label in label_map.items():
+            if name in form.base_fields:
+                form.base_fields[name].label = label
+        return form
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
@@ -245,6 +269,21 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
                 url,
                 label.title,
             )
+        return formfield
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "attribute_values":
+            kwargs["queryset"] = AttributeValue.objects.filter(
+                attribute__is_filterable=True
+            ).select_related("attribute").order_by(
+                "attribute__sort_order",
+                "attribute__name_uk",
+                "sort_order",
+                "name_uk",
+            )
+        formfield = super().formfield_for_manytomany(db_field, request, **kwargs)
+        if db_field.name in ("attribute_values", "categories", "related_products"):
+            formfield.help_text = ""
         return formfield
 
 
@@ -301,23 +340,11 @@ class ProductVariantAdmin(DropdownFiltersMixin, ModelAdmin):
     filter_horizontal = ("attribute_values",)
 
     def has_module_permission(self, request) -> bool:
-        # Приховано з меню / app list — редагування лише inline у товарі
         return False
 
 
 @admin.register(ProductImage)
 class ProductImageAdmin(DropdownFiltersMixin, ModelAdmin):
     form = ProductImageForm
-    list_display = ("preview", "product", "variant", "is_main", "sort_order")
+    list_display = ("product", "variant", "is_main", "sort_order")
     list_filter = (("is_main", UkBooleanDropdownFilter),)
-    search_fields = ("product__name_uk", "alt_uk")
-
-    @admin.display(description="Превʼю")
-    def preview(self, obj: ProductImage):
-        if not obj.image:
-            return "—"
-        return format_html(
-            '<img src="{}" alt="" width="48" height="48" '
-            'style="object-fit:cover;border-radius:4px">',
-            thumb_url(obj.image),
-        )

@@ -18,15 +18,12 @@ class CartPopupTests(TestCase):
             primary_category=cat,
             availability=Availability.IN_STOCK,
             is_active=True,
-        )
-        cls.variant = ProductVariant.objects.create(
-            product=cls.product,
             sku="CART-SKU-1",
             price=Decimal("100.00"),
             old_price=Decimal("150.00"),
             stock=5,
-            is_active=True,
         )
+        cls.variant = cls.product.variants.get(sku="CART-SKU-1")
 
     def test_htmx_cart_detail_returns_partial(self):
         response = self.client.get(

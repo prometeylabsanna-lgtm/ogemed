@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import Min, Q
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+import uuid
+from decimal import Decimal
 
 from apps.core.fields import OptimizedImageField
 from apps.core.image_processing import MAX_SIDE_LOGO, MAX_SIDE_PRODUCT
@@ -38,9 +40,12 @@ class Category(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     description_ru = models.TextField(_("Опис (RU)"), blank=True)
     is_active = models.BooleanField(_("Активна"), default=True)
     show_on_home = models.BooleanField(
-        _("Швидкі категорії на головній"),
+        _("Показувати в швидких категоріях на головній"),
         default=False,
-        help_text=_("Якщо увімкнено — категорія зʼявиться в блоці на головній."),
+        help_text=_(
+            "Якщо увімкнено — категорія зʼявиться в блоці «Категорії» "
+            "на головній сторінці сайту (під hero)."
+        ),
     )
     sort_order = models.PositiveIntegerField(_("Порядок"), default=0)
 
@@ -218,6 +223,29 @@ class Product(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
         ARCHIVED = "archived", _("Архів")
 
     slug = models.SlugField(_("Slug"), max_length=160, unique=True)
+    sku = models.CharField(_("Артикул (SKU)"), max_length=64, unique=True)
+    barcode = models.CharField(_("Штрихкод"), max_length=64, blank=True)
+    price = models.DecimalField(
+        _("Ціна"),
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0"),
+    )
+    old_price = models.DecimalField(
+        _("Стара ціна"),
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    wholesale_price = models.DecimalField(
+        _("Оптова ціна"),
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    stock = models.PositiveIntegerField(_("Залишок"), default=0)
     name_uk = models.CharField(_("Назва (UK)"), max_length=255)
     name_ru = models.CharField(_("Назва (RU)"), max_length=255, blank=True)
     short_description_uk = models.TextField(_("Короткий опис (UK)"), blank=True)
@@ -343,24 +371,49 @@ class Product(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
         return images[1] if len(images) > 1 else None
 
     def rebuild_search_text(self) -> str:
-        """Single source of truth for the search index (also used by the
-        ProductVariant post_save signal — keep both in sync via this method).
-        """
-        skus = " ".join(self.variants.values_list("sku", flat=True))
+        """Single source of truth for the search index."""
         parts = [
             self.name_uk,
             self.name_ru,
             self.short_description_uk,
-            skus,
+            self.sku,
+            self.barcode,
             self.brand.name_uk if self.brand_id else "",
         ]
         self.search_text = " ".join(p for p in parts if p).casefold()
         return self.search_text
 
+    def sync_commerce_variant(self) -> "ProductVariant":
+        """Один прихований ProductVariant для кошика/checkout (джерело правди — поля Product)."""
+        variant = (
+            self.variants.order_by("sort_order", "pk").first()
+            if self.pk
+            else None
+        )
+        created = False
+        if variant is None:
+            variant = ProductVariant(product=self)
+            created = True
+
+        variant.sku = self.sku
+        variant.barcode = self.barcode or ""
+        variant.price = self.price
+        variant.old_price = self.old_price
+        variant.wholesale_price = self.wholesale_price
+        variant.stock = self.stock
+        variant.availability = ""  # успадковувати від товару
+        variant.is_active = True
+        variant.sort_order = 0
+        if not variant.label_uk:
+            variant.label_uk = ""
+        variant.save()
+        return variant
+
     def save(self, *args, **kwargs) -> None:
+        if not (self.sku or "").strip():
+            self.sku = f"SKU-{uuid.uuid4().hex[:10].upper()}"
         super().save(*args, **kwargs)
-        # Rebuild after save (self.pk is guaranteed) so it always includes
-        # existing variant SKUs instead of overwriting them with a stale value.
+        self.sync_commerce_variant()
         self.rebuild_search_text()
         Product.objects.filter(pk=self.pk).update(search_text=self.search_text)
 

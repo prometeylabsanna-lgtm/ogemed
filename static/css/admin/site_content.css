@@ -271,6 +271,17 @@
   display: none;
 }
 
+/* Product change form (fieldset classes) */
+.product-admin-editor.cms-lang-mode-uk fieldset.cms-lang-ru,
+.site-content-editor.cms-lang-mode-uk fieldset.cms-lang-ru {
+  display: none;
+}
+
+.product-admin-editor.cms-lang-mode-ru fieldset.cms-lang-uk,
+.site-content-editor.cms-lang-mode-ru fieldset.cms-lang-uk {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .site-content-editor__head-actions {
     width: 100%;

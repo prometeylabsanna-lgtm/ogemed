@@ -8,7 +8,8 @@ IMAGE_PROFILES: dict[str, str] = {
 }
 
 TEXT_LIMITS: dict[str, str] = {
-    "hero_fallback_title": "До 80 символів.",
+    "hero_fallback_title": "До 80 символів. Показується лише коли немає активних слайдів.",
+    "hero_fallback_subtitle": "Короткий текст під заголовком, якщо немає слайдів.",
     "benefits_section_title": "До 60 символів.",
     "seo_title": "До 60 символів.",
     "seo_description": "До 160 символів.",

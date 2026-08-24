@@ -5,8 +5,8 @@ from __future__ import annotations
 BLOCK_FIELD_LABELS: dict[tuple[str, str], str] = {
     # Home — hero
     ("home", "hero_section_visible"): "Показувати hero",
-    ("home", "hero_fallback_title"): "Fallback заголовок (без слайдів)",
-    ("home", "hero_fallback_subtitle"): "Fallback підзаголовок",
+    ("home", "hero_fallback_title"): "Заголовок без слайдів",
+    ("home", "hero_fallback_subtitle"): "Підзаголовок без слайдів",
     # Home — benefits
     ("home", "benefits_section_visible"): "Показувати переваги",
     ("home", "benefits_section_title"): "Заголовок секції",

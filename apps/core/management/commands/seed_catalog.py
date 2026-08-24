@@ -541,22 +541,16 @@ class Command(BaseCommand):
                     "is_hit": item["is_hit"],
                     "is_new": item["is_new"],
                     "is_sale": item["is_sale"],
+                    "sku": item["sku"],
+                    "price": Decimal(item["price"]),
+                    "old_price": Decimal(item["old_price"]) if item["old_price"] else None,
+                    "stock": 20,
                     **texts,
                     **labels,
                 },
             )
             if created:
                 product.categories.add(item["category"])
-                ProductVariant.objects.create(
-                    product=product,
-                    sku=item["sku"],
-                    label_uk=item["label_uk"],
-                    label_ru=item["label_uk"],
-                    price=Decimal(item["price"]),
-                    old_price=Decimal(item["old_price"]) if item["old_price"] else None,
-                    stock=20,
-                    is_active=True,
-                )
                 self.stdout.write(self.style.SUCCESS(f"Created product {item['slug']}"))
             else:
                 product.name_uk = item["name_uk"]
@@ -567,31 +561,20 @@ class Command(BaseCommand):
                 product.is_active = True
                 product.brand = item_brand
                 product.primary_category = item["category"]
+                product.sku = item["sku"]
+                product.price = Decimal(item["price"])
+                product.old_price = (
+                    Decimal(item["old_price"]) if item["old_price"] else None
+                )
+                product.stock = 20
                 product.short_description_uk = texts["short_description_uk"]
                 product.short_description_ru = texts["short_description_ru"]
                 product.description_uk = texts["description_uk"]
                 product.description_ru = texts["description_ru"]
                 for field, value in labels.items():
                     setattr(product, field, value)
-                product.save(
-                    update_fields=[
-                        "name_uk",
-                        "name_ru",
-                        "is_hit",
-                        "is_new",
-                        "is_sale",
-                        "is_active",
-                        "brand",
-                        "primary_category",
-                        "short_description_uk",
-                        "short_description_ru",
-                        "description_uk",
-                        "description_ru",
-                        *LABEL_FIELDS,
-                        "updated_at",
-                    ]
-                )
-                self.stdout.write(f"Product {item['slug']} exists — updated texts")
+                product.save()
+                self.stdout.write(f"Updated product {item['slug']}")
 
             product.categories.set([item["category"]])
 

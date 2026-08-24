@@ -149,6 +149,48 @@ body {
   color: #fff;
 }
 
+/* Product admin — UA/RU */
+.product-admin-editor__langbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.product-admin-editor__langhint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgb(var(--color-base-500));
+}
+
+.product-admin-editor.cms-lang-mode-uk fieldset.cms-lang-ru {
+  display: none;
+}
+
+.product-admin-editor.cms-lang-mode-ru fieldset.cms-lang-uk {
+  display: none;
+}
+
+/* Мітки: 4 в ряд × 2 ряди */
+fieldset.labels-grid > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+@media (max-width: 1100px) {
+  fieldset.labels-grid > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  fieldset.labels-grid > div {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Превʼю іконок міток — темний фон, бо маски білі/світлі */
 .admin-label-icon-preview {
   display: block;

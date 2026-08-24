@@ -31,6 +31,9 @@ class VariantMatrixUnitTests(TestCase):
             primary_category=cls.cat,
             availability=Availability.IN_STOCK,
             is_active=True,
+            sku="M-50-C",
+            price=Decimal("100"),
+            stock=5,
         )
         cls.vol = Attribute.objects.create(slug="obyem", name_uk="Обʼєм", sort_order=1)
         cls.col = Attribute.objects.create(slug="kolir", name_uk="Колір", sort_order=2)
@@ -54,9 +57,9 @@ class VariantMatrixUnitTests(TestCase):
             color_hex="#3D6B4F",
             sort_order=2,
         )
-        cls.a = ProductVariant.objects.create(
-            product=cls.product, sku="M-50-C", price=Decimal("100"), stock=5, sort_order=0
-        )
+        cls.a = cls.product.variants.get(sku="M-50-C")
+        cls.a.sort_order = 0
+        cls.a.save(update_fields=["sort_order"])
         cls.b = ProductVariant.objects.create(
             product=cls.product, sku="M-50-G", price=Decimal("110"), stock=5, sort_order=1
         )

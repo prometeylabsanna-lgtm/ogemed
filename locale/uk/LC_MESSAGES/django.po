@@ -1,12 +1,9 @@
-# Ukrainian translations for OGEMED admin (Unfold + project overrides).
-# Copyright (C) 2026 OGEMED
-# This file is distributed under the same license as the Django package.
+# Ukrainian translations for OGEMED admin (Unfold + Django admin UI).
+# Keep focused on UI strings. Avoid makemessages without merging — it marks these obsolete.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OGEMED 1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 15:28+0300\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,2326 +13,274 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: apps/accounts/forms.py:22 apps/accounts/forms.py:62
-#: apps/accounts/forms.py:151 apps/cms/models.py:132 apps/core/models.py:15
-#: apps/orders/forms.py:40 apps/orders/models.py:73
-#: templates/cms/contacts.html:57 templates/partials/callback_modal.html:40
-msgid "Email"
-msgstr ""
+msgid "Search apps and models..."
+msgstr "Пошук розділів і моделей…"
 
-#: apps/accounts/forms.py:27 apps/accounts/forms.py:68
-msgid "diana.k@example.org"
-msgstr ""
+msgid "Filter navigation items"
+msgstr "Фільтр навігації"
 
-#: apps/accounts/forms.py:33 apps/accounts/forms.py:74
-#: templates/accounts/profile.html:98
-msgid "Пароль"
-msgstr ""
+msgid "Type to search"
+msgstr "Пошук"
 
-#: apps/accounts/forms.py:38
-msgid "Ваш пароль"
-msgstr ""
+msgid "Return to site"
+msgstr "Повернутись на сайт"
 
-#: apps/accounts/forms.py:50 apps/cms/models.py:130
-#: templates/partials/callback_modal.html:30
-msgid "Імʼя"
-msgstr ""
+msgid "Welcome back to"
+msgstr "Ласкаво просимо до"
 
-#: apps/accounts/forms.py:56
-msgid "Ваше імʼя"
-msgstr ""
+msgid "Log in"
+msgstr "Увійти"
 
-#: apps/accounts/forms.py:79
-msgid "Мінімум 8 символів"
-msgstr ""
+msgid "Forgotten your password or username?"
+msgstr "Забули пароль або імʼя користувача?"
 
-#: apps/accounts/forms.py:85
-msgid "Підтвердження пароля"
-msgstr ""
+msgid "Run"
+msgstr "Виконати"
 
-#: apps/accounts/forms.py:90
-msgid "Повторіть пароль"
-msgstr ""
+msgid "Run the selected action"
+msgstr "Виконати обрану дію"
 
-#: apps/accounts/forms.py:111
-msgid "Користувач з таким email вже існує"
-msgstr ""
+msgid "Expand row"
+msgstr "Розгорнути рядок"
 
-#: apps/accounts/forms.py:126
-msgid "Введені паролі не збігаються. Перевірте правильність повторного вводу."
-msgstr ""
+msgid "Select action to run"
+msgstr "Оберіть дію для виконання"
 
-#: apps/accounts/models.py:11 apps/orders/models.py:62
-msgid "Користувач"
-msgstr ""
+msgid "Clear selection"
+msgstr "Скасувати вибір"
 
-#: apps/accounts/models.py:13 apps/orders/forms.py:24 apps/orders/models.py:71
-msgid "ПІБ"
-msgstr ""
+msgid "Click here to select the objects across all pages"
+msgstr "Натисніть, щоб обрати записи на всіх сторінках"
 
-#: apps/accounts/models.py:14 apps/cms/models.py:131 apps/core/models.py:14
-#: apps/orders/forms.py:35 apps/orders/models.py:72
-#: templates/cms/contacts.html:50 templates/partials/callback_modal.html:35
-#: templates/partials/stock_notify_modal.html:36
-msgid "Телефон"
-msgstr ""
+msgid "History"
+msgstr "Історія"
 
-#: apps/accounts/models.py:15 apps/orders/forms.py:62
-msgid "Місто"
-msgstr ""
+msgid "View on site"
+msgstr "На сайті"
 
-#: apps/accounts/models.py:16 apps/orders/forms.py:63
-msgid "Вулиця"
-msgstr ""
+msgid "Save"
+msgstr "Зберегти"
 
-#: apps/accounts/models.py:17 apps/orders/forms.py:64
-msgid "Будинок"
-msgstr ""
+msgid "Save and continue editing"
+msgstr "Зберегти і продовжити редагування"
 
-#: apps/accounts/models.py:18 apps/orders/forms.py:65
-msgid "Квартира"
-msgstr ""
+msgid "Save and view"
+msgstr "Зберегти і переглянути"
 
-#: apps/accounts/models.py:22 apps/accounts/views.py:96
-#: apps/accounts/views.py:145 apps/accounts/views.py:149
-#: templates/accounts/partials/_cabinet_nav.html:3
-#: templates/accounts/profile.html:14
-msgid "Профіль"
-msgstr ""
+msgid "Save and add another"
+msgstr "Зберегти і додати ще"
 
-#: apps/accounts/models.py:23
-msgid "Профілі"
-msgstr ""
+msgid "Save as new"
+msgstr "Зберегти як новий"
 
-#: apps/accounts/views.py:33 apps/accounts/views.py:34
-#: templates/accounts/login.html:10
-msgid "Вхід"
-msgstr ""
+msgid "Close"
+msgstr "Закрити"
 
-#: apps/accounts/views.py:55 apps/accounts/views.py:56
-#: templates/accounts/login.html:13 templates/accounts/register.html:10
-msgid "Реєстрація"
-msgstr ""
+msgid "Delete"
+msgstr "Видалити"
 
-#: apps/accounts/views.py:68 apps/accounts/views.py:69
-#: templates/accounts/password_reset.html:5
-msgid "Відновлення пароля"
-msgstr ""
+msgid "Add"
+msgstr "Додати"
 
-#: apps/accounts/views.py:92 apps/accounts/views.py:97
-#: templates/accounts/password_change.html:5
-msgid "Зміна пароля"
-msgstr ""
+msgid "Change"
+msgstr "Змінити"
 
-#: apps/accounts/views.py:95 apps/accounts/views.py:110
-#: apps/accounts/views.py:123 apps/accounts/views.py:125
-#: apps/accounts/views.py:148 apps/accounts/views.py:166
-#: apps/accounts/views.py:194 templates/accounts/cabinet.html:14
-#: templates/accounts/orders.html:13
-#: templates/accounts/partials/_cabinet_nav.html:2
-#: templates/accounts/profile.html:13 templates/partials/header.html:94
-msgid "Кабінет"
-msgstr ""
+msgid "View"
+msgstr "Переглянути"
 
-#: apps/accounts/views.py:107 apps/accounts/views.py:111
-#: templates/accounts/password_change_done.html:5
-#: templates/accounts/password_reset_complete.html:5
-msgid "Пароль змінено"
-msgstr ""
+msgid "Site administration"
+msgstr "Адміністрування сайту"
 
-#: apps/accounts/views.py:163 apps/accounts/views.py:167
-#: apps/accounts/views.py:195 apps/orders/models.py:98 apps/orders/models.py:99
-#: apps/orders/models.py:108 apps/payments/models.py:17
-#: templates/accounts/order_detail.html:14 templates/accounts/orders.html:14
-#: templates/accounts/partials/_cabinet_nav.html:4
-#: templates/accounts/profile.html:94 templates/cart/detail.html:13
-#: templates/orders/checkout.html:15 templates/orders/thank_you.html:17
-msgid "Замовлення"
-msgstr ""
-
-#: apps/accounts/views.py:185 apps/accounts/views.py:196
-#, python-format
-msgid "Замовлення №%(n)s"
-msgstr ""
-
-#: apps/cart/views.py:26 apps/cart/views.py:28 apps/orders/views.py:94
-#: templates/cart/detail.html:14 templates/partials/header.html:119
-#: templates/partials/header.html:289 templates/partials/header.html:294
-#: templates/partials/mobile_nav.html:34
-msgid "Кошик"
-msgstr ""
-
-#: apps/catalog/forms.py:27
-msgid "Не вдалося прочитати зображення."
-msgstr ""
-
-#: apps/catalog/forms.py:34
-#, python-format
-msgid ""
-"Фото %(width)s×%(height)spx замале. Потрібно від %(min)spx по довгій "
-"стороні, інакше збільшення на сторінці товару буде розмитим."
-msgstr ""
-
-#: apps/catalog/labels.py:30 apps/catalog/models.py:261
-msgid "Без ароматизаторів"
-msgstr ""
-
-#: apps/catalog/labels.py:31 apps/catalog/models.py:262
-msgid "Веган-формула"
-msgstr ""
-
-#: apps/catalog/labels.py:32 apps/catalog/models.py:263
-msgid "Дерматологічно протестовано"
-msgstr ""
-
-#: apps/catalog/labels.py:33 apps/catalog/models.py:264
-msgid "Делікатна формула"
-msgstr ""
-
-#: apps/catalog/labels.py:34 apps/catalog/models.py:265
-msgid "Гіпоалергенно"
-msgstr ""
-
-#: apps/catalog/labels.py:35 apps/catalog/models.py:266
-msgid "Без парабенів"
-msgstr ""
-
-#: apps/catalog/labels.py:36 apps/catalog/models.py:267
-msgid "Без тестів на тваринах"
-msgstr ""
-
-#: apps/catalog/labels.py:37 apps/catalog/models.py:268
-msgid "Очищення"
-msgstr ""
-
-#: apps/catalog/models.py:12
-msgid "В наявності"
-msgstr ""
-
-#: apps/catalog/models.py:13
-msgid "Під замовлення"
-msgstr ""
-
-#: apps/catalog/models.py:14 templates/catalog/partials/_variant_cta.html:19
-#: templates/catalog/partials/_variant_cta.html:29
-msgid "Немає в наявності"
-msgstr ""
-
-#: apps/catalog/models.py:24
-msgid "Батьківська категорія"
-msgstr ""
-
-#: apps/catalog/models.py:26 apps/catalog/models.py:69
-#: apps/catalog/models.py:131 apps/catalog/models.py:164
-#: apps/catalog/models.py:203 apps/cms/models.py:12
-msgid "Slug"
-msgstr ""
-
-#: apps/catalog/models.py:27 apps/catalog/models.py:70
-#: apps/catalog/models.py:132 apps/catalog/models.py:204
-msgid "Назва (UK)"
-msgstr ""
-
-#: apps/catalog/models.py:28 apps/catalog/models.py:71
-#: apps/catalog/models.py:133 apps/catalog/models.py:205
-msgid "Назва (RU)"
-msgstr ""
-
-#: apps/catalog/models.py:29 apps/catalog/models.py:444
-#: apps/catalog/models.py:468 apps/cms/models.py:85 apps/core/models.py:157
-msgid "Зображення"
-msgstr ""
-
-#: apps/catalog/models.py:30 apps/catalog/models.py:208
-msgid "Опис (UK)"
-msgstr ""
-
-#: apps/catalog/models.py:31 apps/catalog/models.py:209
-msgid "Опис (RU)"
-msgstr ""
-
-#: apps/catalog/models.py:32
-msgid "Активна"
-msgstr ""
-
-#: apps/catalog/models.py:34
-msgid "Швидкі категорії на головній"
-msgstr ""
-
-#: apps/catalog/models.py:36
-msgid "Якщо увімкнено — категорія зʼявиться в блоці на головній."
-msgstr ""
-
-#: apps/catalog/models.py:38 apps/catalog/models.py:104
-#: apps/catalog/models.py:142 apps/catalog/models.py:168
-#: apps/catalog/models.py:269 apps/catalog/models.py:386
-#: apps/catalog/models.py:451 apps/cms/models.py:24 apps/cms/models.py:87
-#: apps/core/models.py:158
-msgid "Порядок"
-msgstr ""
-
-#: apps/catalog/models.py:41 templates/catalog/partials/_filter_bar.html:6
-msgid "Категорія"
-msgstr ""
-
-#: apps/catalog/models.py:42 apps/catalog/models.py:100
-#: apps/catalog/models.py:230
-msgid "Категорії"
-msgstr ""
-
-#: apps/catalog/models.py:72 apps/catalog/models.py:206
-msgid "Короткий опис (UK)"
-msgstr ""
-
-#: apps/catalog/models.py:73 apps/catalog/models.py:207
-msgid "Короткий опис (RU)"
-msgstr ""
-
-#: apps/catalog/models.py:74 apps/core/models.py:9
-msgid "Логотип"
-msgstr ""
-
-#: apps/catalog/models.py:76
-msgid "Логотип (темний)"
-msgstr ""
-
-#: apps/catalog/models.py:79
-msgid "Варіант для темного фону."
-msgstr ""
-
-#: apps/catalog/models.py:81
-msgid "Сайт бренду"
-msgstr ""
-
-#: apps/catalog/models.py:82
-msgid "Опис / історія (UK)"
-msgstr ""
-
-#: apps/catalog/models.py:83
-msgid "Опис / історія (RU)"
-msgstr ""
-
-#: apps/catalog/models.py:85
-msgid "Фото для каталогу"
-msgstr ""
-
-#: apps/catalog/models.py:88
-msgid "Плитка бренду у фільтрах каталогу."
-msgstr ""
-
-#: apps/catalog/models.py:91
-msgid "Зображення для вітрини на головній"
-msgstr ""
-
-#: apps/catalog/models.py:94
-msgid "PNG без фону. Якщо порожнє — візьметься фото для каталогу."
-msgstr ""
-
-#: apps/catalog/models.py:102
-msgid "Показувати на головній"
-msgstr ""
-
-#: apps/catalog/models.py:103 apps/catalog/models.py:199
-#: apps/catalog/models.py:257 apps/catalog/models.py:385 apps/cms/models.py:86
-#: apps/core/models.py:159
-msgid "Активний"
-msgstr ""
-
-#: apps/catalog/models.py:107 apps/catalog/models.py:216
-msgid "Бренд"
-msgstr ""
-
-#: apps/catalog/models.py:108 apps/catalog/views.py:130
-#: apps/catalog/views.py:132 apps/catalog/views.py:179
-#: templates/catalog/brands.html:10
-#: templates/catalog/partials/_brand_cards.html:4
-#: templates/core/partials/_brand_showcase.html:47
-#: templates/partials/header.html:51 templates/partials/header.html:261
-msgid "Бренди"
-msgstr ""
-
-#: apps/catalog/models.py:138
-msgid "Категорії (фільтри)"
-msgstr ""
-
-#: apps/catalog/models.py:139
-msgid "У яких категоріях показувати цей атрибут у фільтрах."
-msgstr ""
-
-#: apps/catalog/models.py:141
-msgid "У фільтрах"
-msgstr ""
-
-#: apps/catalog/models.py:145 apps/catalog/models.py:162
-msgid "Атрибут"
-msgstr ""
-
-#: apps/catalog/models.py:146
-msgid "Атрибути"
-msgstr ""
-
-#: apps/catalog/models.py:165
-msgid "Значення (UK)"
-msgstr ""
-
-#: apps/catalog/models.py:166
-msgid "Значення (RU)"
-msgstr ""
-
-#: apps/catalog/models.py:167
-msgid "Колір HEX"
-msgstr ""
-
-#: apps/catalog/models.py:171
-msgid "Значення атрибута"
-msgstr ""
-
-#: apps/catalog/models.py:172
-msgid "Значення атрибутів"
-msgstr ""
-
-#: apps/catalog/models.py:200
-msgid "Чернетка"
-msgstr ""
-
-#: apps/catalog/models.py:201
-msgid "Архів"
-msgstr ""
-
-#: apps/catalog/models.py:224
-msgid "Основна категорія"
-msgstr ""
-
-#: apps/catalog/models.py:237
-msgid "Схожі товари"
-msgstr ""
-
-#: apps/catalog/models.py:243 templates/catalog/product_detail.html:70
-msgid "Характеристики"
-msgstr ""
-
-#: apps/catalog/models.py:246 templates/catalog/partials/_filter_bar.html:106
-msgid "Наявність"
-msgstr ""
-
-#: apps/catalog/models.py:252 apps/orders/models.py:65
-#: apps/payments/models.py:23 templates/accounts/orders.html:23
-#: templates/orders/thank_you.html:27
-msgid "Статус"
-msgstr ""
-
-#: apps/catalog/models.py:258 templates/catalog/partials/_product_card.html:29
-msgid "Хіт"
-msgstr ""
-
-#: apps/catalog/models.py:259 templates/catalog/partials/_product_card.html:30
-msgid "Новинка"
-msgstr ""
-
-#: apps/catalog/models.py:260 templates/catalog/partials/_product_card.html:31
-msgid "Акція"
-msgstr ""
-
-#: apps/catalog/models.py:270 apps/catalog/services.py:14
-msgid "Популярність"
-msgstr ""
-
-#: apps/catalog/models.py:271
-msgid "Пошуковий індекс"
-msgstr ""
-
-#: apps/catalog/models.py:276 apps/catalog/models.py:356
-#: apps/catalog/models.py:433
-msgid "Товар"
-msgstr ""
-
-#: apps/catalog/models.py:277
-msgid "Товари"
-msgstr ""
-
-#: apps/catalog/models.py:358 apps/orders/models.py:125
-#: templates/accounts/order_detail.html:52
-#: templates/catalog/partials/_variant_price.html:3
-msgid "Артикул"
-msgstr ""
-
-#: apps/catalog/models.py:359
-msgid "Штрихкод"
-msgstr ""
-
-#: apps/catalog/models.py:360
-msgid "Модифікація (UK)"
-msgstr ""
-
-#: apps/catalog/models.py:361
-msgid "Модифікація (RU)"
-msgstr ""
-
-#: apps/catalog/models.py:362 apps/orders/models.py:127
-#: templates/catalog/partials/_filter_bar.html:42
-msgid "Ціна"
-msgstr ""
-
-#: apps/catalog/models.py:364
-msgid "Стара ціна"
-msgstr ""
-
-#: apps/catalog/models.py:371
-msgid "Оптова ціна"
-msgstr ""
-
-#: apps/catalog/models.py:377
-msgid "Залишок"
-msgstr ""
-
-#: apps/catalog/models.py:379
-msgid "Наявність (override)"
-msgstr ""
-
-#: apps/catalog/models.py:383
-msgid "Порожньо = успадкувати від товару"
-msgstr ""
-
-#: apps/catalog/models.py:391
-msgid "Атрибути варіанту"
-msgstr ""
-
-#: apps/catalog/models.py:395 apps/catalog/models.py:441
-msgid "Варіант"
-msgstr ""
-
-#: apps/catalog/models.py:396
-msgid "Варіанти"
-msgstr ""
-
-#: apps/catalog/models.py:446
-msgid "Від 1600px по довгій стороні — фото збільшується на сторінці товару."
-msgstr ""
-
-#: apps/catalog/models.py:448
-msgid "Alt (UK)"
-msgstr ""
-
-#: apps/catalog/models.py:449
-msgid "Alt (RU)"
-msgstr ""
-
-#: apps/catalog/models.py:450
-msgid "Головне"
-msgstr ""
-
-#: apps/catalog/models.py:454
-msgid "Зображення товару"
-msgstr ""
-
-#: apps/catalog/models.py:455
-msgid "Зображення товарів"
-msgstr ""
-
-#: apps/catalog/models.py:465
-msgid "Ключ іконки"
-msgstr ""
-
-#: apps/catalog/models.py:466 apps/orders/models.py:124
-msgid "Назва"
-msgstr ""
-
-#: apps/catalog/models.py:471
-msgid "PNG з прозорим фоном. Порожньо = дефолт із static/img/labels/"
-msgstr ""
-
-#: apps/catalog/models.py:473 apps/cms/about_content.py:361
-#: apps/core/mixins.py:8 apps/core/models.py:79
-msgid "Оновлено"
-msgstr ""
-
-#: apps/catalog/models.py:476
-msgid "Іконка мітки"
-msgstr ""
-
-#: apps/catalog/models.py:477
-msgid "Іконки міток"
-msgstr ""
-
-#: apps/catalog/services.py:13
-msgid "Новизна"
-msgstr ""
-
-#: apps/catalog/services.py:15
-msgid "Ціна: спочатку дешевші"
-msgstr ""
-
-#: apps/catalog/services.py:16
-msgid "Ціна: спочатку дорожчі"
-msgstr ""
-
-#: apps/catalog/services.py:20
-msgid "Сітка"
-msgstr ""
-
-#: apps/catalog/services.py:21
-msgid "Список"
-msgstr ""
-
-#: apps/catalog/views.py:59 apps/catalog/views.py:73 apps/catalog/views.py:115
-#: apps/catalog/views.py:227 apps/core/models.py:141
-#: templates/accounts/profile.html:102 templates/catalog/list.html:18
-#: templates/partials/footer.html:20 templates/partials/header.html:25
-#: templates/partials/header.html:243 templates/partials/mobile_nav.html:21
-msgid "Каталог"
-msgstr ""
-
-#: apps/catalog/views.py:176
-msgid "Товарів цього бренду поки немає"
-msgstr ""
-
-#: apps/catalog/views.py:258 apps/catalog/views.py:260
-#: templates/catalog/search.html:13 templates/catalog/search.html:15
-#: templates/partials/header.html:65
-msgid "Пошук"
-msgstr ""
-
-#: apps/cms/about_content.py:9
-msgid "Hero видимий"
-msgstr ""
-
-#: apps/cms/about_content.py:11
-msgid "Hero kicker (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:14
-msgid "Hero kicker (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:17
-msgid "Hero заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:23
-msgid "Hero заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:29
-msgid "Hero текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:37
-msgid "Hero текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:45
-msgid "Hero зображення"
-msgstr ""
-
-#: apps/cms/about_content.py:49
-msgid "Історія видима"
-msgstr ""
-
-#: apps/cms/about_content.py:51
-msgid "Історія kicker (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:54
-msgid "Історія kicker (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:57
-msgid "Історія заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:63
-msgid "Історія заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:69
-msgid "Історія текст (UK, запасний)"
-msgstr ""
-
-#: apps/cms/about_content.py:74
-msgid "Історія текст (RU, запасний)"
-msgstr ""
-
-#: apps/cms/about_content.py:79
-msgid "Історія зображення"
-msgstr ""
-
-#: apps/cms/about_content.py:82
-msgid "Картка 1 — заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:88
-msgid "Картка 1 — заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:94
-msgid "Картка 1 — текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:106
-msgid "Картка 1 — текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:118
-msgid "Картка 2 — заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:124
-msgid "Картка 2 — заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:130
-msgid "Картка 2 — текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:142
-msgid "Картка 2 — текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:154
-msgid "Картка 3 — заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:160
-msgid "Картка 3 — заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:166
-msgid "Картка 3 — текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:178
-msgid "Картка 3 — текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:191
-msgid "Філософія видима"
-msgstr ""
-
-#: apps/cms/about_content.py:193
-msgid "Філософія kicker (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:199
-msgid "Філософія kicker (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:205
-msgid "Філософія заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:211
-msgid "Філософія заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:217
-msgid "Філософія вступ (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:222
-msgid "Філософія вступ (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:227
-msgid "Філософія зображення"
-msgstr ""
-
-#: apps/cms/about_content.py:230
-msgid "Теза 1 — заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:236
-msgid "Теза 1 — заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:242
-msgid "Теза 1 — текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:247
-msgid "Теза 1 — текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:252
-msgid "Теза 2 — заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:258
-msgid "Теза 2 — заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:264
-msgid "Теза 2 — текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:269
-msgid "Теза 2 — текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:274
-msgid "Теза 3 — заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:280
-msgid "Теза 3 — заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:286
-msgid "Теза 3 — текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:291
-msgid "Теза 3 — текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:296
-msgid "Теза 4 — заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:302
-msgid "Теза 4 — заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:308
-msgid "Теза 4 — текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:313
-msgid "Теза 4 — текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:319
-msgid "CTA видимий"
-msgstr ""
-
-#: apps/cms/about_content.py:321
-msgid "CTA заголовок (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:327
-msgid "CTA заголовок (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:333
-msgid "CTA текст (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:341
-msgid "CTA текст (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:349
-msgid "CTA каталог (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:352
-msgid "CTA каталог (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:355
-msgid "CTA контакти (UK)"
-msgstr ""
-
-#: apps/cms/about_content.py:358
-msgid "CTA контакти (RU)"
-msgstr ""
-
-#: apps/cms/about_content.py:364 apps/cms/about_content.py:365
-msgid "Про нас — контент"
-msgstr ""
-
-#: apps/cms/lead_views.py:48
-msgid "Клієнт"
-msgstr ""
-
-#: apps/cms/lead_views.py:55 apps/core/validators.py:35
-msgid "Будь ласка, вкажіть ваше імʼя."
-msgstr ""
-
-#: apps/cms/lead_views.py:63 apps/cms/lead_views.py:80
-msgid "Перевірте поля форми"
-msgstr ""
-
-#: apps/cms/lead_views.py:95 apps/payments/models.py:10
-msgid "Помилка"
-msgstr ""
-
-#: apps/cms/lead_views.py:105
-msgid "Дякуємо! Повідомимо, коли товар зʼявиться"
-msgstr ""
-
-#: apps/cms/lead_views.py:107
-msgid "Дякуємо, менеджер звʼяжеться з вами"
-msgstr ""
-
-#: apps/cms/models.py:14
-msgid "Ключ сторінки"
-msgstr ""
-
-#: apps/cms/models.py:17
-msgid "about, shipping, returns, contacts, privacy, offer"
-msgstr ""
-
-#: apps/cms/models.py:19 apps/cms/models.py:74
-msgid "Заголовок (UK)"
-msgstr ""
-
-#: apps/cms/models.py:20 apps/cms/models.py:75
-msgid "Заголовок (RU)"
-msgstr ""
-
-#: apps/cms/models.py:21
-msgid "Текст (UK)"
-msgstr ""
-
-#: apps/cms/models.py:22
-msgid "Текст (RU)"
-msgstr ""
-
-#: apps/cms/models.py:23
-msgid "Опубліковано"
-msgstr ""
-
-#: apps/cms/models.py:29
-msgid "CMS-сторінка"
-msgstr ""
-
-#: apps/cms/models.py:30
-msgid "CMS-сторінки"
-msgstr ""
-
-#: apps/cms/models.py:76
-msgid "Підзаголовок (UK)"
-msgstr ""
-
-#: apps/cms/models.py:77
-msgid "Підзаголовок (RU)"
-msgstr ""
-
-#: apps/cms/models.py:79
-msgid "CTA (UK)"
-msgstr ""
-
-#: apps/cms/models.py:82
-msgid "CTA (RU)"
-msgstr ""
-
-#: apps/cms/models.py:84
-msgid "CTA URL"
-msgstr ""
-
-#: apps/cms/models.py:90
-msgid "Hero-слайд"
-msgstr ""
-
-#: apps/cms/models.py:91
-msgid "Hero-слайди"
-msgstr ""
-
-#: apps/cms/models.py:120 templates/cms/contacts.html:27
-#: templates/partials/callback_modal.html:12 templates/partials/header.html:194
-#: templates/partials/header.html:274
-msgid "Передзвоніть мені"
-msgstr ""
-
-#: apps/cms/models.py:121
-msgid "Зворотний звʼязок"
-msgstr ""
-
-#: apps/cms/models.py:122 templates/catalog/partials/_product_card.html:75
-#: templates/catalog/partials/_variant_cta.html:26
-#: templates/partials/stock_notify_modal.html:12
-msgid "Повідомити про надходження"
-msgstr ""
-
-#: apps/cms/models.py:125
-msgid "Тип"
-msgstr ""
-
-#: apps/cms/models.py:133 templates/partials/callback_modal.html:45
-msgid "Повідомлення"
-msgstr ""
-
-#: apps/cms/models.py:142
-msgid "Оброблено"
-msgstr ""
-
-#: apps/cms/models.py:146
-msgid "Лід"
-msgstr ""
-
-#: apps/cms/models.py:147
-msgid "Ліди"
-msgstr ""
-
-#: apps/core/breadcrumbs.py:33 apps/core/models.py:140
-#: templates/partials/mobile_nav.html:6
-msgid "Головна"
-msgstr ""
-
-#: apps/core/mixins.py:7 apps/payments/models.py:8
-msgid "Створено"
-msgstr ""
-
-#: apps/core/mixins.py:15
-msgid "SEO title"
-msgstr ""
-
-#: apps/core/mixins.py:16
-msgid "SEO description"
-msgstr ""
-
-#: apps/core/models.py:12
-msgid "PNG/SVG з прозорим фоном. Порожньо = логотип із static/img/logo.png"
-msgstr ""
-
-#: apps/core/models.py:16
-msgid "Email менеджера"
-msgstr ""
-
-#: apps/core/models.py:17
-msgid "Адреса (UK)"
-msgstr ""
-
-#: apps/core/models.py:18
-msgid "Адреса (RU)"
-msgstr ""
-
-#: apps/core/models.py:19
-msgid "Години роботи (UK)"
-msgstr ""
-
-#: apps/core/models.py:20
-msgid "Години роботи (RU)"
-msgstr ""
-
-#: apps/core/models.py:22
-msgid "Карта Google"
-msgstr ""
-
-#: apps/core/models.py:25
-msgid ""
-"Вставте коротке посилання Google Maps (maps.app.goo.gl/…) або повний HTML "
-"iframe — сайт сам зробить embed."
-msgstr ""
-
-#: apps/core/models.py:30
-msgid "Широта (застаріле)"
-msgstr ""
-
-#: apps/core/models.py:38
-msgid "Довгота (застаріле)"
-msgstr ""
-
-#: apps/core/models.py:45
-msgid "Telegram"
-msgstr ""
-
-#: apps/core/models.py:46
-msgid "Instagram"
-msgstr ""
-
-#: apps/core/models.py:47
-msgid "Facebook"
-msgstr ""
-
-#: apps/core/models.py:48
-msgid "Viber"
-msgstr ""
-
-#: apps/core/models.py:50
-msgid "Telegram консультант (FAB)"
-msgstr ""
-
-#: apps/core/models.py:52
-msgid "Deep-link на чат консультанта"
-msgstr ""
-
-#: apps/core/models.py:55
-msgid "Слоган (UK)"
-msgstr ""
-
-#: apps/core/models.py:61
-msgid "Слоган (RU)"
-msgstr ""
-
-#: apps/core/models.py:67
-msgid "ФОП: одержувач"
-msgstr ""
-
-#: apps/core/models.py:70
-msgid "ПІБ ФОП або назва для оплати за реквізитами"
-msgstr ""
-
-#: apps/core/models.py:72
-msgid "ФОП: IBAN"
-msgstr ""
-
-#: apps/core/models.py:73
-msgid "ФОП: номер картки"
-msgstr ""
-
-#: apps/core/models.py:75
-msgid "ФОП: ЄДРПОУ / ІПН"
-msgstr ""
-
-#: apps/core/models.py:82 apps/core/models.py:83
-msgid "Налаштування сайту"
-msgstr ""
-
-#: apps/core/models.py:135 apps/core/models.py:156
-msgid "Текст"
-msgstr ""
-
-#: apps/core/models.py:136
-msgid "Фото"
-msgstr ""
-
-#: apps/core/models.py:137
-msgid "URL"
-msgstr ""
-
-#: apps/core/models.py:142 templates/partials/footer.html:42
-#: templates/partials/header.html:52 templates/partials/header.html:262
-msgid "Про нас"
-msgstr ""
-
-#: apps/core/models.py:143 apps/orders/forms.py:51 apps/orders/models.py:75
-#: templates/accounts/order_detail.html:74
-#: templates/cart/partials/_cart_panel.html:92
-#: templates/orders/checkout.html:98 templates/orders/checkout.html:170
-msgid "Доставка"
-msgstr ""
-
-#: apps/core/models.py:144 templates/orders/thank_you.html:84
-#: templates/partials/footer.html:61 templates/partials/header.html:53
-#: templates/partials/header.html:263
-msgid "Контакти"
-msgstr ""
-
-#: apps/core/models.py:145
-msgid "Сайт"
-msgstr ""
-
-#: apps/core/models.py:147
-msgid "Сторінка"
-msgstr ""
-
-#: apps/core/models.py:148
-msgid "Ключ блоку"
-msgstr ""
-
-#: apps/core/models.py:149
-msgid "Назва в адмінці"
-msgstr ""
-
-#: apps/core/models.py:154
-msgid "Тип контенту"
-msgstr ""
-
-#: apps/core/models.py:163
-msgid "Блок контенту"
-msgstr ""
-
-#: apps/core/models.py:164
-msgid "Блоки контенту"
-msgstr ""
-
-#: apps/core/models.py:197 apps/core/models.py:198
-msgid "Головна — Hero"
-msgstr ""
-
-#: apps/core/models.py:204 apps/core/models.py:205
-msgid "Головна — Переваги"
-msgstr ""
-
-#: apps/core/models.py:211 apps/core/models.py:212
-msgid "Головна — Категорії"
-msgstr ""
-
-#: apps/core/models.py:218 apps/core/models.py:219
-msgid "Головна — Товари"
-msgstr ""
-
-#: apps/core/models.py:225 apps/core/models.py:226
-msgid "Головна — Бренди"
-msgstr ""
-
-#: apps/core/models.py:232 apps/core/models.py:233
-msgid "Головна — Підбір догляду"
-msgstr ""
-
-#: apps/core/models.py:239 apps/core/models.py:240
-msgid "Головна — Промо"
-msgstr ""
-
-#: apps/core/models.py:246 apps/core/models.py:247
-msgid "Каталог — SEO"
-msgstr ""
-
-#: apps/core/models.py:253 apps/core/models.py:254
-msgid "Каталог — Фільтри"
-msgstr ""
-
-#: apps/core/models.py:260 apps/core/models.py:261
-msgid "Доставка — Методи"
-msgstr ""
-
-#: apps/core/models.py:267 apps/core/models.py:268
-msgid "Доставка — Оплата"
-msgstr ""
-
-#: apps/core/models.py:274 apps/core/models.py:275
-msgid "Контакти — Intro"
-msgstr ""
-
-#: apps/core/models.py:281 apps/core/models.py:282
-msgid "Шапка сайту"
-msgstr ""
-
-#: apps/core/models.py:288 apps/core/models.py:289
-msgid "Підвал сайту"
-msgstr ""
-
-#: apps/core/validators.py:39
-msgid "Імʼя надто коротке. Введіть щонайменше 2 літери."
-msgstr ""
-
-#: apps/core/validators.py:43
-#, python-format
-msgid "Імʼя занадто довге (максимум %(max)s символів)."
-msgstr ""
-
-#: apps/core/validators.py:53
-msgid "Імʼя не може містити цифри та спецсимволи. Використовуйте лише літери."
-msgstr ""
-
-#: apps/core/validators.py:71 apps/core/validators.py:76
-msgid "Введіть номер телефону."
-msgstr ""
-
-#: apps/core/validators.py:81
-msgid "Введіть повний номер телефону: +380 XX XXX XX XX (не вистачає цифр)."
-msgstr ""
-
-#: apps/core/validators.py:88
-msgid "Невірний формат номера. Перевірте правильність введених цифр."
-msgstr ""
-
-#: apps/core/validators.py:103
-msgid "Електронна пошта обовʼязкова для заповнення."
-msgstr ""
-
-#: apps/core/validators.py:109
-msgid "Введіть коректну email-адресу (наприклад: name@domain.com)."
-msgstr ""
-
-#: apps/core/validators.py:125
-msgid "Напишіть текст вашого повідомлення."
-msgstr ""
-
-#: apps/core/validators.py:131
-#, python-format
-msgid ""
-"Повідомлення занадто коротке. Опишіть детальніше (мінімум 15 символів). "
-"Залишилось ввести ще %(left)s симв."
-msgstr ""
-
-#: apps/core/validators.py:138
-msgid "Перевищено максимальний ліміт у 2000 символів."
-msgstr ""
-
-#: apps/core/validators.py:146
-msgid "Обовʼязкове поле"
-msgstr ""
-
-#: apps/core/validators.py:149
-#, python-format
-msgid "Пароль має містити щонайменше %(min)s символів"
-msgstr ""
-
-#: apps/core/validators.py:153
-msgid "Пароль не може складатися лише з цифр"
-msgstr ""
-
-#: apps/core/validators.py:155
-msgid "Пароль не повинен збігатися з email"
-msgstr ""
-
-#: apps/core/views.py:25
-msgid "OGEMED for you"
-msgstr ""
-
-#: apps/core/views.py:27
-msgid "Інтернет-магазин косметики OGEMED for you"
-msgstr ""
-
-#: apps/orders/admin.py:93 apps/orders/services_status.py:53
-#, python-format
-msgid "Заборонений перехід статусу: %(from)s → %(to)s"
-msgstr ""
-
-#: apps/orders/forms.py:54
-msgid "Місто НП"
-msgstr ""
-
-#: apps/orders/forms.py:57
-msgid "Відділення / поштомат"
-msgstr ""
-
-#: apps/orders/forms.py:67
-msgid "Коментар"
-msgstr ""
-
-#: apps/orders/forms.py:78 apps/orders/models.py:90
-#: templates/accounts/order_detail.html:87 templates/orders/checkout.html:145
-msgid "Оплата"
-msgstr ""
-
-#: apps/orders/forms.py:113
-msgid "Оберіть місто та відділення / поштомат Нової Пошти"
-msgstr ""
-
-#: apps/orders/forms.py:121
-msgid "Вкажіть місто та вулицю для курʼєра"
-msgstr ""
-
-#: apps/orders/models.py:12
-msgid "Нове"
-msgstr ""
-
-#: apps/orders/models.py:13
-msgid "Очікує оплати"
-msgstr ""
-
-#: apps/orders/models.py:14
-msgid "Оплачено"
-msgstr ""
-
-#: apps/orders/models.py:15
-msgid "В обробці"
-msgstr ""
-
-#: apps/orders/models.py:16
-msgid "Відправлено"
-msgstr ""
-
-#: apps/orders/models.py:17
-msgid "Виконано"
-msgstr ""
-
-#: apps/orders/models.py:18
-msgid "Скасовано"
-msgstr ""
-
-#: apps/orders/models.py:22
-msgid "Нова Пошта"
-msgstr ""
-
-#: apps/orders/models.py:23
-msgid "Курʼєр"
-msgstr ""
-
-#: apps/orders/models.py:27
-msgid "LiqPay"
-msgstr ""
-
-#: apps/orders/models.py:28
-msgid "Оплата при отриманні"
-msgstr ""
-
-#: apps/orders/models.py:29
-msgid "Оплата на картку / рахунок ФОП"
-msgstr ""
-
-#: apps/orders/models.py:33
-msgid "Відділення"
-msgstr ""
-
-#: apps/orders/models.py:34
-msgid "Поштомат"
-msgstr ""
-
-#: apps/orders/models.py:47 templates/accounts/orders.html:21
-msgid "Номер"
-msgstr ""
-
-#: apps/orders/models.py:50
-msgid "Токен доступу"
-msgstr ""
-
-#: apps/orders/models.py:126
-msgid "Модифікація"
-msgstr ""
-
-#: apps/orders/models.py:128 templates/accounts/order_detail.html:57
-#: templates/cart/partials/_cart_panel.html:26
-msgid "Кількість"
-msgstr ""
-
-#: apps/orders/models.py:129 templates/accounts/order_detail.html:70
-#: templates/accounts/orders.html:24
-#: templates/cart/partials/_cart_panel.html:28
-#: templates/cart/partials/_cart_panel.html:88
-#: templates/orders/checkout.html:166
-msgid "Сума"
-msgstr ""
-
-#: apps/orders/models.py:132
-msgid "Позиція замовлення"
-msgstr ""
-
-#: apps/orders/models.py:133
-msgid "Позиції замовлення"
-msgstr ""
-
-#: apps/orders/services_checkout.py:38
-#, python-format
-msgid "Товар «%(name)s» більше недоступний"
-msgstr ""
-
-#: apps/orders/services_checkout.py:42
-#, python-format
-msgid "Недостатньо товару «%(name)s» на складі"
-msgstr ""
-
-#: apps/orders/views.py:25 templates/cart/partials/_cart_panel.html:106
-msgid "Кошик порожній"
-msgstr ""
-
-#: apps/orders/views.py:90 apps/orders/views.py:95 apps/orders/views.py:147
-#: templates/orders/checkout.html:16
-msgid "Оформлення"
-msgstr ""
-
-#: apps/orders/views.py:145 apps/orders/views.py:147
-msgid "Дякуємо"
-msgstr ""
-
-#: apps/payments/models.py:9
-msgid "Успіх"
-msgstr ""
-
-#: apps/payments/models.py:11
-msgid "Sandbox"
-msgstr ""
-
-#: apps/payments/models.py:19
-msgid "Провайдер"
-msgstr ""
-
-#: apps/payments/models.py:33
-msgid "Спроба оплати"
-msgstr ""
-
-#: apps/payments/models.py:34
-msgid "Спроби оплати"
-msgstr ""
-
-#: templates/404.html:4 templates/404.html:27
-msgid "Сторінку не знайдено"
-msgstr ""
-
-#: templates/404.html:29
-msgid "Можливо, посилання застаріло або адресу введено з помилкою."
-msgstr ""
-
-#: templates/404.html:32 templates/orders/thank_you.html:70
-#: templates/orders/thank_you.html:83
-msgid "На головну"
-msgstr ""
-
-#: templates/404.html:33 templates/accounts/cabinet.html:45
-#: templates/accounts/orders.html:42 templates/core/home.html:53
-msgid "До каталогу"
-msgstr ""
-
-#: templates/accounts/cabinet.html:13 templates/accounts/login.html:9
-#: templates/accounts/register.html:9
-msgid "Акаунт"
-msgstr ""
-
-#: templates/accounts/cabinet.html:16
-msgid "Вітаємо"
-msgstr ""
-
-#: templates/accounts/cabinet.html:23
-msgid "Останні замовлення"
-msgstr ""
-
-#: templates/accounts/cabinet.html:39
-msgid "Усі замовлення"
-msgstr ""
-
-#: templates/accounts/cabinet.html:43 templates/accounts/orders.html:40
-msgid "Замовлень поки немає"
-msgstr ""
-
-#: templates/accounts/email/password_reset_email.txt:3
-msgid "Перейдіть за посиланням для скидання пароля:"
-msgstr ""
-
-#: templates/accounts/email/password_reset_subject.txt:3
-msgid "Скидання пароля OGEMED for you"
-msgstr ""
-
-#: templates/accounts/login.html:12
-msgid "Немає акаунту?"
-msgstr ""
-
-#: templates/accounts/login.html:38
-#: templates/accounts/password_reset_complete.html:6
-#: templates/accounts/register.html:13 templates/partials/header.html:94
-msgid "Увійти"
-msgstr ""
-
-#: templates/accounts/login.html:43
-msgid "Забули пароль?"
-msgstr ""
-
-#: templates/accounts/order_detail.html:26
-msgid "Склад"
-msgstr ""
-
-#: templates/accounts/order_detail.html:27 templates/orders/checkout.html:21
-#: templates/orders/thank_you.html:50
-msgid "Товари в замовленні"
-msgstr ""
-
-#: templates/accounts/order_detail.html:67
-#: templates/cart/partials/_cart_panel.html:85
-#: templates/orders/checkout.html:163
-msgid "Підсумок"
-msgstr ""
-
-#: templates/accounts/order_detail.html:91 templates/accounts/profile.html:28
-msgid "Контакт"
-msgstr ""
-
-#: templates/accounts/order_detail.html:101
-#: templates/cart/partials/_cart_panel.html:97
-#: templates/orders/checkout.html:175 templates/orders/thank_you.html:63
-msgid "Разом"
-msgstr ""
-
-#: templates/accounts/order_detail.html:113
-msgid "Оплатити"
-msgstr ""
-
-#: templates/accounts/order_detail.html:120
-msgid "До списку замовлень"
-msgstr ""
-
-#: templates/accounts/orders.html:22
-msgid "Дата"
-msgstr ""
-
-#: templates/accounts/orders.html:41
-msgid "Коли оформити перше замовлення — воно з’явиться тут."
-msgstr ""
-
-#: templates/accounts/partials/_cabinet_nav.html:7
-msgid "Вийти"
-msgstr ""
-
-#: templates/accounts/password_change.html:16
-#: templates/accounts/password_reset_confirm.html:9
-#: templates/accounts/profile.html:84
-#: templates/admin/core/site_content_page.html:77
-msgid "Зберегти"
-msgstr ""
-
-#: templates/accounts/password_change_done.html:6
-msgid "Ваш пароль успішно оновлено."
-msgstr ""
-
-#: templates/accounts/password_change_done.html:7
-msgid "До профілю"
-msgstr ""
-
-#: templates/accounts/password_reset.html:6
-msgid "Вкажіть email — надішлемо посилання для скидання пароля."
-msgstr ""
-
-#: templates/accounts/password_reset.html:10
-#: templates/partials/callback_modal.html:52
-#: templates/partials/stock_notify_modal.html:43
-msgid "Надіслати"
-msgstr ""
-
-#: templates/accounts/password_reset_confirm.html:5
-msgid "Новий пароль"
-msgstr ""
-
-#: templates/accounts/password_reset_done.html:5
-msgid "Лист надіслано"
-msgstr ""
-
-#: templates/accounts/password_reset_done.html:6
-msgid "Якщо акаунт існує, інструкції надіслано на email."
-msgstr ""
-
-#: templates/accounts/profile.html:52
-msgid "Адреса за замовчуванням"
-msgstr ""
-
-#: templates/accounts/profile.html:85
-msgid "Змінити пароль"
-msgstr ""
-
-#: templates/accounts/profile.html:91
-msgid "Швидкі дії"
-msgstr ""
-
-#: templates/accounts/profile.html:95
-msgid "Переглянути"
-msgstr ""
-
-#: templates/accounts/profile.html:99
-msgid "Змінити"
-msgstr ""
-
-#: templates/accounts/profile.html:103
-msgid "До покупок"
-msgstr ""
-
-#: templates/accounts/register.html:12
-msgid "Вже є акаунт?"
-msgstr ""
-
-#: templates/accounts/register.html:37
-msgid "Створити акаунт"
-msgstr ""
-
-#: templates/accounts/register.html:44
-#, python-format
-msgid ""
-"Реєструючись, ви приймаєте <a href=\"%(offer_url)s\">Публічну оферту</a> та "
-"<a href=\"%(privacy_url)s\">Політику конфіденційності</a>."
-msgstr ""
-
-#: templates/admin/change_list.html:28
-#: templates/unfold/helpers/site_icon.html:6
-#: templates/unfold/helpers/site_icon.html:7
-#: templates/unfold/helpers/site_icon.html:9
-msgid "Home"
-msgstr "Домівка"
-
-#: templates/admin/core/site_content_page.html:17
 msgid "Django site admin"
 msgstr "Адмін-панель"
 
-#: templates/base.html:47
-msgid "Перейти до контенту"
-msgstr ""
-
-#: templates/base.html:70
-msgid "Месенджери"
-msgstr ""
-
-#: templates/base.html:77
-msgid "Написати консультанту в Telegram"
-msgstr ""
-
-#: templates/base.html:90
-msgid "Написати в Viber"
-msgstr ""
-
-#: templates/cart/partials/_cart_panel.html:43
-msgid "Менше"
-msgstr ""
-
-#: templates/cart/partials/_cart_panel.html:56
-msgid "Більше"
-msgstr ""
-
-#: templates/cart/partials/_cart_panel.html:72
-#: templates/orders/checkout.html:55
-msgid "Видалити"
-msgstr ""
-
-#: templates/cart/partials/_cart_panel.html:93
-msgid "Розраховується під час оформлення."
-msgstr ""
-
-#: templates/cart/partials/_cart_panel.html:100
-msgid "Оформити замовлення"
-msgstr ""
-
-#: templates/cart/partials/_cart_panel.html:112
-#: templates/orders/thank_you.html:69
-msgid "Продовжити покупки"
-msgstr ""
-
-#: templates/cart/partials/_cart_panel.html:116
-#: templates/partials/header.html:298
-msgid "Повна сторінка кошика"
-msgstr ""
-
-#: templates/catalog/brand_detail.html:37
-msgid "Усі бренди"
-msgstr ""
-
-#: templates/catalog/brands.html:18
-msgid "Бренди ще не додані"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:7
-#: templates/catalog/partials/_filter_bar.html:16
-msgid "Усі категорії"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:46
-#: templates/catalog/partials/_filter_bar.html:49
-msgid "Будь-яка"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:47
-#: templates/catalog/partials/_filter_bar.html:58
-msgid "від"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:48
-#: templates/catalog/partials/_filter_bar.html:62
-msgid "до"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:56
-msgid "Ціна від"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:60
-msgid "Ціна до"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:64
-msgid "Застосувати"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:76
-#: templates/catalog/partials/_filter_bar.html:107
-#: templates/catalog/partials/_filter_bar.html:117
-#: templates/catalog/partials/_filter_bar.html:119
-msgid "Усі"
-msgstr ""
-
-#: templates/catalog/partials/_filter_bar.html:157
-msgid "Скинути фільтри"
-msgstr ""
-
-#: templates/catalog/partials/_gallery.html:2 templates/cms/about.html:190
-#: templates/partials/callback_modal.html:13 templates/partials/header.html:295
-#: templates/partials/stock_notify_modal.html:13
-msgid "Закрити"
-msgstr ""
-
-#: templates/catalog/partials/_gallery.html:22
-#, python-format
-msgid "Фото %(n)s"
-msgstr ""
-
-#: templates/catalog/partials/_product_card.html:48
-#: templates/catalog/partials/_variant_price.html:9
-msgid "шт"
-msgstr ""
-
-#: templates/catalog/partials/_product_card.html:65
-#: templates/catalog/partials/_variant_cta.html:15
-msgid "До кошика"
-msgstr ""
-
-#: templates/catalog/partials/_product_cards_more.html:13
-#: templates/catalog/partials/_product_grid.html:16
-msgid "Показати ще"
-msgstr ""
-
-#: templates/catalog/partials/_product_grid.html:22
-msgid "Пагінація"
-msgstr ""
-
-#: templates/catalog/partials/_product_grid.html:26
-msgid "Назад"
-msgstr ""
-
-#: templates/catalog/partials/_product_grid.html:32
-msgid "Далі"
-msgstr ""
-
-#: templates/catalog/partials/_product_grid.html:37
-#: templates/orders/checkout.html:112 templates/orders/checkout.html:123
-#: templates/partials/header.html:85
-msgid "Нічого не знайдено"
-msgstr ""
-
-#: templates/catalog/partials/_product_slider.html:7
-msgid "Попередні товари"
-msgstr ""
-
-#: templates/catalog/partials/_product_slider.html:22
-msgid "Наступні товари"
-msgstr ""
-
-#: templates/catalog/partials/_sort.html:8
-msgid "Вигляд каталогу"
-msgstr ""
-
-#: templates/catalog/partials/_sort.html:10
-msgid "Вигляд"
-msgstr ""
-
-#: templates/catalog/partials/_sort.html:44
-msgid "Сортування"
-msgstr ""
-
-#: templates/catalog/partials/_variant_cta.html:32
-msgid "Немає доступних модифікацій"
-msgstr ""
-
-#: templates/catalog/search.html:16 templates/partials/header.html:71
-msgid "за назвою або артикулом"
-msgstr ""
-
-#: templates/catalog/search.html:17
-msgid "Знайти"
-msgstr ""
-
-#: templates/cms/about.html:89
-msgid "Картка історії"
-msgstr ""
-
-#: templates/cms/about.html:153 templates/partials/cookie_banner.html:17
-msgid "Детальніше"
-msgstr ""
-
-#: templates/cms/contacts.html:14
-msgid "Звʼязок"
-msgstr ""
-
-#: templates/cms/contacts.html:28
-msgid "Залиште номер — менеджер звʼяжеться з вами найближчим часом."
-msgstr ""
-
-#: templates/cms/contacts.html:30 templates/cms/partials/_info_page_cta.html:24
-msgid "Залишити заявку"
-msgstr ""
-
-#: templates/cms/contacts.html:38
-msgid "Або написати в Telegram"
-msgstr ""
-
-#: templates/cms/contacts.html:70
-msgid "Написати консультанту"
-msgstr ""
-
-#: templates/cms/contacts.html:76
-msgid "Адреса"
-msgstr ""
-
-#: templates/cms/contacts.html:83
-msgid "Години роботи"
-msgstr ""
-
-#: templates/cms/contacts.html:91
-msgid "Соцмережі"
-msgstr ""
-
-#: templates/cms/contacts.html:120
-msgid "Карта"
-msgstr ""
-
-#: templates/cms/offer.html:16 templates/cms/privacy.html:16
-msgid "Документи"
-msgstr ""
-
-#: templates/cms/partials/_info_page_cta.html:6
-#: templates/cms/partials/_info_page_cta.html:18
-msgid "Потрібна допомога?"
-msgstr ""
-
-#: templates/cms/partials/_info_page_cta.html:13
-msgid "Сховати"
-msgstr ""
-
-#: templates/cms/partials/_info_page_cta.html:21
-msgid ""
-"Напишіть або залиште номер — менеджер OGEMED for you відповість у робочі "
-"години."
-msgstr ""
-
-#: templates/cms/partials/_info_page_cta.html:27
-msgid "Усі контакти"
-msgstr ""
-
-#: templates/cms/partials/_info_page_cta.html:36
-msgid "Показати заявку"
-msgstr ""
-
-#: templates/cms/partials/_info_page_cta.html:38
-msgid "Заявка"
-msgstr ""
-
-#: templates/cms/returns.html:16 templates/cms/shipping.html:16
-msgid "Сервіс"
-msgstr ""
-
-#: templates/core/home.html:41
-#, python-format
-msgid "Слайд %(n)s"
-msgstr ""
-
-#: templates/core/home.html:81
-msgid "Підібрати за типом шкіри"
-msgstr ""
-
-#: templates/core/partials/_brand_showcase.html:64
-msgid "Перейти до всіх брендів"
-msgstr ""
-
-#: templates/orders/checkout.html:52
-#, python-format
-msgid "Видалити %(name)s"
-msgstr ""
-
-#: templates/orders/checkout.html:76
-msgid "Дані покупця"
-msgstr ""
-
-#: templates/orders/checkout.html:155
-msgid ""
-"Після оформлення замовлення ви отримаєте реквізити для оплати. Менеджер "
-"зв'яжеться для підтвердження."
-msgstr ""
-
-#: templates/orders/checkout.html:171
-msgid "За тарифами перевізника."
-msgstr ""
-
-#: templates/orders/checkout.html:178
-msgid "Підтвердити"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:3
-msgid "Реквізити для оплати"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:8
-msgid "Одержувач"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:14
-msgid "Номер картки"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:26
-msgid "ЄДРПОУ / ІПН"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:31
-msgid "Призначення платежу"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:35
-msgid "Сума до сплати"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:43
-msgid "Скопійовано"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:45
-msgid "Скопіювати реквізити"
-msgstr ""
-
-#: templates/orders/partials/_fop_requisites.html:50
-msgid "Менеджер надішле реквізити та звʼяжеться для підтвердження оплати."
-msgstr ""
-
-#: templates/orders/thank_you.html:4
-msgid "Дякуємо за замовлення"
-msgstr ""
-
-#: templates/orders/thank_you.html:4 templates/orders/thank_you.html:77
-msgid "Замовлення не знайдено"
-msgstr ""
-
-#: templates/orders/thank_you.html:18
-msgid "Дякуємо за замовлення!"
-msgstr ""
-
-#: templates/orders/thank_you.html:20
-#, python-format
-msgid "Номер замовлення <strong>%(num)s</strong>"
-msgstr ""
-
-#: templates/orders/thank_you.html:32
-msgid "Оплату успішно підтверджено."
-msgstr ""
-
-#: templates/orders/thank_you.html:34
-msgid "Замовлення очікує оплати."
-msgstr ""
-
-#: templates/orders/thank_you.html:39
-msgid "Сплатити знову"
-msgstr ""
-
-#: templates/orders/thank_you.html:43
-msgid "Замовлення прийнято в обробку."
-msgstr ""
-
-#: templates/orders/thank_you.html:79
-msgid "Перевірте посилання або зверніться до менеджера."
-msgstr ""
-
-#: templates/partials/breadcrumbs.html:3
-msgid "Хлібні крихти"
-msgstr ""
-
-#: templates/partials/cookie_banner.html:9
-msgid "Повідомлення про cookies"
-msgstr ""
-
-#: templates/partials/cookie_banner.html:13
-msgid ""
-"Ми використовуємо необхідні cookies для роботи кошика та сесії. Продовжуючи "
-"користуватися сайтом, ви погоджуєтесь з їх використанням."
-msgstr ""
-
-#: templates/partials/cookie_banner.html:20
-msgid "Прийняти"
-msgstr ""
-
-#: templates/partials/footer.html:25 templates/partials/header.html:44
-msgid "Усі товари"
-msgstr ""
-
-#: templates/partials/footer.html:38
-msgid "Інформація"
-msgstr ""
-
-#: templates/partials/footer.html:43
-msgid "Доставка і оплата"
-msgstr ""
-
-#: templates/partials/footer.html:44
-msgid "Повернення"
-msgstr ""
-
-#: templates/partials/footer.html:52
-msgid "Показати більше посилань"
-msgstr ""
-
-#: templates/partials/footer.html:62
-msgid "Політика конфіденційності"
-msgstr ""
+msgid "Authentication and Authorization"
+msgstr "Користувачі та права"
 
-#: templates/partials/footer.html:63
-msgid "Публічна оферта"
-msgstr ""
+msgid "You don’t have permission to view or edit anything."
+msgstr "У вас немає прав для перегляду або редагування."
 
-#: templates/partials/footer.html:69
-msgid "Звʼязатись з нами"
-msgstr ""
+msgid "Models in the %(name)s application"
+msgstr "Моделі в розділі «%(name)s»"
 
-#: templates/partials/footer.html:148
-msgid "Від команди"
-msgstr ""
+msgid "Change password"
+msgstr "Змінити пароль"
 
-#: templates/partials/header.html:17
-msgid "Головна навігація"
-msgstr ""
+msgid "Light"
+msgstr "Світла"
 
-#: templates/partials/header.html:86
-msgid "Усі результати"
-msgstr ""
+msgid "Dark"
+msgstr "Темна"
 
-#: templates/partials/header.html:174
-msgid "Мова"
-msgstr ""
+msgid "System"
+msgstr "Системна"
 
-#: templates/partials/header.html:233
-msgid "Меню"
-msgstr ""
+msgid "Click to download"
+msgstr "Натисніть, щоб завантажити"
 
-#: templates/partials/header.html:241
-msgid "Мобільна навігація"
-msgstr ""
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr "Обрати всі %(total_count)s: %(module_name)s"
 
-#: templates/partials/mobile_nav.html:2
-msgid "Основна навігація"
-msgstr ""
+msgid "entry"
+msgid_plural "entries"
+msgstr[0] "запис"
+msgstr[1] "записи"
+msgstr[2] "записів"
+msgstr[3] "записів"
 
-#: templates/payments/liqpay_redirect.html:7
-msgid "Перехід до оплати"
-msgstr ""
+msgid "No results found"
+msgstr "Нічого не знайдено"
 
-#: templates/payments/liqpay_redirect.html:10
-msgid "Перенаправляємо на LiqPay…"
-msgstr ""
+msgid "This page yielded into no results. Create a new item or reset your filters."
+msgstr "На цій сторінці немає записів. Створіть новий або скиньте фільтри."
 
-#: templates/payments/liqpay_redirect.html:14
-msgid "Сплатити"
-msgstr ""
+msgid "Reset filters"
+msgstr "Скинути фільтри"
 
-#~ msgid "Search apps and models..."
-#~ msgstr "Пошук розділів і моделей…"
+msgid "Filters"
+msgstr "Фільтри"
 
-#~ msgid "Filter navigation items"
-#~ msgstr "Фільтр навігації"
+msgid "Apply Filters"
+msgstr "Застосувати фільтри"
 
-#~ msgid "Return to site"
-#~ msgstr "Повернутись на сайт"
+msgid "Clear all filters"
+msgstr "Очистити всі фільтри"
 
-#~ msgid "Welcome back to"
-#~ msgstr "Ласкаво просимо до"
+msgid "Hide counts"
+msgstr "Сховати кількість"
 
-#~ msgid "Log in"
-#~ msgstr "Увійти"
+msgid "Show counts"
+msgstr "Показати кількість"
 
-#~ msgid "Forgotten your password or username?"
-#~ msgstr "Забули пароль або імʼя користувача?"
+msgid "No results matching your query"
+msgstr "Немає результатів за вашим запитом"
 
-#~ msgid "Run"
-#~ msgstr "Виконати"
+msgid "Loading more results..."
+msgstr "Завантаження ще результатів…"
 
-#~ msgid "Run the selected action"
-#~ msgstr "Виконати обрану дію"
+msgid "Recent searches"
+msgstr "Нещодавні пошуки"
 
-#~ msgid "Expand row"
-#~ msgstr "Розгорнути рядок"
+msgid "No recent searches"
+msgstr "Немає нещодавніх пошуків"
 
-#~ msgid "Type to search"
-#~ msgstr "Пошук"
+msgid "Select all rows"
+msgstr "Обрати всі рядки"
 
-#~ msgid "Select action to run"
-#~ msgstr "Оберіть дію для виконання"
+msgid "More actions"
+msgstr "Більше дій"
 
-#~ msgid "Clear selection"
-#~ msgstr "Скасувати вибір"
+msgid "View site"
+msgstr "Переглянути сайт"
 
-#~ msgid "Click here to select the objects across all pages"
-#~ msgstr "Натисніть, щоб обрати записи на всіх сторінках"
+msgid "Log out"
+msgstr "Вийти"
 
-#~ msgid "History"
-#~ msgstr "Історія"
+msgid "Cancel"
+msgstr "Скасувати"
 
-#~ msgid "View on site"
-#~ msgstr "На сайті"
+msgid "Submit"
+msgstr "Надіслати"
 
-#~ msgid "Save"
-#~ msgstr "Зберегти"
+msgid "No, take me back"
+msgstr "Ні, повернутися"
 
-#~ msgid "Save and continue editing"
-#~ msgstr "Зберегти і продовжити редагування"
+msgid "Yes, I’m sure"
+msgstr "Так, впевнений"
 
-#~ msgid "Save and view"
-#~ msgstr "Зберегти і переглянути"
+msgid "Yes, I'm sure"
+msgstr "Так, впевнений"
 
-#~ msgid "Save and add another"
-#~ msgstr "Зберегти і додати ще"
+msgid "Go back"
+msgstr "Назад"
 
-#~ msgid "Save as new"
-#~ msgstr "Зберегти як новий"
+msgid "Previous"
+msgstr "Попередня"
 
-#~ msgid "Close"
-#~ msgstr "Закрити"
+msgid "Next"
+msgstr "Наступна"
 
-#~ msgid "Delete"
-#~ msgstr "Видалити"
+msgid "All applications"
+msgstr "Усі розділи"
 
-#~ msgid "Add"
-#~ msgstr "Додати"
+msgid "No data"
+msgstr "Немає даних"
 
-#~ msgid "Change"
-#~ msgstr "Змінити"
+msgid "Add row"
+msgstr "Додати рядок"
 
-#~ msgid "View"
-#~ msgstr "Переглянути"
+msgid "Toggle password visibility"
+msgstr "Показати або приховати пароль"
 
-#~ msgid "Site administration"
-#~ msgstr "Адміністрування сайту"
+msgid "Unknown"
+msgstr "Невідомо"
 
-#~ msgid "Authentication and Authorization"
-#~ msgstr "Користувачі та права"
+msgid "True"
+msgstr "Так"
 
-#~ msgid "You don’t have permission to view or edit anything."
-#~ msgstr "У вас немає прав для перегляду або редагування."
+msgid "False"
+msgstr "Ні"
 
-#~ msgid "Models in the %(name)s application"
-#~ msgstr "Моделі в розділі «%(name)s»"
+msgid "You have been successfully logged out from the administration"
+msgstr "Ви успішно вийшли з адмін-панелі"
 
-#~ msgid ""
-#~ "This object doesn’t have a change history. It probably wasn’t added via "
-#~ "this admin site."
-#~ msgstr ""
-#~ "У цього обʼєкта немає історії змін. Ймовірно, він не додавався через цю "
-#~ "адмін-панель."
+msgid "Thanks for spending some quality time with the web site today."
+msgstr "Дякуємо за роботу з сайтом сьогодні."
 
-#~ msgid ""
-#~ "After you've created a user, you’ll be able to edit more user options."
-#~ msgstr ""
-#~ "Після створення користувача ви зможете редагувати додаткові параметри."
+msgid "Log in again"
+msgstr "Увійти знову"
 
-#~ msgid "Change password"
-#~ msgstr "Змінити пароль"
+msgid "Add %(name)s"
+msgstr "Додати %(name)s"
 
-#~ msgid "Light"
-#~ msgstr "Світла"
+msgid "Select action"
+msgstr "Оберіть дію"
 
-#~ msgid "Dark"
-#~ msgstr "Темна"
+msgid "Choose file to upload"
+msgstr "Оберіть файл для завантаження"
 
-#~ msgid "System"
-#~ msgstr "Системна"
+msgid "Select value"
+msgstr "Оберіть значення"
 
-#~ msgid "Click to download"
-#~ msgstr "Натисніть, щоб завантажити"
+msgid "Home"
+msgstr "Домівка"
 
-#~ msgid "Select all %(total_count)s %(module_name)s"
-#~ msgstr "Обрати всі %(total_count)s: %(module_name)s"
+msgid "All"
+msgstr "Всі"
 
-#~ msgid "entry"
-#~ msgid_plural "entries"
-#~ msgstr[0] "запис"
-#~ msgstr[1] "записи"
-#~ msgstr[2] "записів"
-#~ msgstr[3] "записів"
+msgid " By %(filter_title)s "
+msgstr "%(filter_title)s"
 
-#~ msgid "No results found"
-#~ msgstr "Нічого не знайдено"
+# Django admin FilteredSelectMultiple (SelectFilter2.js via jsi18n)
+msgid "Available %s"
+msgstr "Доступні %s"
 
-#~ msgid ""
-#~ "This page yielded into no results. Create a new item or reset your "
-#~ "filters."
-#~ msgstr "На цій сторінці немає записів. Створіть новий або скиньте фільтри."
+msgid "Choose %s by selecting them and then select the \"Choose\" arrow button."
+msgstr "Оберіть потрібні %s зі списку та натисніть стрілку «Додати»."
 
-#~ msgid "Reset filters"
-#~ msgstr "Скинути фільтри"
+msgid "Choose all %s"
+msgstr "Обрати всі %s"
 
-#~ msgid "Filters"
-#~ msgstr "Фільтри"
+msgid "Choose selected %s"
+msgstr "Додати обрані %s"
 
-#~ msgid "Apply Filters"
-#~ msgstr "Застосувати фільтри"
+msgid "Remove all %s"
+msgstr "Прибрати всі %s"
 
-#~ msgid "Clear all filters"
-#~ msgstr "Очистити всі фільтри"
+msgid "Remove selected %s"
+msgstr "Прибрати обрані %s"
 
-#~ msgid "Hide counts"
-#~ msgstr "Сховати кількість"
+msgid "Filter"
+msgstr "Фільтр"
 
-#~ msgid "Show counts"
-#~ msgstr "Показати кількість"
+msgid "Choose"
+msgstr "Додати"
 
-#~ msgid "No results matching your query"
-#~ msgstr "Немає результатів за вашим запитом"
+msgid "Remove"
+msgstr "Прибрати"
 
-#~ msgid "Loading more results..."
-#~ msgstr "Завантаження ще результатів…"
+msgid "Type into this box to filter down the list of available %s."
+msgstr "Введіть текст, щоб відфільтрувати список доступних %s."
 
-#~ msgid "Recent searches"
-#~ msgstr "Нещодавні пошуки"
-
-#~ msgid "No recent searches"
-#~ msgstr "Немає нещодавніх пошуків"
-
-#~ msgid "Select all rows"
-#~ msgstr "Обрати всі рядки"
-
-#~ msgid "More actions"
-#~ msgstr "Більше дій"
-
-#~ msgid "View site"
-#~ msgstr "Переглянути сайт"
-
-#~ msgid "Log out"
-#~ msgstr "Вийти"
-
-#~ msgid "Cancel"
-#~ msgstr "Скасувати"
-
-#~ msgid "Submit"
-#~ msgstr "Надіслати"
-
-#~ msgid "No, take me back"
-#~ msgstr "Ні, повернутися"
-
-#~ msgid "Yes, I’m sure"
-#~ msgstr "Так, впевнений"
-
-#~ msgid "Yes, I'm sure"
-#~ msgstr "Так, впевнений"
-
-#~ msgid "Record picture"
-#~ msgstr "Зображення запису"
-
-#~ msgid "Remove"
-#~ msgstr "Видалити"
-
-#~ msgid "This item will be deleted."
-#~ msgstr "Цей запис буде видалено."
-
-#~ msgid "Click to cancel"
-#~ msgstr "Натисніть, щоб скасувати"
-
-#~ msgid "Go back"
-#~ msgstr "Назад"
-
-#~ msgid "General"
-#~ msgstr "Загальне"
-
-#~ msgid "Previous"
-#~ msgstr "Попередня"
-
-#~ msgid "Next"
-#~ msgstr "Наступна"
-
-#~ msgid "All applications"
-#~ msgstr "Усі розділи"
-
-#~ msgid "No data"
-#~ msgstr "Немає даних"
-
-#~ msgid "Add row"
-#~ msgstr "Додати рядок"
-
-#~ msgid "Toggle password visibility"
-#~ msgstr "Показати або приховати пароль"
-
-#~ msgid "Unknown"
-#~ msgstr "Невідомо"
-
-#~ msgid "True"
-#~ msgstr "Так"
-
-#~ msgid "False"
-#~ msgstr "Ні"
-
-#~ msgid "You have been successfully logged out from the administration"
-#~ msgstr "Ви успішно вийшли з адмін-панелі"
-
-#~ msgid "Thanks for spending some quality time with the web site today."
-#~ msgstr "Дякуємо за роботу з сайтом сьогодні."
-
-#~ msgid "Log in again"
-#~ msgstr "Увійти знову"
-
-#~ msgid "Add %(name)s"
-#~ msgstr "Додати %(name)s"
-
-#~ msgid "Select action"
-#~ msgstr "Оберіть дію"
-
-#~ msgid "Choose file to upload"
-#~ msgstr "Оберіть файл для завантаження"
-
-#~ msgid "Catalog"
-#~ msgstr "Каталог"
-
-#~ msgid "All"
-#~ msgstr "Всі"
-
-#~ msgid " By %(filter_title)s "
-#~ msgstr "%(filter_title)s"
-
-#~ msgid " By {{ filter_title }} "
-#~ msgstr "{{ filter_title }}"
+msgid "This is the list of available %s. You may choose some by selecting them in the box below and then clicking the \"Choose\" arrow between the two boxes."
+msgstr "Список доступних %s. Оберіть потрібні та натисніть стрілку «Додати»."
