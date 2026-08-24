@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 
-from apps.catalog.models import Brand, Category
+from apps.catalog.models import Brand
 
-# Догляд (Косметика). Дублікати з ін'єкційними — один бренд, обидві категорії.
+# Догляд (Косметика).
 CARE_BRANDS = [
     ("biolab", "Biolab"),
     ("isov-sorex-skin-care", "Isov Sorex Skin Care"),
@@ -36,47 +36,28 @@ INJECTABLE_BRANDS = [
     ("medixa", "Medixa"),
 ]
 
-CAT_COSMETICS = "kosmetyka"
-CAT_INJECTIONS = "inektsijni-preparaty"
-
 # Existing demo brands keep lower sort_order; new ones start below them.
 START_ORDER = 100
 
 
 class Command(BaseCommand):
-    help = (
-        "Idempotent brand seed (name + slug + category links). "
-        "Never overwrites logos uploaded through the admin."
-    )
+    help = "Idempotent brand seed (name + slug). Never overwrites cover/showcase images."
 
     def handle(self, *args, **options):
-        cosmetics = Category.objects.filter(slug=CAT_COSMETICS, is_active=True).first()
-        injections = Category.objects.filter(slug=CAT_INJECTIONS, is_active=True).first()
-        if cosmetics is None or injections is None:
-            self.stderr.write(
-                self.style.ERROR(
-                    "Categories kosmetyka / inektsijni-preparaty missing. "
-                    "Run seed_catalog first."
-                )
-            )
-            return
-
         by_slug: dict[str, dict] = {}
         for index, (slug, name) in enumerate(CARE_BRANDS):
             entry = by_slug.setdefault(
                 slug,
-                {"name": name, "cats": set(), "order": START_ORDER + index},
+                {"name": name, "order": START_ORDER + index},
             )
             entry["name"] = name
-            entry["cats"].add(cosmetics)
         offset = len(CARE_BRANDS)
         for index, (slug, name) in enumerate(INJECTABLE_BRANDS):
             entry = by_slug.setdefault(
                 slug,
-                {"name": name, "cats": set(), "order": START_ORDER + offset + index},
+                {"name": name, "order": START_ORDER + offset + index},
             )
             entry["name"] = name
-            entry["cats"].add(injections)
 
         created = updated = 0
         for slug, data in by_slug.items():
@@ -97,7 +78,6 @@ class Command(BaseCommand):
                 brand.is_active = True
                 brand.save(update_fields=["name_uk", "name_ru", "is_active", "updated_at"])
                 updated += 1
-            brand.categories.set(data["cats"])
 
         self.stdout.write(
             self.style.SUCCESS(

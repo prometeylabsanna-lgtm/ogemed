@@ -54,6 +54,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "apps.core.middleware.ForceAdminUkrainianMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -117,7 +118,11 @@ TINYMCE_DEFAULT_CONFIG = {
     "height": 400,
     "menubar": False,
     "plugins": "link lists image code",
-    "toolbar": "undo redo | bold italic underline | bullist numlist | link image | code",
+    "toolbar": (
+        "undo redo | bold italic underline | forecolor fontsize | "
+        "bullist numlist | link image | code"
+    ),
+    "font_size_formats": "12px 14px 16px 18px 20px 24px 28px 32px",
     "content_css": False,
     "skin": "oxide",
 }

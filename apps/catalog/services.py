@@ -142,14 +142,6 @@ def top_level_categories():
     )
 
 
-def home_quick_categories(limit: int = 8):
-    """Категорії з прапорцем show_on_home для блоку на головній."""
-    return (
-        Category.objects.filter(is_active=True, show_on_home=True)
-        .order_by("sort_order", "name_uk")[:limit]
-    )
-
-
 def category_branch_ids(category: Category) -> list[int]:
     """Category plus its active descendants, so parent pages are not empty."""
     ids = [category.pk]

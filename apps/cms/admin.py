@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.html import format_html
+from tinymce.widgets import TinyMCE
 from unfold.admin import ModelAdmin
 
 from apps.core.admin_filters import (
@@ -9,8 +11,10 @@ from apps.core.admin_filters import (
     UkBooleanDropdownFilter,
     UkChoicesDropdownFilter,
 )
+from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 
 from .about_content import AboutContent
+from .info_page_models import InfoPageMeta, InfoPageSection
 from .models import CMSPage, Lead
 
 
@@ -29,22 +33,103 @@ class CMSPageAdmin(DropdownFiltersMixin, ModelAdmin):
         ("Русский", {"fields": ("title_ru", "body_ru")}),
     )
 
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name in ("body_uk", "body_ru"):
+            kwargs["widget"] = TinyMCE(attrs={"cols": 80, "rows": 12})
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+
+@admin.register(InfoPageSection)
+class InfoPageSectionAdmin(DropdownFiltersMixin, ModelAdmin):
+    list_display = (
+        "heading_uk",
+        "page_key",
+        "layout",
+        "sort_order",
+        "is_active",
+    )
+    list_editable = ("sort_order", "is_active")
+    list_filter = (
+        ("page_key", UkChoicesDropdownFilter),
+        ("layout", UkChoicesDropdownFilter),
+        ("is_active", UkBooleanDropdownFilter),
+    )
+    search_fields = ("heading_uk", "heading_ru", "body_uk", "body_ru")
+    ordering = ("page_key", "sort_order", "id")
+    fieldsets = (
+        (
+            None,
+            {"fields": ("page_key", "layout", "sort_order", "is_active")},
+        ),
+        (
+            "Українська",
+            {"fields": ("heading_uk", "subheading_uk", "body_uk")},
+        ),
+        (
+            "Русский",
+            {"fields": ("heading_ru", "subheading_ru", "body_ru")},
+        ),
+    )
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name in ("body_uk", "body_ru"):
+            kwargs["widget"] = TinyMCE(attrs={"cols": 80, "rows": 18})
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+
+@admin.register(InfoPageMeta)
+class InfoPageMetaAdmin(DropdownFiltersMixin, ModelAdmin):
+    list_display = ("page_key", "cta_title_uk")
+    list_filter = (("page_key", UkChoicesDropdownFilter),)
+    fieldsets = (
+        (None, {"fields": ("page_key",)}),
+        (
+            "CTA",
+            {
+                "fields": (
+                    "cta_title_uk",
+                    "cta_title_ru",
+                    "cta_text_uk",
+                    "cta_text_ru",
+                ),
+            },
+        ),
+        (
+            "Бічна замітка",
+            {
+                "fields": (
+                    "note_title_uk",
+                    "note_title_ru",
+                    "note_steps_uk",
+                    "note_steps_ru",
+                    "note_text_uk",
+                    "note_text_ru",
+                ),
+            },
+        ),
+    )
+
 
 @admin.register(AboutContent)
 class AboutContentAdmin(ModelAdmin):
+    formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     fieldsets = (
         (
-            "Hero",
+            "Hero / банер",
             {
+                "description": (
+                    "Верхній банер сторінки «Про нас». "
+                    "Якщо зображення не завантажено — показується дефолтне static/img/about/hero.jpg."
+                ),
                 "fields": (
                     "hero_visible",
+                    "hero_image",
                     "hero_kicker_uk",
                     "hero_kicker_ru",
                     "hero_title_uk",
                     "hero_title_ru",
                     "hero_text_uk",
                     "hero_text_ru",
-                    "hero_image",
                 ),
             },
         ),
@@ -117,6 +202,15 @@ class AboutContentAdmin(ModelAdmin):
             },
         ),
     )
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+        if db_field.name == "hero_image" and formfield is not None:
+            formfield.label = "Зображення банера"
+            formfield.help_text = (
+                "Desktop ≈ 1920×800 (WebP/JPEG). Обрізання по центру на мобільному."
+            )
+        return formfield
 
     def has_add_permission(self, request) -> bool:
         return not AboutContent.objects.exists()

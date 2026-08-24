@@ -1,0 +1,15 @@
+{% extends "admin/change_form.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin/site_content.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/ogemed_theme.css' %}">
+<script src="{% static 'js/admin/catalog_lang_tabs.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="product-admin-editor site-content-editor" data-catalog-lang-root>
+    {{ block.super }}
+</div>
+{% endblock %}

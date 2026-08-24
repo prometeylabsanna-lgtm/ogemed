@@ -22,7 +22,15 @@ class SiteContentRegistryTests(TestCase):
 
     def test_page_key_pairs_unique(self):
         keys = _all_keys()
-        self.assertGreater(len(keys), 10)
+        self.assertGreater(len(keys), 5)
+
+    def test_dead_sections_removed(self):
+        names = {s.admin_model_name for s in CONTENT_SECTIONS}
+        self.assertNotIn("homebenefitssettings", names)
+        self.assertNotIn("homecategoriessettings", names)
+        self.assertNotIn("homepromosettings", names)
+        self.assertNotIn("catalogseosettings", names)
+        self.assertNotIn("catalogfilterssettings", names)
 
 
 class SiteContentAdminTests(TestCase):
@@ -45,13 +53,11 @@ class SiteContentAdminTests(TestCase):
             follow = self.client.get(response["Location"])
             self.assertEqual(follow.status_code, 200)
 
-    def test_seed_creates_blocks_on_open(self):
-        url = reverse(
-            "admin:core_homebenefitssettings_change",
-            args=[1],
-        )
+    def test_header_section_has_logo_and_phone(self):
+        url = reverse("admin:core_siteheadersettings_change", args=[1])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(
-            SiteBlock.objects.filter(page="home", key="benefits_section_title").exists()
-        )
+        html = response.content.decode()
+        self.assertIn('name="logo"', html)
+        self.assertIn('name="phone"', html)
+        self.assertIn("Логотип і телефон", html)

@@ -132,6 +132,16 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
                             "icon": "article",
                             "link": _admin_link(prefix, "cms", "cmspage"),
                         },
+                        {
+                            "title": "Юридичні секції",
+                            "icon": "gavel",
+                            "link": _admin_link(prefix, "cms", "infopagesection"),
+                        },
+                        {
+                            "title": "Юридичні CTA / замітки",
+                            "icon": "notes",
+                            "link": _admin_link(prefix, "cms", "infopagemeta"),
+                        },
                     ],
                 },
                 {
@@ -180,6 +190,17 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
                             "title": "Ліди",
                             "icon": "support_agent",
                             "link": _admin_link(prefix, "cms", "lead"),
+                        },
+                    ],
+                },
+                {
+                    "title": "Недавні дії",
+                    "separator": True,
+                    "items": [
+                        {
+                            "title": "Недавні дії",
+                            "icon": "history",
+                            "link": _admin_link(prefix, "admin", "logentry"),
                         },
                     ],
                 },

@@ -17,7 +17,7 @@
         <h1 class="info-page__title">{{ page.title }}</h1>
         {% if page.body %}
         <div class="info-page__intro">
-          {{ page.body|linebreaks }}
+          {{ page.body|safe }}
         </div>
         {% endif %}
       </header>
@@ -26,7 +26,7 @@
         {% for section in info_sections %}
         <section class="info-page__section">
           <h2 class="info-page__section-title">{{ section.title }}</h2>
-          <div class="info-page__section-body">{{ section.body|linebreaks }}</div>
+          <div class="info-page__section-body">{{ section.body|safe }}</div>
         </section>
         {% endfor %}
       </div>

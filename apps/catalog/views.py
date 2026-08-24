@@ -63,6 +63,9 @@ class CatalogListView(ListView):
         ctx["selected_brand"] = self.request.GET.get("brand", "")
         ctx["selected_availability"] = self.request.GET.get("availability", "")
         ctx["selected_label"] = label_by_slug(self.request.GET.get("label"))
+        if ctx["selected_label"] is not None:
+            label = ctx["selected_label"]
+            ctx["selected_label_title"] = label.display_title()
         skin_type = (self.request.GET.get("skin_type") or "").strip()
         ctx["selected_skin_type"] = (
             "" if skin_type == SKIN_TYPE_SELECT else skin_type

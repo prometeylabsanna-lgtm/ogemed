@@ -60,7 +60,7 @@
   </div>
 
   {% if product.description %}
-  <div class="pdp__description">{{ product.description|linebreaks }}</div>
+  <div class="pdp__description">{{ product.description|safe }}</div>
   {% endif %}
 
   {% with attrs=product.attribute_values.all %}

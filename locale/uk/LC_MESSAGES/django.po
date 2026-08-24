@@ -56,7 +56,13 @@ msgid "History"
 msgstr "Історія"
 
 msgid "View on site"
-msgstr "На сайті"
+msgstr "Переглянути на сайті"
+
+msgid "Recent actions"
+msgstr "Недавні дії"
+
+msgid "Select action"
+msgstr "Оберіть дію"
 
 msgid "Save"
 msgstr "Зберегти"
@@ -233,9 +239,6 @@ msgstr "Увійти знову"
 msgid "Add %(name)s"
 msgstr "Додати %(name)s"
 
-msgid "Select action"
-msgstr "Оберіть дію"
-
 msgid "Choose file to upload"
 msgstr "Оберіть файл для завантаження"
 
@@ -284,3 +287,27 @@ msgstr "Введіть текст, щоб відфільтрувати спис�
 
 msgid "This is the list of available %s. You may choose some by selecting them in the box below and then clicking the \"Choose\" arrow between the two boxes."
 msgstr "Список доступних %s. Оберіть потрібні та натисніть стрілку «Додати»."
+
+msgid "Failed tasks"
+msgstr "Невдалі задачі"
+
+msgid "Queued tasks"
+msgstr "У черзі"
+
+msgid "Scheduled tasks"
+msgstr "За розкладом"
+
+msgid "Successful tasks"
+msgstr "Успішні задачі"
+
+msgid "Django Q"
+msgstr "Черга задач"
+
+msgid "First, enter a username and password. Then, you’ll be able to edit more user options."
+msgstr "Спочатку введіть імʼя користувача та пароль. Після цього зʼявляться інші налаштування."
+
+msgid "First, enter a username and password. Then, you'll be able to edit more user options."
+msgstr "Спочатку введіть імʼя користувача та пароль. Після цього зʼявляться інші налаштування."
+
+msgid "Delete selected %(verbose_name_plural)s"
+msgstr "Видалити обрані %(verbose_name_plural)s"

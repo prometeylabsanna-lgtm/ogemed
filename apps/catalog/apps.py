@@ -1,11 +1,12 @@
 from django.apps import AppConfig
+from django.utils.translation import gettext_lazy as _
 
 
 class CatalogConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.catalog"
     label = "catalog"
-    verbose_name = "Catalog"
+    verbose_name = _("Каталог")
 
     def ready(self) -> None:
         from . import signals  # noqa: F401

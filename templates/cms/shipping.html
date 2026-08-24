@@ -17,7 +17,7 @@
       <h1 class="info-page__title">{{ page.title }}</h1>
       {% if page.body %}
       <div class="info-page__intro">
-        {{ page.body|linebreaks }}
+        {{ page.body|safe }}
       </div>
       {% endif %}
     </header>
@@ -27,7 +27,7 @@
       <li class="info-page__item">
         <span class="info-page__label">{{ item.label }}</span>
         <p class="info-page__value">{{ item.value }}</p>
-        <div class="info-page__text">{{ item.text|linebreaks }}</div>
+        <div class="info-page__text">{{ item.text|safe }}</div>
       </li>
       {% endfor %}
     </ul>

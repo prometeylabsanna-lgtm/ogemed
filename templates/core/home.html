@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="{% vstatic 'css/components/product_grid.css' %}">
 <link rel="stylesheet" href="{% vstatic 'css/components/product_slider.css' %}">
 <link rel="stylesheet" href="{% vstatic 'css/components/home.css' %}">
-<link rel="stylesheet" href="{% vstatic 'css/components/home_quick.css' %}">
 <link rel="stylesheet" href="{% vstatic 'css/components/slider_bars.css' %}">
 <link rel="stylesheet" href="{% vstatic 'css/components/brand_showcase.css' %}">
 {% endblock %}
@@ -56,8 +55,6 @@
 {% endif %}
 {% endif %}
 
-{% include "core/partials/_quick_categories.html" %}
-
 {% section_visible "home" "products_section_visible" as products_ok %}
 {% if products_ok and new_items %}
 <section class="home-section container section-gap">
@@ -68,14 +65,19 @@
 
 {% section_visible "home" "care_section_visible" as care_ok %}
 {% if care_ok %}
+{% block_image_url "home" "care_section_image" as care_bg %}
+{% block_text "home" "care_cta_url" "/katalog/" as care_cta_href %}
 <section class="care-selection-section section-gap">
-  <div class="care-selection">
+  <div class="care-selection{% if care_bg %} care-selection--has-bg{% endif %}">
+    {% if care_bg %}
+    <img class="care-selection__bg" src="{{ care_bg }}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+    {% endif %}
     <div class="care-selection__inner">
       <h3 class="care-selection__title">{% block_text "home" "care_section_title" "Знайдіть свій ідеальний догляд" %}</h3>
-      <p class="care-selection__subtitle">{% block_text "home" "care_section_text" "Дайте відповідь на декілька запитань або оберіть засіб із повної колекції професійної косметики" %}</p>
+      <p class="care-selection__subtitle">{% block_text "home" "care_section_text" "Оберіть категорію або бренд — і зберіть свою рутину." %}</p>
       <div class="care-selection__actions">
-        <a href="{% url 'catalog:list' %}" class="btn btn--primary care-selection__btn">
-          {% block_text "home" "care_cta_label" "Переглянути весь каталог" %} <span class="arrow" aria-hidden="true">→</span>
+        <a href="{{ care_cta_href }}" class="btn btn--primary care-selection__btn">
+          {% block_text "home" "care_cta_label" "До каталогу" %} <span class="arrow" aria-hidden="true">→</span>
         </a>
         <a href="{% url 'catalog:list' %}?skin_type=select" class="btn btn--secondary care-selection__btn">
           {% trans "Підібрати за типом шкіри" %}

@@ -7,6 +7,7 @@ from apps.core.fields import OptimizedImageField
 from apps.core.image_processing import MAX_SIDE_HERO
 
 from .about_content import AboutContent  # noqa: F401
+from .info_page_models import InfoPageMeta, InfoPageSection  # noqa: F401
 
 
 class CMSPage(models.Model):
@@ -139,16 +140,19 @@ class Lead(models.Model):
     phone = models.CharField(_("Телефон"), max_length=32)
     email = models.EmailField(_("Email"), blank=True)
     message = models.TextField(_("Повідомлення"), blank=True)
-    honeypot = models.CharField(max_length=120, blank=True, editable=False)
+    honeypot = models.CharField(
+        _("Антиспам"), max_length=120, blank=True, editable=False
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="leads",
+        verbose_name=_("Користувач"),
     )
     is_processed = models.BooleanField(_("Оброблено"), default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(_("Створено"), auto_now_add=True)
 
     class Meta:
         verbose_name = _("Лід")

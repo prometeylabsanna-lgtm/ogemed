@@ -4,15 +4,14 @@ from __future__ import annotations
 IMAGE_PROFILES: dict[str, str] = {
     "block_image": "Рекомендовано WebP/JPEG, ширина до 1600px.",
     "hero": "Desktop ≈ 1920×800, Mobile — обрізання по центру. WebP/JPEG.",
-    "promo": "Банер ≈ 1200×400.",
+    "care_section_image": (
+        "Фон секції ≈ 1920×600, WebP/JPEG. Без фото секція лишається без фону."
+    ),
 }
 
 TEXT_LIMITS: dict[str, str] = {
     "hero_fallback_title": "До 80 символів. Показується лише коли немає активних слайдів.",
     "hero_fallback_subtitle": "Короткий текст під заголовком, якщо немає слайдів.",
-    "benefits_section_title": "До 60 символів.",
-    "seo_title": "До 60 символів.",
-    "seo_description": "До 160 символів.",
 }
 
 

@@ -74,25 +74,32 @@ class Order(models.Model):
     delivery_type = models.CharField(
         _("Доставка"), max_length=32, choices=DeliveryType.choices
     )
-    np_city_ref = models.CharField(max_length=64, blank=True)
-    np_city_name = models.CharField(max_length=255, blank=True)
-    np_warehouse_ref = models.CharField(max_length=64, blank=True)
-    np_warehouse_name = models.CharField(max_length=255, blank=True)
+    np_city_ref = models.CharField(_("НП: код міста"), max_length=64, blank=True)
+    np_city_name = models.CharField(_("НП: місто"), max_length=255, blank=True)
+    np_warehouse_ref = models.CharField(_("НП: код відділення"), max_length=64, blank=True)
+    np_warehouse_name = models.CharField(_("НП: відділення"), max_length=255, blank=True)
     np_point_type = models.CharField(
-        max_length=32, choices=NPPointType.choices, blank=True
+        _("НП: тип пункту"),
+        max_length=32,
+        choices=NPPointType.choices,
+        blank=True,
     )
-    courier_city = models.CharField(max_length=120, blank=True)
-    courier_street = models.CharField(max_length=255, blank=True)
-    courier_building = models.CharField(max_length=64, blank=True)
-    courier_apartment = models.CharField(max_length=64, blank=True)
-    courier_comment = models.TextField(blank=True)
+    courier_city = models.CharField(_("Курʼєр: місто"), max_length=120, blank=True)
+    courier_street = models.CharField(_("Курʼєр: вулиця"), max_length=255, blank=True)
+    courier_building = models.CharField(_("Курʼєр: будинок"), max_length=64, blank=True)
+    courier_apartment = models.CharField(_("Курʼєр: квартира"), max_length=64, blank=True)
+    courier_comment = models.TextField(_("Курʼєр: коментар"), blank=True)
     payment_type = models.CharField(
         _("Оплата"), max_length=32, choices=PaymentType.choices
     )
-    subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0"))
-    total = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0"))
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    subtotal = models.DecimalField(
+        _("Підсумок"), max_digits=12, decimal_places=2, default=Decimal("0")
+    )
+    total = models.DecimalField(
+        _("Разом"), max_digits=12, decimal_places=2, default=Decimal("0")
+    )
+    created_at = models.DateTimeField(_("Створено"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Оновлено"), auto_now=True)
 
     class Meta:
         verbose_name = _("Замовлення")
@@ -113,6 +120,7 @@ class OrderItem(models.Model):
         null=True,
         blank=True,
         related_name="order_items",
+        verbose_name=_("Товар"),
     )
     variant = models.ForeignKey(
         "catalog.ProductVariant",
@@ -120,6 +128,7 @@ class OrderItem(models.Model):
         null=True,
         blank=True,
         related_name="order_items",
+        verbose_name=_("Варіант"),
     )
     name = models.CharField(_("Назва"), max_length=255)
     sku = models.CharField(_("Артикул"), max_length=64)

@@ -1,11 +1,9 @@
 from django.views.generic import DetailView
-from django.utils.translation import get_language
 
 from apps.core.breadcrumbs import build_breadcrumbs
 
-from . import info_page_content as info_content
-from . import info_page_content_2 as info_content_legal
 from .about_content import AboutContent
+from .info_page_service import meta_for_page, sections_for_page
 from .models import CMSPage
 
 
@@ -25,6 +23,13 @@ _SLUG_TEMPLATES = {
     "povernennya": "cms/returns.html",
     "polityka-konfidentsiynosti": "cms/privacy.html",
     "publichna-oferta": "cms/offer.html",
+}
+
+_PAGE_KEY_BY_SLUG = {
+    "dostavka-i-oplata": "shipping",
+    "povernennya": "returns",
+    "polityka-konfidentsiynosti": "privacy",
+    "publichna-oferta": "offer",
 }
 
 
@@ -65,52 +70,11 @@ class CMSPageDetailView(DetailView):
         return ctx
 
     def _add_info_page_context(self, ctx: dict, page: CMSPage) -> None:
-        key = page.page_key or ""
-        slug = page.slug
-        is_ru = (get_language() or "uk")[:2] == "ru"
-
-        if key == "shipping" or slug == "dostavka-i-oplata":
-            ctx["info_sections"] = info_content.shipping_sections()
-            ctx["info_note"] = info_content.shipping_note()
-            ctx["cta_title"] = (
-                "Нужна помощь с заказом?" if is_ru else "Потрібна допомога із замовленням?"
-            )
-            ctx["cta_text"] = (
-                "Уточним доставку Новой Почтой, оплату LiqPay или статус ТТН."
-                if is_ru
-                else "Уточнимо доставку Новою Поштою, оплату LiqPay або статус ТТН."
-            )
-        elif key == "returns" or slug == "povernennya":
-            ctx["info_sections"] = info_content.returns_sections()
-            ctx["cta_title"] = (
-                "Есть вопрос по возврату?" if is_ru else "Є питання щодо повернення?"
-            )
-            ctx["cta_text"] = (
-                "Напишите номер заказа — разберём брак, ошибку комплектации "
-                "или повреждение в пути."
-                if is_ru
-                else "Напишіть номер замовлення — розберемо брак, помилку "
-                "комплектації чи пошкодження в дорозі."
-            )
-        elif key == "privacy" or slug == "polityka-konfidentsiynosti":
-            ctx["info_sections"] = info_content_legal.privacy_sections()
-            ctx["cta_title"] = (
-                "Вопросы по данным?" if is_ru else "Питання щодо даних?"
-            )
-            ctx["cta_text"] = (
-                "Напишите на hello@ogemed.ua или оставьте заявку — ответим "
-                "в рабочие часы."
-                if is_ru
-                else "Напишіть на hello@ogemed.ua або залиште заявку — відповімо "
-                "у робочі години."
-            )
-        elif key == "offer" or slug == "publichna-oferta":
-            ctx["info_sections"] = info_content_legal.offer_sections()
-            ctx["cta_title"] = (
-                "Нужны уточнения?" if is_ru else "Потрібні уточнення?"
-            )
-            ctx["cta_text"] = (
-                "По условиям договора, доставке или оплате — менеджер на связи."
-                if is_ru
-                else "Щодо умов договору, доставки чи оплати — менеджер на звʼязку."
-            )
+        key = page.page_key or _PAGE_KEY_BY_SLUG.get(page.slug, "")
+        if key not in {"shipping", "returns", "privacy", "offer"}:
+            return
+        ctx["info_sections"] = sections_for_page(key)
+        meta = meta_for_page(key)
+        ctx["cta_title"] = meta["cta_title"]
+        ctx["cta_text"] = meta["cta_text"]
+        ctx["info_note"] = meta["info_note"]

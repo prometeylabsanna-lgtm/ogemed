@@ -8,7 +8,9 @@ from django.core.cache import cache
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from unfold.widgets import UnfoldAdminFileFieldWidget, UnfoldBooleanWidget
+from unfold.widgets import UnfoldBooleanWidget
+
+from apps.core.admin_widgets import AdminImagePreviewWidget
 
 from apps.core.admin_guidelines import get_image_hint, get_text_limit_hint
 from apps.core.admin_hero_slides import build_hero_slide_formset
@@ -34,6 +36,19 @@ from apps.core.site_content_registry import (
 
 SECTION_VISIBLE_FIELD = "section_visible"
 LANGS = ("uk", "ru")
+HEADER_BRAND_FIELDS = ("logo", "phone")
+
+
+class HeaderBrandForm(forms.ModelForm):
+    """Логотип і телефон шапки = поля SiteSettings (спільні з «Налаштування сайту»)."""
+
+    class Meta:
+        model = SiteSettings
+        fields = HEADER_BRAND_FIELDS
+        widgets = {
+            "logo": AdminImagePreviewWidget(),
+            "phone": CmsAdminTextInputWidget(),
+        }
 
 
 def block_field_name(page: str, key: str, suffix: str) -> str:
@@ -141,12 +156,12 @@ class SitePageContentForm(forms.Form):
             return
 
         if block.content_type == SiteBlock.ContentType.IMAGE:
-            hint = get_image_hint("block_image")
+            hint = get_image_hint(key) or get_image_hint("block_image")
             current = f"Поточне: {block.image.name}. " if block.image else ""
             self.fields[block_field_name(page, key, "image")] = forms.ImageField(
                 label=label,
                 required=False,
-                widget=UnfoldAdminFileFieldWidget(),
+                widget=AdminImagePreviewWidget(),
                 help_text=current + hint,
             )
             return
@@ -232,8 +247,20 @@ def _bound_fields_for_keys(
     return fields
 
 
-def _section_fieldsets(form: SitePageContentForm, section: ContentSection) -> list:
+def _section_fieldsets(
+    form: SitePageContentForm,
+    section: ContentSection,
+    *,
+    header_form: HeaderBrandForm | None = None,
+) -> list:
     fieldsets: list = []
+    if header_form is not None:
+        fieldsets.append(
+            (
+                "Логотип і телефон",
+                [header_form[name] for name in HEADER_BRAND_FIELDS if name in header_form.fields],
+            )
+        )
     if SECTION_VISIBLE_FIELD in form.fields:
         fieldsets.append(("Видимість", [form[SECTION_VISIBLE_FIELD]]))
     if section.field_groups:
@@ -265,19 +292,30 @@ def site_content_section_view(
 
     blocks = load_section_blocks(section)
     use_hero_slides = section.slug == "hero"
+    use_header_brand = section.slug == "header"
     slides_formset = None
+    header_form = None
+    settings_obj = SiteSettings.load() if use_header_brand else None
 
     if request.method == "POST":
         form = SitePageContentForm(section, blocks, request.POST, request.FILES)
         if use_hero_slides:
             slides_formset = build_hero_slide_formset(request.POST, request.FILES)
-            forms_ok = form.is_valid() and slides_formset.is_valid()
-        else:
-            forms_ok = form.is_valid()
+        if use_header_brand:
+            header_form = HeaderBrandForm(
+                request.POST, request.FILES, instance=settings_obj
+            )
+        forms_ok = form.is_valid()
+        if use_hero_slides:
+            forms_ok = forms_ok and slides_formset.is_valid()
+        if use_header_brand:
+            forms_ok = forms_ok and header_form.is_valid()
         if forms_ok:
             form.save()
             if slides_formset is not None:
                 slides_formset.save()
+            if header_form is not None:
+                header_form.save()
             messages.success(
                 request,
                 f"«{section.sidebar_title or section.title}» збережено.",
@@ -287,13 +325,16 @@ def site_content_section_view(
         form = SitePageContentForm(section, blocks)
         if use_hero_slides:
             slides_formset = build_hero_slide_formset()
+        if use_header_brand:
+            header_form = HeaderBrandForm(instance=settings_obj)
 
     opts = model_admin.model._meta if model_admin else SiteBlock._meta
     context = {
         **default_admin_site.each_context(request),
         "form": form,
+        "header_form": header_form,
         "section": section,
-        "fieldsets": _section_fieldsets(form, section),
+        "fieldsets": _section_fieldsets(form, section, header_form=header_form),
         "slides_formset": slides_formset,
         "preview_url": section.preview_url,
         "title": section.sidebar_title or section.title,

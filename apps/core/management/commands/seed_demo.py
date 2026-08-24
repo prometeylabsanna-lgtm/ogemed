@@ -194,6 +194,7 @@ class Command(BaseCommand):
 
         call_command("seed_catalog")
         call_command("seed_brands")
+        call_command("seed_info_sections")
         sources = settings.BASE_DIR / "media" / "brands" / "sources"
         if sources.is_dir():
             call_command("import_brand_covers", src=str(sources))

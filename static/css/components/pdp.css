@@ -201,8 +201,16 @@ body.page-pdp {
   margin-bottom: 0.4em;
 }
 
-.pdp__description > *:last-child {
-  margin-bottom: 0;
+.pdp__description strong {
+  font-weight: 700;
+}
+
+.pdp__description em {
+  font-style: italic;
+}
+
+.pdp__description u {
+  text-decoration: underline;
 }
 
 .pdp__attrs {

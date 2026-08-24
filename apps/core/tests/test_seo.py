@@ -14,14 +14,14 @@ class SeoMetaTests(TestCase):
         brand = Brand.objects.create(
             slug="seo-brand",
             name_uk="SEO Brand",
-            seo_title="Brand SEO Title",
-            seo_description="Brand SEO desc",
+            seo_title_uk="Brand SEO Title",
+            seo_description_uk="Brand SEO desc",
         )
         cat = Category.objects.create(
             slug="seo-cat",
             name_uk="SEO Cat",
-            seo_title="Cat SEO Title",
-            seo_description="Cat SEO desc",
+            seo_title_uk="Cat SEO Title",
+            seo_description_uk="Cat SEO desc",
         )
         cls.product = Product.objects.create(
             slug="seo-product",
@@ -30,8 +30,8 @@ class SeoMetaTests(TestCase):
             primary_category=cat,
             availability=Availability.IN_STOCK,
             is_active=True,
-            seo_title="Custom Product Title",
-            seo_description="Custom product description for SEO",
+            seo_title_uk="Custom Product Title",
+            seo_description_uk="Custom product description for SEO",
             short_description_uk="Short",
         )
         ProductVariant.objects.create(

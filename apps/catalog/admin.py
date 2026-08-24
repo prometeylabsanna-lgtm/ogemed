@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.text import slugify
 from unfold.admin import ModelAdmin, TabularInline
 
 from apps.core.admin_filters import (
@@ -8,145 +9,38 @@ from apps.core.admin_filters import (
     UkChoicesDropdownFilter,
     UkRelatedDropdownFilter,
 )
+from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 from apps.core.image_processing import thumb_url
 
+from .admin_product_form import ProductAdminForm, attribute_select_field_names
+from .admin_taxonomy import (
+    LABEL_LANG_SWITCH_HTML,
+    LANG_SWITCH_HTML,
+    RICHTEXT_FIELDS,
+    tinymce_widget,
+)
 from .forms import ProductImageForm
 from .labels import LABEL_FIELDS, LABELS_BY_FIELD, label_icon_url
-from .models import (
-    Attribute,
-    AttributeValue,
-    Brand,
-    Category,
-    LabelIcon,
-    Product,
-    ProductImage,
-    ProductVariant,
-)
+from .models import LabelIcon, Product, ProductImage, ProductVariant
 
-
-class AttributeValueInline(TabularInline):
-    model = AttributeValue
-    extra = 1
-
-
-@admin.register(Attribute)
-class AttributeAdmin(DropdownFiltersMixin, ModelAdmin):
-    list_display = ("name_uk", "slug", "is_filterable", "sort_order")
-    list_filter = (("is_filterable", UkBooleanDropdownFilter),)
-    prepopulated_fields = {"slug": ("name_uk",)}
-    filter_horizontal = ("categories",)
-    inlines = [AttributeValueInline]
-    fieldsets = (
-        (None, {"fields": ("slug", "is_filterable", "sort_order", "categories")}),
-        ("Українська", {"fields": ("name_uk",)}),
-        ("Русский", {"fields": ("name_ru",)}),
-    )
-
-
-@admin.register(AttributeValue)
-class AttributeValueAdmin(DropdownFiltersMixin, ModelAdmin):
-    list_display = ("name_uk", "attribute", "slug", "color_hex", "sort_order")
-    list_filter = (("attribute", UkRelatedDropdownFilter),)
-    prepopulated_fields = {"slug": ("name_uk",)}
-    fieldsets = (
-        (None, {"fields": ("attribute", "slug", "color_hex", "sort_order")}),
-        ("Українська", {"fields": ("name_uk",)}),
-        ("Русский", {"fields": ("name_ru",)}),
-    )
-
-
-@admin.register(Category)
-class CategoryAdmin(DropdownFiltersMixin, ModelAdmin):
-    list_display = ("name_uk", "slug", "parent", "is_active", "show_on_home", "sort_order")
-    list_filter = (
-        ("is_active", UkBooleanDropdownFilter),
-        ("show_on_home", UkBooleanDropdownFilter),
-    )
-    list_editable = ("show_on_home", "sort_order")
-    search_fields = ("name_uk", "name_ru", "slug")
-    prepopulated_fields = {"slug": ("name_uk",)}
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "parent",
-                    "slug",
-                    "image",
-                    "is_active",
-                    "show_on_home",
-                    "sort_order",
-                )
-            },
-        ),
-        ("Українська", {"fields": ("name_uk", "description_uk")}),
-        ("Русский", {"fields": ("name_ru", "description_ru")}),
-        ("SEO", {"fields": ("seo_title", "seo_description"), "classes": ("collapse",)}),
-    )
-
-
-@admin.register(Brand)
-class BrandAdmin(DropdownFiltersMixin, ModelAdmin):
-    list_display = ("name_uk", "slug", "is_featured", "is_active", "sort_order")
-    list_filter = (
-        ("is_active", UkBooleanDropdownFilter),
-        ("is_featured", UkBooleanDropdownFilter),
-        ("categories", UkRelatedDropdownFilter),
-    )
-    search_fields = ("name_uk", "name_ru", "slug")
-    prepopulated_fields = {"slug": ("name_uk",)}
-    filter_horizontal = ("categories",)
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "slug",
-                    "website_url",
-                    "logo",
-                    "logo_dark",
-                    "cover_image",
-                    "showcase_image",
-                    "categories",
-                    "is_featured",
-                    "is_active",
-                    "sort_order",
-                )
-            },
-        ),
-        (
-            "Українська",
-            {"fields": ("name_uk", "tagline_uk", "description_uk")},
-        ),
-        (
-            "Русский",
-            {"fields": ("name_ru", "tagline_ru", "description_ru")},
-        ),
-        ("SEO", {"fields": ("seo_title", "seo_description"), "classes": ("collapse",)}),
-    )
+# Реєстрація Attribute / Category / Brand
+from . import admin_taxonomy  # noqa: F401
 
 
 class ProductImageInline(TabularInline):
     model = ProductImage
     form = ProductImageForm
+    formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     extra = 1
-    readonly_fields = ("preview",)
-    fields = ("preview", "image", "alt_uk", "alt_ru", "is_main", "sort_order")
-
-    @admin.display(description="Превʼю")
-    def preview(self, obj: ProductImage):
-        if not obj.pk or not obj.image:
-            return "—"
-        return format_html(
-            '<img src="{}" alt="" width="56" height="56" '
-            'style="object-fit:cover;border-radius:4px">',
-            thumb_url(obj.image),
-        )
+    fields = ("image", "alt_uk", "alt_ru", "is_main")
+    ordering = ("-is_main", "id")
 
 
 @admin.register(Product)
 class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
     change_form_template = "admin/catalog/product/change_form.html"
+    form = ProductAdminForm
+    formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     list_display = (
         "name_uk",
         "sku",
@@ -155,25 +49,23 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
         "brand",
         "status",
         "availability",
-        "is_active",
     )
     list_filter = (
         ("status", UkChoicesDropdownFilter),
         ("availability", UkChoicesDropdownFilter),
         ("brand", UkRelatedDropdownFilter),
-        ("is_active", UkBooleanDropdownFilter),
         ("is_hit", UkBooleanDropdownFilter),
         ("is_new", UkBooleanDropdownFilter),
         ("is_sale", UkBooleanDropdownFilter),
     )
     search_fields = ("name_uk", "name_ru", "slug", "sku", "barcode", "search_text")
-    prepopulated_fields = {"slug": ("name_uk",)}
-    filter_horizontal = ("categories", "attribute_values", "related_products")
+    filter_horizontal = ("categories", "related_products")
     inlines = [ProductImageInline]
     fieldsets = (
         (
             "Артикул і ціна",
             {
+                "classes": ("product-shared-fields",),
                 "fields": (
                     "sku",
                     "barcode",
@@ -192,43 +84,49 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
         (
             "Загальне",
             {
+                "classes": ("product-shared-fields",),
                 "fields": (
-                    "slug",
                     "status",
                     "brand",
                     "primary_category",
                     "categories",
-                    "is_active",
                     "is_hit",
                     "is_new",
                     "is_sale",
-                    "sort_order",
                     "popularity",
-                )
+                ),
             },
         ),
         (
-            "Українська",
+            "Назва, опис і SEO",
             {
-                "classes": ("cms-lang-uk",),
-                "fields": ("name_uk", "short_description_uk", "description_uk"),
-            },
-        ),
-        (
-            "Русский",
-            {
-                "classes": ("cms-lang-ru",),
-                "fields": ("name_ru", "short_description_ru", "description_ru"),
+                "classes": ("product-i18n-fields",),
+                "description": LANG_SWITCH_HTML,
+                "fields": (
+                    "name_uk",
+                    "short_description_uk",
+                    "description_uk",
+                    "seo_title_uk",
+                    "seo_description_uk",
+                    "name_ru",
+                    "short_description_ru",
+                    "description_ru",
+                    "seo_title_ru",
+                    "seo_description_ru",
+                ),
             },
         ),
         (
             "Звʼязки",
-            {"fields": ("attribute_values", "related_products")},
+            {
+                "classes": ("product-shared-fields",),
+                "fields": ("related_products",),
+            },
         ),
         (
             "Мітки на сторінці товару",
             {
-                "classes": ("labels-grid",),
+                "classes": ("labels-grid", "product-shared-fields"),
                 "fields": LABEL_FIELDS,
                 "description": (
                     "Увімкнені мітки показуються <strong>іконками під описом</strong> "
@@ -237,14 +135,44 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
                 ),
             },
         ),
-        ("SEO", {"fields": ("seo_title", "seo_description"), "classes": ("collapse",)}),
     )
 
     class Media:
-        css = {"all": ("css/admin/site_content.css",)}
-        js = ("js/admin/product_lang_tabs.js",)
+        css = {"all": ("css/admin/site_content.css", "css/admin/ogemed_theme.css")}
+        js = (
+            "js/admin/catalog_lang_tabs.js",
+            "js/admin/product_image_main.js",
+        )
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super().get_fieldsets(request, obj))
+        attr_fields = attribute_select_field_names()
+        insert_at = next(
+            (i for i, (title, _) in enumerate(fieldsets) if title == "Звʼязки"),
+            len(fieldsets),
+        )
+        fieldsets.insert(
+            insert_at,
+            (
+                "Характеристики",
+                {
+                    "classes": ("product-attrs-grid", "product-shared-fields"),
+                    "fields": attr_fields,
+                    "description": (
+                        "Для кожної характеристики оберіть одне значення "
+                        "у випадаючому списку. Порожньо = не показувати."
+                    ),
+                },
+            ),
+        )
+        return fieldsets
 
     def get_form(self, request, obj=None, **kwargs):
+        fields = kwargs.get("fields")
+        if fields is not None:
+            kwargs["fields"] = tuple(
+                f for f in fields if not str(f).startswith("attr_select_")
+            )
         form = super().get_form(request, obj, **kwargs)
         label_map = {
             "name_uk": "Назва",
@@ -253,6 +181,10 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
             "short_description_ru": "Короткий опис",
             "description_uk": "Опис",
             "description_ru": "Опис",
+            "seo_title_uk": "SEO title",
+            "seo_title_ru": "SEO title",
+            "seo_description_uk": "SEO description",
+            "seo_description_ru": "SEO description",
         }
         for name, label in label_map.items():
             if name in form.base_fields:
@@ -260,6 +192,8 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
         return form
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name in RICHTEXT_FIELDS:
+            kwargs["widget"] = tinymce_widget()
         formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
         label = LABELS_BY_FIELD.get(db_field.name)
         if label and formfield is not None:
@@ -267,32 +201,76 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
             formfield.help_text = format_html(
                 '<img src="{}" alt="{}" class="admin-label-icon-preview" width="40" height="40">',
                 url,
-                label.title,
+                label.display_title(),
             )
         return formfield
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "attribute_values":
-            kwargs["queryset"] = AttributeValue.objects.filter(
-                attribute__is_filterable=True
-            ).select_related("attribute").order_by(
-                "attribute__sort_order",
-                "attribute__name_uk",
-                "sort_order",
-                "name_uk",
-            )
         formfield = super().formfield_for_manytomany(db_field, request, **kwargs)
-        if db_field.name in ("attribute_values", "categories", "related_products"):
+        if db_field.name in ("categories", "related_products") and formfield is not None:
             formfield.help_text = ""
         return formfield
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        if hasattr(form, "save_attribute_values"):
+            form.save_attribute_values()
+
+    def save_model(self, request, obj, form, change):
+        if not change or not obj.slug:
+            obj.slug = self._unique_product_slug(obj.name_uk, obj.pk)
+        super().save_model(request, obj, form, change)
+
+    @staticmethod
+    def _unique_product_slug(name: str, pk) -> str:
+        base = slugify(name) or "product"
+        base = base[:140]
+        slug = base
+        n = 2
+        qs = Product.objects.all()
+        if pk:
+            qs = qs.exclude(pk=pk)
+        while qs.filter(slug=slug).exists():
+            slug = f"{base}-{n}"
+            n += 1
+        return slug
 
 
 @admin.register(LabelIcon)
 class LabelIconAdmin(ModelAdmin):
-    list_display = ("preview", "title", "key", "updated_at")
-    readonly_fields = ("key", "title", "preview_large", "updated_at")
-    fields = ("title", "key", "preview_large", "image", "updated_at")
-    ordering = ("title",)
+    change_form_template = "admin/catalog/i18n_change_form.html"
+    formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
+    list_display = ("preview", "title_uk", "title_ru", "key", "updated_at")
+    readonly_fields = ("key", "preview_large", "updated_at")
+    fieldsets = (
+        (
+            "Загальне",
+            {
+                "classes": ("product-shared-fields",),
+                "fields": ("key", "preview_large", "image", "updated_at"),
+            },
+        ),
+        (
+            "Підпис",
+            {
+                "classes": ("product-i18n-fields",),
+                "description": LABEL_LANG_SWITCH_HTML,
+                "fields": ("title_uk", "title_ru"),
+            },
+        ),
+    )
+    ordering = ("title_uk",)
+
+    class Media:
+        css = {"all": ("css/admin/site_content.css", "css/admin/ogemed_theme.css")}
+        js = ("js/admin/catalog_lang_tabs.js",)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        for name in ("title_uk", "title_ru"):
+            if name in form.base_fields:
+                form.base_fields[name].label = "Підпис"
+        return form
 
     @admin.display(description="Превʼю")
     def preview(self, obj: LabelIcon):
@@ -300,7 +278,7 @@ class LabelIconAdmin(ModelAdmin):
         return format_html(
             '<img src="{}" alt="{}" class="admin-label-icon-preview" width="40" height="40">',
             url,
-            obj.title,
+            obj.title_uk,
         )
 
     @admin.display(description="Поточна іконка")
@@ -309,7 +287,7 @@ class LabelIconAdmin(ModelAdmin):
         return format_html(
             '<img src="{}" alt="{}" class="admin-label-icon-preview--lg" width="72" height="72">',
             url,
-            obj.title,
+            obj.title_uk,
         )
 
     def has_add_permission(self, request) -> bool:
@@ -346,5 +324,10 @@ class ProductVariantAdmin(DropdownFiltersMixin, ModelAdmin):
 @admin.register(ProductImage)
 class ProductImageAdmin(DropdownFiltersMixin, ModelAdmin):
     form = ProductImageForm
+    formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     list_display = ("product", "variant", "is_main", "sort_order")
     list_filter = (("is_main", UkBooleanDropdownFilter),)
+    fields = ("product", "variant", "image", "alt_uk", "alt_ru", "is_main")
+
+    class Media:
+        js = ("js/admin/product_image_main.js",)

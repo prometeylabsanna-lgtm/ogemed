@@ -204,22 +204,8 @@ class SiteBlock(models.Model):
 class HomeHeroSettings(SiteSettings):
     class Meta:
         proxy = True
-        verbose_name = _("Головна — Hero")
-        verbose_name_plural = _("Головна — Hero")
-
-
-class HomeBenefitsSettings(SiteSettings):
-    class Meta:
-        proxy = True
-        verbose_name = _("Головна — Переваги")
-        verbose_name_plural = _("Головна — Переваги")
-
-
-class HomeCategoriesSettings(SiteSettings):
-    class Meta:
-        proxy = True
-        verbose_name = _("Головна — Категорії")
-        verbose_name_plural = _("Головна — Категорії")
+        verbose_name = _("Головна — банер")
+        verbose_name_plural = _("Головна — банер")
 
 
 class HomeProductsSettings(SiteSettings):
@@ -243,47 +229,11 @@ class HomeCareSettings(SiteSettings):
         verbose_name_plural = _("Головна — Підбір догляду")
 
 
-class HomePromoSettings(SiteSettings):
-    class Meta:
-        proxy = True
-        verbose_name = _("Головна — Промо")
-        verbose_name_plural = _("Головна — Промо")
-
-
-class CatalogSeoSettings(SiteSettings):
-    class Meta:
-        proxy = True
-        verbose_name = _("Каталог — SEO")
-        verbose_name_plural = _("Каталог — SEO")
-
-
-class CatalogFiltersSettings(SiteSettings):
-    class Meta:
-        proxy = True
-        verbose_name = _("Каталог — Фільтри")
-        verbose_name_plural = _("Каталог — Фільтри")
-
-
-class ShippingMethodsSettings(SiteSettings):
-    class Meta:
-        proxy = True
-        verbose_name = _("Доставка — Методи")
-        verbose_name_plural = _("Доставка — Методи")
-
-
-class ShippingPaymentSettings(SiteSettings):
-    class Meta:
-        proxy = True
-        verbose_name = _("Доставка — Оплата")
-        verbose_name_plural = _("Доставка — Оплата")
-
-
 class ContactsIntroSettings(SiteSettings):
     class Meta:
         proxy = True
         verbose_name = _("Контакти — Intro")
         verbose_name_plural = _("Контакти — Intro")
-
 
 class SiteHeaderSettings(SiteSettings):
     class Meta:

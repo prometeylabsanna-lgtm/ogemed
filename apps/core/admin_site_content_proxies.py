@@ -8,18 +8,11 @@ from unfold.admin import ModelAdmin
 
 from apps.core.admin_site_content import site_content_section_view
 from apps.core.models import (
-    CatalogFiltersSettings,
-    CatalogSeoSettings,
     ContactsIntroSettings,
-    HomeBenefitsSettings,
     HomeBrandsSettings,
     HomeCareSettings,
-    HomeCategoriesSettings,
     HomeHeroSettings,
     HomeProductsSettings,
-    HomePromoSettings,
-    ShippingMethodsSettings,
-    ShippingPaymentSettings,
     SiteFooterSettings,
     SiteHeaderSettings,
     SiteSettings,
@@ -54,16 +47,9 @@ class SiteContentSectionAdmin(SingletonSettingsAdmin):
 
 _SECTION_MODELS: tuple[tuple[type[SiteSettings], str, str], ...] = (
     (HomeHeroSettings, "home", "hero"),
-    (HomeBenefitsSettings, "home", "benefits"),
-    (HomeCategoriesSettings, "home", "categories"),
     (HomeProductsSettings, "home", "products"),
-    (HomeBrandsSettings, "home", "brands"),
     (HomeCareSettings, "home", "care"),
-    (HomePromoSettings, "home", "promo"),
-    (CatalogSeoSettings, "catalog", "seo"),
-    (CatalogFiltersSettings, "catalog", "filters"),
-    (ShippingMethodsSettings, "shipping", "methods"),
-    (ShippingPaymentSettings, "shipping", "payment"),
+    (HomeBrandsSettings, "home", "brands"),
     (ContactsIntroSettings, "contacts", "intro"),
     (SiteHeaderSettings, "site", "header"),
     (SiteFooterSettings, "site", "footer"),

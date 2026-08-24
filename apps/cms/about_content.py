@@ -45,10 +45,11 @@ class AboutContent(models.Model):
         ),
     )
     hero_image = OptimizedImageField(
-        _("Hero зображення"),
+        _("Зображення банера"),
         upload_to="about/",
         blank=True,
         max_side=MAX_SIDE_HERO,
+        help_text=_("Верхній банер «Про нас». Desktop ≈ 1920×800, WebP/JPEG."),
     )
 
     # —— Історія ——

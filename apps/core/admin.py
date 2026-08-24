@@ -1,6 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 
+from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 from apps.core.map_embed import normalize_map_embed
 
 from .models import SiteSettings
@@ -8,6 +9,7 @@ from .models import SiteSettings
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(ModelAdmin):
+    formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     fieldsets = (
         (
             "Контакти",
@@ -86,3 +88,4 @@ class SiteSettingsAdmin(ModelAdmin):
 
 # Proxy CMS sections
 from apps.core import admin_site_content_proxies  # noqa: E402, F401
+from apps.core import admin_logentry  # noqa: E402, F401

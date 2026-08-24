@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
 
 from apps.catalog.models import Brand
-from apps.catalog.services import hits_products, home_quick_categories, new_products
+from apps.catalog.services import hits_products, new_products
 from apps.cms.models import HeroSlide
 
 
@@ -30,7 +30,6 @@ class HomeView(TemplateView):
         ctx["hero_slides"] = HeroSlide.objects.filter(is_active=True)
         ctx["hits"] = hits_products(8)
         ctx["new_items"] = new_products(8)
-        ctx["quick_categories"] = home_quick_categories(8)
         ctx["featured_brands"] = Brand.objects.filter(
             is_active=True, is_featured=True
         ).order_by("sort_order", "name_uk")[:3]

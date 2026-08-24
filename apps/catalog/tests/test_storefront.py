@@ -249,14 +249,6 @@ class CatalogStorefrontTests(TestCase):
         self.assertNotContains(r, "Сироватка під замовлення")
         self.assertContains(r, 'name="availability"')
 
-    def test_home_quick_categories(self):
-        self.cat.show_on_home = True
-        self.cat.save(update_fields=["show_on_home"])
-        r = self.client.get("/")
-        self.assertContains(r, "home-quick")
-        self.assertContains(r, self.cat.name_uk)
-        self.assertContains(r, self.cat.get_absolute_url())
-
     def test_catalog_load_more_partial(self):
         r = self.client.get(
             reverse("catalog:list"),

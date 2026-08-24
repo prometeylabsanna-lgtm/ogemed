@@ -519,7 +519,8 @@ class Command(BaseCommand):
 
         seeded_slugs = {item["slug"] for item in samples}
         Product.objects.exclude(slug__in=seeded_slugs).filter(is_active=True).update(
-            is_active=False
+            is_active=False,
+            status="inactive",
         )
 
         # order_by робить порядок незалежним від того, коли бренд додали в базу

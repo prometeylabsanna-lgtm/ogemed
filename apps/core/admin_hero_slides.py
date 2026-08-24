@@ -3,7 +3,9 @@ from __future__ import annotations
 
 from django import forms
 from django.forms import BaseModelFormSet, modelformset_factory
-from unfold.widgets import UnfoldAdminFileFieldWidget, UnfoldBooleanWidget
+from unfold.widgets import UnfoldBooleanWidget
+
+from apps.core.admin_widgets import AdminImagePreviewWidget
 
 from apps.cms.models import HeroSlide
 from apps.core.admin_guidelines import get_image_hint
@@ -28,7 +30,7 @@ class HeroSlideForm(forms.ModelForm):
             "is_active",
         )
         widgets = {
-            "image": UnfoldAdminFileFieldWidget(),
+            "image": AdminImagePreviewWidget(),
             "title_uk": CmsAdminTextInputWidget(),
             "title_ru": CmsAdminTextInputWidget(),
             "subtitle_uk": CmsAdminTextInputWidget(),

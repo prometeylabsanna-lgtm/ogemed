@@ -83,22 +83,6 @@ class Brand(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     name_ru = models.CharField(_("Назва (RU)"), max_length=255, blank=True)
     tagline_uk = models.TextField(_("Короткий опис (UK)"), blank=True)
     tagline_ru = models.TextField(_("Короткий опис (RU)"), blank=True)
-    logo = OptimizedImageField(
-        _("Логотип"),
-        upload_to="brands/",
-        blank=True,
-        max_side=MAX_SIDE_LOGO,
-        allow_svg=True,
-    )
-    logo_dark = OptimizedImageField(
-        _("Логотип (темний)"),
-        upload_to="brands/",
-        blank=True,
-        help_text=_("Варіант для темного фону."),
-        max_side=MAX_SIDE_LOGO,
-        allow_svg=True,
-    )
-    website_url = models.URLField(_("Сайт бренду"), blank=True)
     description_uk = models.TextField(_("Опис / історія (UK)"), blank=True)
     description_ru = models.TextField(_("Опис / історія (RU)"), blank=True)
     cover_image = OptimizedImageField(
@@ -114,12 +98,6 @@ class Brand(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
         blank=True,
         help_text=_("PNG без фону. Якщо порожнє — візьметься фото для каталогу."),
         max_side=MAX_SIDE_PRODUCT,
-    )
-    categories = models.ManyToManyField(
-        "catalog.Category",
-        blank=True,
-        related_name="brands",
-        verbose_name=_("Категорії"),
     )
     is_featured = models.BooleanField(_("Показувати на головній"), default=False)
     is_active = models.BooleanField(_("Активний"), default=True)
@@ -219,8 +197,7 @@ class ProductQuerySet(models.QuerySet):
 class Product(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     class Status(models.TextChoices):
         ACTIVE = "active", _("Активний")
-        DRAFT = "draft", _("Чернетка")
-        ARCHIVED = "archived", _("Архів")
+        INACTIVE = "inactive", _("Неактивний")
 
     slug = models.SlugField(_("Slug"), max_length=160, unique=True)
     sku = models.CharField(_("Артикул (SKU)"), max_length=64, unique=True)
@@ -412,6 +389,8 @@ class Product(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     def save(self, *args, **kwargs) -> None:
         if not (self.sku or "").strip():
             self.sku = f"SKU-{uuid.uuid4().hex[:10].upper()}"
+        # status і is_active синхронізуємо: одне джерело правди для вітрини
+        self.is_active = self.status == self.Status.ACTIVE
         super().save(*args, **kwargs)
         self.sync_commerce_variant()
         self.rebuild_search_text()
@@ -516,8 +495,8 @@ class ProductImage(TimeStampedModel):
         help_text=_("Від 1600px по довгій стороні — фото збільшується на сторінці товару."),
         max_side=MAX_SIDE_PRODUCT,
     )
-    alt_uk = models.CharField(_("Alt (UK)"), max_length=255, blank=True)
-    alt_ru = models.CharField(_("Alt (RU)"), max_length=255, blank=True)
+    alt_uk = models.CharField(_("Назва (UK)"), max_length=255, blank=True)
+    alt_ru = models.CharField(_("Назва (RU)"), max_length=255, blank=True)
     is_main = models.BooleanField(_("Головне"), default=False)
     sort_order = models.PositiveIntegerField(_("Порядок"), default=0)
 
@@ -529,12 +508,22 @@ class ProductImage(TimeStampedModel):
     def __str__(self) -> str:
         return f"Image #{self.pk} for {self.product_id}"
 
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+        if self.is_main and self.product_id:
+            (
+                ProductImage.objects.filter(product_id=self.product_id)
+                .exclude(pk=self.pk)
+                .update(is_main=False)
+            )
+
 
 class LabelIcon(models.Model):
     """Заміна PNG-маски мітки товару (ключ = ProductLabel.icon)."""
 
     key = models.SlugField(_("Ключ іконки"), max_length=64, unique=True)
-    title = models.CharField(_("Назва"), max_length=120)
+    title_uk = models.CharField(_("Підпис (UK)"), max_length=120)
+    title_ru = models.CharField(_("Підпис (RU)"), max_length=120, blank=True)
     image = OptimizedImageField(
         _("Зображення"),
         upload_to="label_icons/",
@@ -548,20 +537,38 @@ class LabelIcon(models.Model):
     class Meta:
         verbose_name = _("Іконка мітки")
         verbose_name_plural = _("Іконки міток")
-        ordering = ["title"]
+        ordering = ["title_uk"]
 
     def __str__(self) -> str:
-        return self.title
+        return self.title_uk
+
+    @property
+    def title(self) -> str:
+        from django.utils.translation import get_language
+
+        lang = (get_language() or "uk")[:2]
+        if lang == "ru" and self.title_ru:
+            return self.title_ru
+        return self.title_uk
 
     @classmethod
     def ensure_defaults(cls) -> None:
-        from apps.catalog.labels import PRODUCT_LABELS
+        from apps.catalog.labels import LABEL_TITLE_RU, PRODUCT_LABELS
 
         for label in PRODUCT_LABELS:
-            cls.objects.get_or_create(
+            title_uk = str(label.title)
+            obj, created = cls.objects.get_or_create(
                 key=label.icon,
-                defaults={"title": str(label.title)},
+                defaults={
+                    "title_uk": title_uk,
+                    "title_ru": LABEL_TITLE_RU.get(label.icon, ""),
+                },
             )
+            if not created and not obj.title_ru:
+                ru = LABEL_TITLE_RU.get(label.icon, "")
+                if ru:
+                    obj.title_ru = ru
+                    obj.save(update_fields=["title_ru"])
 
 
 __all__ = [
