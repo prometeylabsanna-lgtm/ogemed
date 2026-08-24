@@ -53,11 +53,20 @@ class SiteContentAdminTests(TestCase):
             follow = self.client.get(response["Location"])
             self.assertEqual(follow.status_code, 200)
 
-    def test_header_section_has_logo_and_phone(self):
-        url = reverse("admin:core_siteheadersettings_change", args=[1])
+    def test_products_section_split_visibility(self):
+        url = reverse("admin:core_homeproductssettings_change", args=[1])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         html = response.content.decode()
-        self.assertIn('name="logo"', html)
-        self.assertIn('name="phone"', html)
-        self.assertIn("Логотип і телефон", html)
+        self.assertIn("Новинки", html)
+        self.assertIn("Хіти", html)
+        self.assertIn("Показувати блок «Новинки»", html)
+        self.assertIn("Показувати блок «Хіти»", html)
+
+    def test_brands_section_has_brand_picker(self):
+        url = reverse("admin:core_homebrandssettings_change", args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        self.assertIn("Бренди на головній", html)
+

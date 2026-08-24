@@ -70,6 +70,10 @@
             {% if slides_formset %}
             {% include "admin/core/hero_slides_fieldset.html" with formset=slides_formset %}
             {% endif %}
+
+            {% if brands_formset %}
+            {% include "admin/core/home_brands_fieldset.html" with formset=brands_formset %}
+            {% endif %}
         </div>
 
         <div class="site-content-editor__actions">

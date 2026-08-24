@@ -55,6 +55,7 @@ class InfoPageSectionAdmin(DropdownFiltersMixin, ModelAdmin):
         ("is_active", UkBooleanDropdownFilter),
     )
     search_fields = ("heading_uk", "heading_ru", "body_uk", "body_ru")
+    search_help_text = "Пошук…"
     ordering = ("page_key", "sort_order", "id")
     fieldsets = (
         (
@@ -70,6 +71,48 @@ class InfoPageSectionAdmin(DropdownFiltersMixin, ModelAdmin):
             {"fields": ("heading_ru", "subheading_ru", "body_ru")},
         ),
     )
+
+    @staticmethod
+    def _page_key_from_request(request) -> str | None:
+        page_key = request.GET.get("page_key__exact") or request.GET.get("page_key")
+        if page_key in {c.value for c in InfoPageSection.PageKey}:
+            return page_key
+        return None
+
+    def get_list_display(self, request):
+        if self._page_key_from_request(request):
+            return ("heading_uk", "layout", "sort_order", "is_active")
+        return self.list_display
+
+    def get_list_filter(self, request):
+        if self._page_key_from_request(request):
+            return (
+                ("layout", UkChoicesDropdownFilter),
+                ("is_active", UkBooleanDropdownFilter),
+            )
+        return self.list_filter
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        page_key = self._page_key_from_request(request)
+        if page_key:
+            return qs.filter(page_key=page_key)
+        return qs
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        page_key = self._page_key_from_request(request)
+        if page_key:
+            label = dict(InfoPageSection.PageKey.choices)[page_key]
+            extra_context["title"] = f"Секції — {label}"
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def get_changeform_initial_data(self, request):
+        data = super().get_changeform_initial_data(request)
+        page_key = self._page_key_from_request(request)
+        if page_key:
+            data["page_key"] = page_key
+        return data
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name in ("body_uk", "body_ru"):
@@ -115,11 +158,11 @@ class AboutContentAdmin(ModelAdmin):
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     fieldsets = (
         (
-            "Hero / банер",
+            "Верхній банер",
             {
                 "description": (
-                    "Верхній банер сторінки «Про нас». "
-                    "Якщо зображення не завантажено — показується дефолтне static/img/about/hero.jpg."
+                    "Перший великий блок на сторінці «Про нас». "
+                    "Якщо фото немає — показується стандартне зображення."
                 ),
                 "fields": (
                     "hero_visible",
@@ -186,7 +229,7 @@ class AboutContentAdmin(ModelAdmin):
             },
         ),
         (
-            "CTA",
+            "Нижній блок з кнопками",
             {
                 "fields": (
                     "cta_visible",

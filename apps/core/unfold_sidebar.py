@@ -43,6 +43,35 @@ def _admin_link(prefix: str, *parts: str) -> str:
     return f"/{base}/{path}/" if path else f"/{base}/"
 
 
+def _admin_link_query(prefix: str, *parts: str, query: str = "") -> str:
+    url = _admin_link(prefix, *parts)
+    return f"{url}?{query}" if query else url
+
+
+_LEGAL_PAGES = (
+    ("shipping", "Доставка і оплата", "local_shipping"),
+    ("returns", "Повернення", "undo"),
+    ("privacy", "Конфіденційність", "policy"),
+    ("offer", "Оферта", "gavel"),
+)
+
+
+def _legal_page_sidebar_items(prefix: str) -> list[dict]:
+    return [
+        {
+            "title": title,
+            "icon": icon,
+            "link": _admin_link_query(
+                prefix,
+                "cms",
+                "infopagesection",
+                query=f"page_key__exact={key}",
+            ),
+        }
+        for key, title, icon in _LEGAL_PAGES
+    ]
+
+
 def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
     prefix = (admin_url or "ogm8k2x9p4qh7n").strip("/")
     return {
@@ -132,13 +161,16 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
                             "icon": "article",
                             "link": _admin_link(prefix, "cms", "cmspage"),
                         },
+                    ],
+                },
+                {
+                    "title": "Юридичні сторінки",
+                    "separator": True,
+                    "collapsible": True,
+                    "items": [
+                        *_legal_page_sidebar_items(prefix),
                         {
-                            "title": "Юридичні секції",
-                            "icon": "gavel",
-                            "link": _admin_link(prefix, "cms", "infopagesection"),
-                        },
-                        {
-                            "title": "Юридичні CTA / замітки",
+                            "title": "CTA / замітки (усі)",
                             "icon": "notes",
                             "link": _admin_link(prefix, "cms", "infopagemeta"),
                         },

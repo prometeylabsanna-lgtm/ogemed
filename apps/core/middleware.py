@@ -13,10 +13,12 @@ class ForceAdminUkrainianMiddleware:
         self._prefix = f"/{(getattr(settings, 'ADMIN_URL', 'admin') or 'admin').strip('/')}/"
 
     def __call__(self, request):
-        if request.path.startswith(self._prefix):
-            translation.activate("uk")
+        if not request.path.startswith(self._prefix):
+            return self.get_response(request)
+
+        # override тримає uk на весь request (activate інколи скидає LocaleMiddleware / view).
+        with translation.override("uk"):
             request.LANGUAGE_CODE = "uk"
-        response = self.get_response(request)
-        if request.path.startswith(self._prefix):
-            response.headers.setdefault("Content-Language", "uk")
+            response = self.get_response(request)
+        response.headers.setdefault("Content-Language", "uk")
         return response

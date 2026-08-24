@@ -1,0 +1,47 @@
+{% load i18n %}
+
+<section class="site-content-fieldset border border-base-200 dark:border-base-700 rounded-default shadow-sm dark:bg-base-900 p-4 md:p-5" data-home-brands>
+  <div class="home-brands-admin__head">
+    <div>
+      <h2 class="site-content-fieldset__title text-font-important-light dark:text-font-important-dark">Бренди на головній</h2>
+      <p class="home-brands-admin__hint text-font-subtle-light dark:text-font-subtle-dark">
+        Увімкніть «На головній», задайте порядок і фото вітрини. На сайті — до 3 брендів.
+      </p>
+    </div>
+  </div>
+
+  {{ formset.management_form }}
+  {% if formset.non_form_errors %}
+    {% include "unfold/helpers/messages/errornote.html" with errors=formset.non_form_errors %}
+  {% endif %}
+
+  {% if not formset.forms %}
+    <p class="home-brands-admin__empty text-font-subtle-light dark:text-font-subtle-dark">
+      Немає активних брендів. Додайте їх у Каталозі → Бренди.
+    </p>
+  {% else %}
+  <div class="home-brands-admin__list">
+    {% for brand_form in formset %}
+    <div class="home-brands-admin__row border border-base-200 dark:border-base-700{% if brand_form.errors %} is-invalid{% endif %}">
+      {% for hidden in brand_form.hidden_fields %}{{ hidden }}{% endfor %}
+      <div class="home-brands-admin__name text-font-important-light dark:text-font-important-dark">
+        {{ brand_form.instance.name_uk }}
+        {% if brand_form.instance.cover_image %}
+        <img class="home-brands-admin__thumb" src="{{ brand_form.instance.cover_image.url }}" alt="" width="40" height="40" loading="lazy" decoding="async">
+        {% endif %}
+      </div>
+      <div class="home-brands-admin__fields">
+        {% include "unfold/helpers/field.html" with field=brand_form.is_featured %}
+        {% include "unfold/helpers/field.html" with field=brand_form.sort_order %}
+        {% include "unfold/helpers/field.html" with field=brand_form.showcase_image %}
+      </div>
+      {% if brand_form.errors %}
+        <div class="home-brands-admin__errors">
+          {% for err in brand_form.non_field_errors %}<p>{{ err }}</p>{% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>

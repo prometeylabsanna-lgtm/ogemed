@@ -8,28 +8,34 @@ from apps.core.image_processing import MAX_SIDE_HERO, MAX_SIDE_PRODUCT
 class AboutContent(models.Model):
     """Singleton content for /pro-nas/ — секції з окремими полями UK/RU."""
 
-    # —— Hero ——
-    hero_visible = models.BooleanField(_("Hero видимий"), default=True)
+    # —— Верхній банер ——
+    hero_visible = models.BooleanField(_("Показувати верхній банер"), default=True)
     hero_kicker_uk = models.CharField(
-        _("Hero kicker (UK)"), max_length=80, blank=True, default="OGEMED for you"
+        _("Надпис над заголовком [UA]"),
+        max_length=80,
+        blank=True,
+        default="OGEMED for you",
     )
     hero_kicker_ru = models.CharField(
-        _("Hero kicker (RU)"), max_length=80, blank=True, default="OGEMED for you"
+        _("Надпис над заголовком [RU]"),
+        max_length=80,
+        blank=True,
+        default="OGEMED for you",
     )
     hero_title_uk = models.CharField(
-        _("Hero заголовок (UK)"),
+        _("Заголовок банера [UA]"),
         max_length=160,
         blank=True,
         default="Краса з турботою про вас",
     )
     hero_title_ru = models.CharField(
-        _("Hero заголовок (RU)"),
+        _("Заголовок банера [RU]"),
         max_length=160,
         blank=True,
         default="Красота с заботой о вас",
     )
     hero_text_uk = models.TextField(
-        _("Hero текст (UK)"),
+        _("Текст банера [UA]"),
         blank=True,
         default=(
             "Ми допомагаємо обрати догляд, якому можна довіряти — "
@@ -37,7 +43,7 @@ class AboutContent(models.Model):
         ),
     )
     hero_text_ru = models.TextField(
-        _("Hero текст (RU)"),
+        _("Текст банера [RU]"),
         blank=True,
         default=(
             "Мы помогаем выбрать уход, которому можно доверять — "
@@ -55,10 +61,16 @@ class AboutContent(models.Model):
     # —— Історія ——
     history_visible = models.BooleanField(_("Історія видима"), default=True)
     history_kicker_uk = models.CharField(
-        _("Історія kicker (UK)"), max_length=80, blank=True, default="Історія"
+        _("Надпис секції «Історія» [UA]"),
+        max_length=80,
+        blank=True,
+        default="Історія",
     )
     history_kicker_ru = models.CharField(
-        _("Історія kicker (RU)"), max_length=80, blank=True, default="История"
+        _("Надпис секції «Історія» [RU]"),
+        max_length=80,
+        blank=True,
+        default="История",
     )
     history_title_uk = models.CharField(
         _("Історія заголовок (UK)"),
@@ -200,13 +212,13 @@ class AboutContent(models.Model):
     # —— Філософія ——
     philosophy_visible = models.BooleanField(_("Філософія видима"), default=True)
     philosophy_kicker_uk = models.CharField(
-        _("Філософія kicker (UK)"),
+        _("Надпис секції «Філософія» [UA]"),
         max_length=80,
         blank=True,
         default="Філософія догляду",
     )
     philosophy_kicker_ru = models.CharField(
-        _("Філософія kicker (RU)"),
+        _("Надпис секції «Філософія» [RU]"),
         max_length=80,
         blank=True,
         default="Философия ухода",
@@ -328,22 +340,22 @@ class AboutContent(models.Model):
         default="Спокойствие в решении вместо усталости от бесконечного шума.",
     )
 
-    # —— CTA ——
-    cta_visible = models.BooleanField(_("CTA видимий"), default=True)
+    # —— Нижній заклик ——
+    cta_visible = models.BooleanField(_("Показувати нижній блок з кнопками"), default=True)
     cta_title_uk = models.CharField(
-        _("CTA заголовок (UK)"),
+        _("Заголовок нижнього блоку [UA]"),
         max_length=160,
         blank=True,
         default="Готові знайти свій догляд?",
     )
     cta_title_ru = models.CharField(
-        _("CTA заголовок (RU)"),
+        _("Заголовок нижнього блоку [RU]"),
         max_length=160,
         blank=True,
         default="Готовы найти свой уход?",
     )
     cta_text_uk = models.TextField(
-        _("CTA текст (UK)"),
+        _("Текст нижнього блоку [UA]"),
         blank=True,
         default=(
             "Перегляньте каталог або напишіть нам — підкажемо за брендом, "
@@ -351,7 +363,7 @@ class AboutContent(models.Model):
         ),
     )
     cta_text_ru = models.TextField(
-        _("CTA текст (RU)"),
+        _("Текст нижнього блоку [RU]"),
         blank=True,
         default=(
             "Посмотрите каталог или напишите нам — подскажем по бренду, "
@@ -359,16 +371,28 @@ class AboutContent(models.Model):
         ),
     )
     cta_catalog_label_uk = models.CharField(
-        _("CTA каталог (UK)"), max_length=80, blank=True, default="До каталогу"
+        _("Кнопка «До каталогу» [UA]"),
+        max_length=80,
+        blank=True,
+        default="До каталогу",
     )
     cta_catalog_label_ru = models.CharField(
-        _("CTA каталог (RU)"), max_length=80, blank=True, default="В каталог"
+        _("Кнопка «До каталогу» [RU]"),
+        max_length=80,
+        blank=True,
+        default="В каталог",
     )
     cta_contacts_label_uk = models.CharField(
-        _("CTA контакти (UK)"), max_length=80, blank=True, default="Контакти"
+        _("Кнопка «Контакти» [UA]"),
+        max_length=80,
+        blank=True,
+        default="Контакти",
     )
     cta_contacts_label_ru = models.CharField(
-        _("CTA контакти (RU)"), max_length=80, blank=True, default="Контакты"
+        _("Кнопка «Контакти» [RU]"),
+        max_length=80,
+        blank=True,
+        default="Контакты",
     )
 
     updated_at = models.DateTimeField(_("Оновлено"), auto_now=True)

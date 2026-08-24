@@ -6,7 +6,11 @@ from django.contrib.admin.models import DELETION, LogEntry
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin
 
-from apps.core.admin_filters import DropdownFiltersMixin, UkRelatedDropdownFilter
+from apps.core.admin_filters import (
+    DropdownFiltersMixin,
+    UkActionFlagDropdownFilter,
+    UkRelatedDropdownFilter,
+)
 
 
 @admin.register(LogEntry)
@@ -21,9 +25,10 @@ class LogEntryAdmin(DropdownFiltersMixin, ModelAdmin):
     list_filter = (
         ("user", UkRelatedDropdownFilter),
         ("content_type", UkRelatedDropdownFilter),
-        "action_flag",
+        ("action_flag", UkActionFlagDropdownFilter),
     )
     search_fields = ("object_repr", "change_message", "user__username")
+    search_help_text = "Пошук…"
     date_hierarchy = "action_time"
     ordering = ("-action_time",)
     list_per_page = 50
@@ -55,9 +60,6 @@ class LogEntryAdmin(DropdownFiltersMixin, ModelAdmin):
 
     def has_add_permission(self, request) -> bool:
         return False
-
-    def has_change_permission(self, request, obj=None) -> bool:
-        return request.user.is_staff
 
     def has_delete_permission(self, request, obj=None) -> bool:
         return False

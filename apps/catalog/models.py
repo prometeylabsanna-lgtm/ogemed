@@ -39,14 +39,6 @@ class Category(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     description_uk = models.TextField(_("Опис (UK)"), blank=True)
     description_ru = models.TextField(_("Опис (RU)"), blank=True)
     is_active = models.BooleanField(_("Активна"), default=True)
-    show_on_home = models.BooleanField(
-        _("Показувати в швидких категоріях на головній"),
-        default=False,
-        help_text=_(
-            "Якщо увімкнено — категорія зʼявиться в блоці «Категорії» "
-            "на головній сторінці сайту (під hero)."
-        ),
-    )
     sort_order = models.PositiveIntegerField(_("Порядок"), default=0)
 
     class Meta:
@@ -506,7 +498,11 @@ class ProductImage(TimeStampedModel):
         ordering = ["-is_main", "sort_order", "id"]
 
     def __str__(self) -> str:
-        return f"Image #{self.pk} for {self.product_id}"
+        if self.is_main:
+            return "Головне фото"
+        if self.pk:
+            return f"Фото #{self.pk}"
+        return "Нове фото"
 
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)

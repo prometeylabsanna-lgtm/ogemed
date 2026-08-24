@@ -2,6 +2,8 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
+from apps.core.admin_widgets import AdminImagePreviewWidget
+
 from .models import ProductImage
 
 # Фото на сторінці товару збільшується до 4×, тому дрібний файл дає мутну лупу
@@ -12,6 +14,9 @@ class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
         fields = "__all__"
+        widgets = {
+            "image": AdminImagePreviewWidget(),
+        }
 
     def clean_image(self):
         image = self.cleaned_data.get("image")

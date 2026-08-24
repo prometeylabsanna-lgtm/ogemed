@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
     # modeltranslation — перед власними apps
     "modeltranslation",
     "tinymce",
@@ -84,6 +85,10 @@ TEMPLATES = [
         },
     },
 ]
+
+# Віджети форм (Unfold file input тощо) мають бачити templates/ DIRS,
+# а не лише app_dirs пакета unfold.
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 WSGI_APPLICATION = "config.wsgi.application"
 

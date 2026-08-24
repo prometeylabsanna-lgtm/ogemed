@@ -20,7 +20,7 @@ msgid "Filter navigation items"
 msgstr "Фільтр навігації"
 
 msgid "Type to search"
-msgstr "Пошук"
+msgstr "Пошук…"
 
 msgid "Return to site"
 msgstr "Повернутись на сайт"

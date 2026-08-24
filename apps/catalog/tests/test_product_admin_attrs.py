@@ -68,7 +68,6 @@ class ProductAdminAttrsTests(TestCase):
                 "availability": self.product.availability,
                 "status": self.product.status,
                 "sort_order": 0,
-                "popularity": 0,
                 f"{ATTR_FIELD_PREFIX}{self.attr.pk}": str(self.v50.pk),
             },
             instance=self.product,

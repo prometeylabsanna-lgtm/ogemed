@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from django import forms
+from unfold.widgets import UnfoldAdminSelectWidget
 
 from apps.catalog.models import Attribute, AttributeValue, Product
 
@@ -15,7 +16,7 @@ def _attr_field_name(attribute_id: int) -> str:
 class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ("is_active", "slug", "attribute_values", "search_text")
+        exclude = ("is_active", "slug", "attribute_values", "search_text", "popularity")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,7 +24,6 @@ class ProductAdminForm(forms.ModelForm):
         selected: dict[int, int] = {}
         if self.instance and self.instance.pk:
             for av in self.instance.attribute_values.all().only("id", "attribute_id"):
-                # одне значення на атрибут — якщо кілька, беремо перше
                 selected.setdefault(av.attribute_id, av.pk)
 
         attributes = (
@@ -35,7 +35,7 @@ class ProductAdminForm(forms.ModelForm):
         for attr in attributes:
             field_name = _attr_field_name(attr.pk)
             self._attribute_ids.append(attr.pk)
-            self.fields[field_name] = forms.ModelChoiceField(
+            field = forms.ModelChoiceField(
                 label=attr.name_uk,
                 queryset=AttributeValue.objects.filter(attribute=attr).order_by(
                     "sort_order", "name_uk"
@@ -43,7 +43,10 @@ class ProductAdminForm(forms.ModelForm):
                 required=False,
                 empty_label="— не обрано —",
                 initial=selected.get(attr.pk),
+                widget=UnfoldAdminSelectWidget(),
             )
+            field.label_from_instance = lambda obj: (obj.name_uk or str(obj.pk))
+            self.fields[field_name] = field
 
     def save_attribute_values(self) -> None:
         if not self.instance.pk:

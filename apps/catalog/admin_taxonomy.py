@@ -20,8 +20,7 @@ LANG_SWITCH_HTML = (
     '<button type="button" class="cms-lang-switch__btn is-active" data-cms-lang="uk">UA</button>'
     '<button type="button" class="cms-lang-switch__btn" data-cms-lang="ru">RU</button>'
     '<p class="product-admin-editor__langhint">'
-    "Перемикач стосується назви, описів і SEO. "
-    "Спільні поля — з чекбоксом «Дефолтне значення»."
+    "Перемикач показує назву, описи та SEO українською або російською."
     "</p></div>"
 )
 
@@ -64,7 +63,6 @@ ATTR_LANG_SWITCH_HTML = (
     '<button type="button" class="cms-lang-switch__btn" data-cms-lang="ru">RU</button>'
     '<p class="product-admin-editor__langhint">'
     "Перемикач показує назву українською або російською. "
-    "Slug, порядок і «У фільтрах» — з чекбоксом «Дефолтне значення». "
     "Таблиця значень атрибутів нижче не змінюється."
     "</p></div>"
 )
@@ -123,12 +121,10 @@ class AttributeValueAdmin(DropdownFiltersMixin, ModelAdmin):
 class CategoryAdmin(DropdownFiltersMixin, ModelAdmin):
     change_form_template = "admin/catalog/i18n_change_form.html"
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
-    list_display = ("name_uk", "slug", "parent", "is_active", "show_on_home", "sort_order")
-    list_filter = (
-        ("is_active", UkBooleanDropdownFilter),
-        ("show_on_home", UkBooleanDropdownFilter),
-    )
-    list_editable = ("show_on_home", "sort_order")
+    list_display = ("category_name", "slug", "parent", "is_active", "sort_order")
+    list_display_links = ("category_name",)
+    list_filter = (("is_active", UkBooleanDropdownFilter),)
+    list_editable = ("sort_order",)
     search_fields = ("name_uk", "name_ru", "slug")
     prepopulated_fields = {"slug": ("name_uk",)}
     fieldsets = (
@@ -141,7 +137,6 @@ class CategoryAdmin(DropdownFiltersMixin, ModelAdmin):
                     "slug",
                     "image",
                     "is_active",
-                    "show_on_home",
                     "sort_order",
                 ),
             },
@@ -168,6 +163,10 @@ class CategoryAdmin(DropdownFiltersMixin, ModelAdmin):
     class Media:
         css = {"all": ("css/admin/site_content.css", "css/admin/ogemed_theme.css")}
         js = ("js/admin/catalog_lang_tabs.js",)
+
+    @admin.display(description="Назва", ordering="name_uk")
+    def category_name(self, obj: Category):
+        return obj.name_uk
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

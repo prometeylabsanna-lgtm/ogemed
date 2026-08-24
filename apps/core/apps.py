@@ -12,6 +12,7 @@ class CoreConfig(AppConfig):
         from django.apps import apps
 
         from . import checks  # noqa: F401
+        from . import admin_widgets  # noqa: F401  # UK file-input templates on Unfold widgets
 
         try:
             apps.get_app_config("django_q").verbose_name = _("Черга задач")

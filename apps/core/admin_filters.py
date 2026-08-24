@@ -113,6 +113,33 @@ class UkAllValuesDropdownFilter(ValueMixin, admin.AllValuesFieldListFilter):
         }
 
 
+class UkActionFlagDropdownFilter(UkChoicesDropdownFilter):
+    """Тип дії LogEntry — dropdown з узгодженими UK-підписами."""
+
+    def __init__(self, field, request, params, model, model_admin, field_path):
+        super().__init__(field, request, params, model, model_admin, field_path)
+        self.title = "Тип дії"
+
+    def choices(self, changelist: ChangeList) -> Generator[dict[str, Any], None, None]:
+        from django.contrib.admin.models import ADDITION, CHANGE, DELETION
+
+        choices = [
+            self.all_option,
+            [str(ADDITION), "Додавання"],
+            [str(CHANGE), "Зміна"],
+            [str(DELETION), "Видалення"],
+        ]
+        yield {
+            "form": self.form_class(
+                label=_filter_label(self.title),
+                name=self.lookup_kwarg,
+                choices=choices,
+                data={self.lookup_kwarg: self.value() or ""},
+                multiple=self.multiple if hasattr(self, "multiple") else False,
+            ),
+        }
+
+
 class DropdownFiltersMixin:
     """Фільтри зверху над таблицею, без бічної панелі."""
 

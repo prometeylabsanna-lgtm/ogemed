@@ -185,28 +185,6 @@ body {
   margin: 0 0 0.75rem;
 }
 
-.product-default-lock {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin: 0.35rem 0 0.5rem;
-  font-size: 0.8125rem;
-  cursor: pointer;
-  user-select: none;
-  opacity: 0.9;
-}
-
-.product-default-lock__cb {
-  width: 1rem;
-  height: 1rem;
-  accent-color: #8c4f49;
-}
-
-.product-admin-editor [data-locked-by-default="1"] {
-  opacity: 0.65;
-  pointer-events: none;
-}
-
 /* Мітки: 4 в ряд × 2 ряди; іконки на одній лінії */
 fieldset.labels-grid > div {
   display: grid;
@@ -222,13 +200,21 @@ fieldset.labels-grid > div > div {
   min-height: 7.25rem;
   height: 100%;
   box-sizing: border-box;
+  overflow: visible;
 }
 
-/* Зона підпису/тогла — місце під ~2 рядки, щоб іконки стартували однаково */
+/* Підпис мітки — один рядок, без переносу */
 fieldset.labels-grid > div > div > label,
 fieldset.labels-grid > div > div > .flex {
-  min-height: 2.85rem;
+  min-height: 2.5rem;
   align-items: flex-start;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+fieldset.labels-grid > div > div > label span,
+fieldset.labels-grid > div > div > .flex span {
+  white-space: nowrap;
 }
 
 fieldset.labels-grid .help,
@@ -265,9 +251,22 @@ fieldset.labels-grid .admin-label-icon-preview {
   fieldset.labels-grid > div > div {
     min-height: 0;
   }
+
+  fieldset.labels-grid > div > div > label,
+  fieldset.labels-grid > div > div > .flex {
+    white-space: normal;
+  }
 }
 
 /* Характеристики: сітка select-ів */
+fieldset.product-attrs-grid .description,
+fieldset.product-attrs-grid > .description,
+.product-admin-editor fieldset.product-attrs-grid .text-sm {
+  white-space: nowrap;
+  overflow: visible;
+  max-width: none;
+}
+
 fieldset.product-attrs-grid > div {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -278,11 +277,37 @@ fieldset.product-attrs-grid > div {
   fieldset.product-attrs-grid > div {
     grid-template-columns: 1fr;
   }
+
+  fieldset.product-attrs-grid .description,
+  fieldset.product-attrs-grid > .description {
+    white-space: normal;
+  }
+}
+
+fieldset.product-attrs-grid select,
+fieldset.product-attrs-grid .select2-container,
+fieldset.product-attrs-grid .select2-selection,
+fieldset.product-attrs-grid [class*="select2"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-height: 2.5rem;
+  box-sizing: border-box;
 }
 
 fieldset.product-attrs-grid select {
-  width: 100%;
-  max-width: 100%;
+  border: 1px solid #d6d0c6;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  appearance: auto;
+}
+
+fieldset.product-attrs-grid .select2-selection {
+  border: 1px solid #d6d0c6;
+  border-radius: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.25rem 0.5rem;
 }
 
 .admin-label-icon-preview--lg {
@@ -354,5 +379,67 @@ fieldset.product-attrs-grid select {
   border-radius: 8px;
   border: 1px solid #2a2624;
   background: #3a3532;
+}
+
+/* Категорії / changelist: без горизонтального скролу */
+#changelist .results,
+#changelist-form .results {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+#changelist #result_list,
+#changelist-form #result_list {
+  table-layout: fixed;
+  width: 100%;
+  max-width: 100%;
+}
+
+#changelist #result_list th,
+#changelist #result_list td,
+#changelist-form #result_list th,
+#changelist-form #result_list td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+#changelist #result_list th.column-sort_order,
+#changelist #result_list td.field-sort_order,
+#changelist-form #result_list th.column-sort_order,
+#changelist-form #result_list td.field-sort_order {
+  width: 5.5rem;
+  white-space: normal;
+}
+
+#changelist #result_list td.field-sort_order input,
+#changelist-form #result_list td.field-sort_order input {
+  width: 4rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#changelist #result_list th.column-is_active,
+#changelist #result_list td.field-is_active,
+#changelist-form #result_list th.column-is_active,
+#changelist-form #result_list td.field-is_active {
+  width: 5.5rem;
+}
+
+#changelist #result_list th.column-slug,
+#changelist #result_list td.field-slug,
+#changelist-form #result_list th.column-slug,
+#changelist-form #result_list td.field-slug {
+  width: 18%;
+}
+
+@media (max-width: 1024px) {
+  #changelist #result_list th.column-slug,
+  #changelist #result_list td.field-slug,
+  #changelist-form #result_list th.column-slug,
+  #changelist-form #result_list td.field-slug {
+    width: 14%;
+  }
 }
 

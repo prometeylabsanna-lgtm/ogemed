@@ -14,6 +14,7 @@ from apps.core.admin_widgets import AdminImagePreviewWidget
 
 from apps.core.admin_guidelines import get_image_hint, get_text_limit_hint
 from apps.core.admin_hero_slides import build_hero_slide_formset
+from apps.core.admin_home_brands import build_home_brands_formset, save_home_brands_formset
 from apps.core.admin_site_content_widgets import (
     CmsAdminTextareaWidget,
     CmsAdminTextInputWidget,
@@ -84,12 +85,24 @@ def _set_lang_text(block: SiteBlock, lang: str, value: str) -> None:
 
 def load_section_blocks(section: ContentSection) -> dict[tuple[str, str], SiteBlock]:
     blocks: dict[tuple[str, str], SiteBlock] = {}
+    legacy_products_visible = None
     for page, key in iter_section_blocks(section):
         content_type = _block_content_type(page, key)
         uk_default, ru_default = default_pair(page, key)
         if is_visibility_key(key):
             uk_default = uk_default or "1"
             ru_default = ru_default or uk_default
+            if key in {"products_new_visible", "products_hits_visible"}:
+                if legacy_products_visible is None:
+                    legacy_products_visible = SiteBlock.objects.filter(
+                        page="home", key="products_section_visible"
+                    ).first()
+                if legacy_products_visible is not None:
+                    legacy_val = (
+                        _get_lang_text(legacy_products_visible, "uk").strip() or "1"
+                    )
+                    uk_default = legacy_val
+                    ru_default = legacy_val
         block, created = SiteBlock.objects.get_or_create(
             page=page,
             key=key,
@@ -293,7 +306,9 @@ def site_content_section_view(
     blocks = load_section_blocks(section)
     use_hero_slides = section.slug == "hero"
     use_header_brand = section.slug == "header"
+    use_home_brands = section.slug == "brands"
     slides_formset = None
+    brands_formset = None
     header_form = None
     settings_obj = SiteSettings.load() if use_header_brand else None
 
@@ -301,6 +316,8 @@ def site_content_section_view(
         form = SitePageContentForm(section, blocks, request.POST, request.FILES)
         if use_hero_slides:
             slides_formset = build_hero_slide_formset(request.POST, request.FILES)
+        if use_home_brands:
+            brands_formset = build_home_brands_formset(request.POST, request.FILES)
         if use_header_brand:
             header_form = HeaderBrandForm(
                 request.POST, request.FILES, instance=settings_obj
@@ -308,12 +325,16 @@ def site_content_section_view(
         forms_ok = form.is_valid()
         if use_hero_slides:
             forms_ok = forms_ok and slides_formset.is_valid()
+        if use_home_brands:
+            forms_ok = forms_ok and brands_formset.is_valid()
         if use_header_brand:
             forms_ok = forms_ok and header_form.is_valid()
         if forms_ok:
             form.save()
             if slides_formset is not None:
                 slides_formset.save()
+            if brands_formset is not None:
+                save_home_brands_formset(brands_formset)
             if header_form is not None:
                 header_form.save()
             messages.success(
@@ -325,6 +346,8 @@ def site_content_section_view(
         form = SitePageContentForm(section, blocks)
         if use_hero_slides:
             slides_formset = build_hero_slide_formset()
+        if use_home_brands:
+            brands_formset = build_home_brands_formset()
         if use_header_brand:
             header_form = HeaderBrandForm(instance=settings_obj)
 
@@ -336,6 +359,7 @@ def site_content_section_view(
         "section": section,
         "fieldsets": _section_fieldsets(form, section, header_form=header_form),
         "slides_formset": slides_formset,
+        "brands_formset": brands_formset,
         "preview_url": section.preview_url,
         "title": section.sidebar_title or section.title,
         "breadcrumb": (

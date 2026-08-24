@@ -55,8 +55,8 @@
 {% endif %}
 {% endif %}
 
-{% section_visible "home" "products_section_visible" as products_ok %}
-{% if products_ok and new_items %}
+{% section_visible "home" "products_new_visible" as products_new_ok %}
+{% if products_new_ok and new_items %}
 <section class="home-section container section-gap">
   <h2 class="home-section__kicker">{% block_text "home" "products_new_title" "Новинки" %}</h2>
   {% include "catalog/partials/_product_slider.html" with products=new_items %}
@@ -90,7 +90,8 @@
 
 {% include "core/partials/_brand_showcase.html" %}
 
-{% if products_ok and hits %}
+{% section_visible "home" "products_hits_visible" as products_hits_ok %}
+{% if products_hits_ok and hits %}
 <section class="home-section container section-gap">
   <h2 class="home-section__kicker">{% block_text "home" "products_hits_title" "Хіти продажу" %}</h2>
   {% include "catalog/partials/_product_slider.html" with products=hits %}

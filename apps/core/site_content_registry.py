@@ -61,14 +61,26 @@ CONTENT_SECTIONS: tuple[ContentSection, ...] = (
         sidebar_icon="inventory_2",
         preview_url="/",
         admin_model_name="homeproductssettings",
-        visibility_key="products_section_visible",
-        description="Товари з прапорцями «Новинка» / «Хіт» — у Каталозі.",
+        visibility_key="",
+        description=(
+            "Новинки й хіти — окремі блоки на головній. "
+            "Список товарів задається прапорцями «Новинка» / «Хіт» у Каталозі."
+        ),
         blocks=(
+            ("home", "products_new_visible"),
             ("home", "products_new_title"),
+            ("home", "products_hits_visible"),
             ("home", "products_hits_title"),
         ),
         field_groups=(
-            FieldGroup("Заголовки", ("products_new_title", "products_hits_title")),
+            FieldGroup(
+                "Новинки",
+                ("products_new_visible", "products_new_title"),
+            ),
+            FieldGroup(
+                "Хіти",
+                ("products_hits_visible", "products_hits_title"),
+            ),
         ),
     ),
     ContentSection(
@@ -104,6 +116,10 @@ CONTENT_SECTIONS: tuple[ContentSection, ...] = (
         preview_url="/",
         admin_model_name="homebrandssettings",
         visibility_key="brands_section_visible",
+        description=(
+            "Оберіть бренди для вітрини та їхні фото на головній. "
+            "Показуються до 3 обраних (за порядком)."
+        ),
         blocks=(("home", "brands_section_title"),),
         field_groups=(FieldGroup("Заголовок", ("brands_section_title",)),),
     ),

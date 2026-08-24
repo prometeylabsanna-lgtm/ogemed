@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.actions import delete_selected
 from django.utils.html import format_html
 from django.utils.text import slugify
 from unfold.admin import ModelAdmin, TabularInline
@@ -12,6 +13,8 @@ from apps.core.admin_filters import (
 from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 from apps.core.image_processing import thumb_url
 
+from .admin_product_actions import PRODUCT_ADMIN_ACTIONS
+from .admin_product_filters import PRODUCT_ATTRIBUTE_ADMIN_FILTERS
 from .admin_product_form import ProductAdminForm, attribute_select_field_names
 from .admin_taxonomy import (
     LABEL_LANG_SWITCH_HTML,
@@ -57,7 +60,9 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
         ("is_hit", UkBooleanDropdownFilter),
         ("is_new", UkBooleanDropdownFilter),
         ("is_sale", UkBooleanDropdownFilter),
+        *PRODUCT_ATTRIBUTE_ADMIN_FILTERS,
     )
+    actions = (*PRODUCT_ADMIN_ACTIONS, delete_selected)
     search_fields = ("name_uk", "name_ru", "slug", "sku", "barcode", "search_text")
     filter_horizontal = ("categories", "related_products")
     inlines = [ProductImageInline]
@@ -93,7 +98,6 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
                     "is_hit",
                     "is_new",
                     "is_sale",
-                    "popularity",
                 ),
             },
         ),
