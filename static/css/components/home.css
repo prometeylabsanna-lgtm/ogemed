@@ -6,6 +6,37 @@
   font-family: var(--font-literata);
 }
 
+.home-hero {
+  padding: clamp(48px, 10vw, 96px) 0;
+  background: var(--color-accent-200);
+  font-family: var(--font-literata);
+}
+
+.home-hero__kicker {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-neutral-600);
+}
+
+.home-hero__title {
+  margin: 0 0 16px;
+  font-family: var(--font-literata);
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--color-neutral-700);
+}
+
+.home-hero__text {
+  margin: 0 0 24px;
+  max-width: 36em;
+  font-family: var(--font-literata);
+  color: var(--color-neutral-700);
+}
+
 .home-hero-slide {
   display: none;
   position: relative;
@@ -77,14 +108,6 @@
   color: var(--color-accent-700);
 }
 
-.home-section__title {
-  margin: 0 0 24px;
-  font-family: var(--font-display);
-  font-size: clamp(26px, 3.5vw, 36px);
-  font-weight: 400;
-  color: var(--color-neutral-700);
-}
-
 .care-selection-section {
   width: 100%;
   max-width: 100%;
@@ -139,8 +162,8 @@
 }
 
 .care-selection .btn--primary {
-  background: #1e140f;
-  border-color: #1e140f;
+  background: var(--color-ink);
+  border-color: var(--color-ink);
   color: var(--color-accent-100);
   transition:
     background 0.25s ease,
@@ -151,15 +174,15 @@
 
 .care-selection .btn--primary:hover,
 .care-selection .btn--primary:focus-visible {
-  background: #2c1e17;
-  border-color: #2c1e17;
+  background: var(--color-ink-hover);
+  border-color: var(--color-ink-hover);
   color: var(--color-accent-100);
   transform: scale(1.02);
 }
 
 .care-selection .btn--primary:active {
-  background: #160f0b;
-  border-color: #160f0b;
+  background: var(--color-ink-active);
+  border-color: var(--color-ink-active);
   transform: scale(1);
 }
 
@@ -175,8 +198,8 @@
 
 .care-selection .btn--secondary {
   background: transparent;
-  border: 1px solid #1e140f;
-  color: #1e140f;
+  border: 1px solid var(--color-ink);
+  color: var(--color-ink);
   box-shadow: none;
   transition:
     background 0.25s ease,
@@ -187,18 +210,18 @@
 
 .care-selection .btn--secondary:hover,
 .care-selection .btn--secondary:focus-visible {
-  background: color-mix(in srgb, #1e140f 8%, transparent);
-  border-color: #1e140f;
-  color: #1e140f;
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
   text-decoration: underline;
   text-underline-offset: 0.22em;
   box-shadow: none;
 }
 
 .care-selection .btn--secondary:active {
-  background: color-mix(in srgb, #1e140f 14%, transparent);
-  border-color: #1e140f;
-  color: #1e140f;
+  background: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
 }
 
 @media (max-width: 1024px) and (min-width: 768px) {

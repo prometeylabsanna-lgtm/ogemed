@@ -162,7 +162,7 @@
   font-size: clamp(26px, 3.2vw, 40px);
   font-weight: 400;
   line-height: 1.12;
-  color: #1a1918;
+  color: var(--color-text);
 }
 
 .about-paper__body {

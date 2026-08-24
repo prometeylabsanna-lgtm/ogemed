@@ -204,7 +204,7 @@
   padding: 24px 14px 16px;
   box-sizing: border-box;
   text-align: center;
-  color: #1a1918;
+  color: var(--color-text);
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -271,7 +271,7 @@
   font-size: clamp(13px, 3.1vw, 16px);
   font-weight: 500;
   line-height: 1.2;
-  color: #1a1918;
+  color: var(--color-text);
 }
 
 .about-value-modal__text {

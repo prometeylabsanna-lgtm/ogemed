@@ -90,14 +90,8 @@
     padding-bottom: var(--mobile-nav-clearance);
   }
 
-  .fab-stack,
-  .fab-telegram {
-    bottom: calc(var(--fab-offset) + var(--mobile-nav-clearance));
-  }
-
-  html.has-cookie-banner .fab-stack,
-  html.has-cookie-banner .fab-telegram {
-    bottom: calc(var(--fab-offset) + var(--mobile-nav-clearance) + 132px);
+  .fab-stack {
+    bottom: calc(var(--fab-offset) + var(--mobile-nav-clearance) + var(--cookie-fab-clearance));
   }
 
   html.is-mobile-menu-open .mobile-nav {

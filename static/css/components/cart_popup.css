@@ -31,7 +31,7 @@
   flex-direction: column;
   padding: 12px 14px calc(12px + var(--safe-bottom));
   box-sizing: border-box;
-  color: #1a1918;
+  color: var(--color-text);
   overflow: hidden;
   background: transparent;
   border: 1px solid color-mix(in srgb, #fff 72%, transparent);
@@ -81,7 +81,7 @@
   font-family: var(--font-display);
   font-size: 20px;
   font-weight: 400;
-  color: #1a1918;
+  color: var(--color-text);
 }
 
 .cart-popup__close {
@@ -101,7 +101,7 @@
 
 .cart-popup__close:hover,
 .cart-popup__close:focus-visible {
-  color: #1a1918;
+  color: var(--color-text);
 }
 
 .cart-popup__close:active {

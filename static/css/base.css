@@ -38,6 +38,15 @@
   --color-stock-order: #b26860;
   --color-stock-out: #82796a;
 
+  --color-error: #8c2f2f;
+  --color-error-bg: color-mix(in srgb, #8c2f2f 8%, white);
+
+  /* теплий «ink» для CTA-акцентів (care / dark buttons) */
+  --color-ink: #1e140f;
+  --color-ink-hover: #2c1e17;
+  --color-ink-active: #160f0b;
+  --color-paper: #fbf9f3;
+
   --font-body: "Literata", Georgia, "Times New Roman", serif;
   --font-display: "Literata", Georgia, "Times New Roman", serif;
   --font-literata: var(--font-body);
@@ -56,7 +65,18 @@
   --container-gutter: clamp(16px, 4vw, 40px);
   --fab-size: 52px;
   --fab-offset: 16px;
+  --cookie-fab-clearance: 0px;
   --fab-clearance: calc(var(--fab-offset) + var(--fab-size) + 16px + var(--safe-bottom));
+}
+
+html.has-cookie-banner {
+  --cookie-fab-clearance: 92px;
+}
+
+@media (max-width: 640px) {
+  html.has-cookie-banner {
+    --cookie-fab-clearance: 132px;
+  }
 }
 
 *,
@@ -74,11 +94,10 @@ html {
 }
 
 body {
-  margin: 0;
+  margin: 0 auto;
   min-width: 0;
   max-width: min(100%, 1920px);
   width: 100%;
-  margin-inline: auto;
   overflow-x: clip;
   background: color-mix(in srgb, var(--color-bg) 32%, white);
   color: var(--color-text);
@@ -121,7 +140,7 @@ a:hover {
   padding: 0;
   margin: 0;
   background: var(--color-surface);
-  border-radius: 0 0 8px 0;
+  border-radius: 0 0 var(--radius-sm) 0;
   /* без margin:-1px / left:-9999px — вони розширюють scrollWidth і дають H-скрол */
   width: 1px;
   height: 1px;
@@ -203,6 +222,21 @@ a:hover {
   color: var(--color-accent-100);
 }
 
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text);
+  border-color: color-mix(in srgb, var(--color-text) 28%, transparent);
+  box-shadow: none;
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  background: color-mix(in srgb, var(--color-accent-100) 55%, white);
+  color: var(--color-accent-800);
+  border-color: color-mix(in srgb, var(--color-accent-500) 45%, var(--color-text));
+  box-shadow: none;
+}
+
 .btn--callback {
   white-space: nowrap;
   padding: 7px 16px;
@@ -212,7 +246,7 @@ a:hover {
 .fab-stack {
   position: fixed;
   right: calc(var(--fab-offset) + env(safe-area-inset-right, 0px));
-  bottom: calc(var(--fab-offset) + var(--safe-bottom));
+  bottom: calc(var(--fab-offset) + var(--safe-bottom) + var(--cookie-fab-clearance));
   z-index: 120;
   display: flex;
   flex-direction: column-reverse;
@@ -245,29 +279,6 @@ a:hover {
   background: #5f4dd6;
 }
 
-/* legacy alias */
-.fab-telegram {
-  position: fixed;
-  right: calc(var(--fab-offset) + env(safe-area-inset-right, 0px));
-  bottom: calc(var(--fab-offset) + var(--safe-bottom));
-  z-index: 120;
-  width: var(--fab-size);
-  height: var(--fab-size);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 14px;
-  background: var(--color-neutral-900);
-  color: #fff;
-  box-shadow: var(--shadow-lg);
-  transition: background 0.25s ease;
-}
-
-.fab-telegram:hover {
-  background: var(--color-neutral-800);
-  color: #fff;
-}
-
 .messages {
   list-style: none;
   margin: 0;
@@ -280,37 +291,6 @@ a:hover {
   background: transparent;
   border-bottom: 1px solid var(--color-divider);
   margin-bottom: 8px;
-}
-
-.home-hero {
-  padding: clamp(48px, 10vw, 96px) 0;
-  background: var(--color-accent-200);
-  font-family: var(--font-literata);
-}
-
-.home-hero__kicker {
-  margin: 0 0 14px;
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: var(--color-neutral-600);
-}
-
-.home-hero__title {
-  margin: 0 0 16px;
-  font-family: var(--font-literata);
-  font-size: clamp(32px, 6vw, 56px);
-  font-weight: 500;
-  line-height: 1.15;
-  color: var(--color-neutral-700);
-}
-
-.home-hero__text {
-  margin: 0 0 24px;
-  max-width: 36em;
-  font-family: var(--font-literata);
-  color: var(--color-neutral-700);
 }
 
 .cms-page__title {

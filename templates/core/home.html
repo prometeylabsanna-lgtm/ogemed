@@ -74,10 +74,10 @@
       <h3 class="care-selection__title">{% block_text "home" "care_section_title" "Знайдіть свій ідеальний догляд" %}</h3>
       <p class="care-selection__subtitle">{% block_text "home" "care_section_text" "Дайте відповідь на декілька запитань або оберіть засіб із повної колекції професійної косметики" %}</p>
       <div class="care-selection__actions">
-        <a href="/catalog/" class="btn btn--primary care-selection__btn">
+        <a href="{% url 'catalog:list' %}" class="btn btn--primary care-selection__btn">
           {% block_text "home" "care_cta_label" "Переглянути весь каталог" %} <span class="arrow" aria-hidden="true">→</span>
         </a>
-        <a href="/catalog/?skin_type=select" class="btn btn--secondary care-selection__btn">
+        <a href="{% url 'catalog:list' %}?skin_type=select" class="btn btn--secondary care-selection__btn">
           {% trans "Підібрати за типом шкіри" %}
         </a>
       </div>

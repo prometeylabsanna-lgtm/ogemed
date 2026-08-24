@@ -322,7 +322,7 @@
   transform: translate(-50%, -50%) scale(1.08);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .site-footer {
     padding: 32px 0 0;
   }
@@ -400,7 +400,7 @@
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .site-footer__inner {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     align-items: start;
@@ -450,7 +450,7 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     .site-footer {
       padding-bottom: 0;
     }

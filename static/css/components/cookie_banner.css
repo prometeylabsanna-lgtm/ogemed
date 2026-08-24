@@ -25,7 +25,7 @@
   margin: 0 auto;
   padding: 12px 14px;
   box-sizing: border-box;
-  color: #1a1918;
+  color: var(--color-text);
   background: color-mix(in srgb, #fff 46%, transparent);
   border: 1px solid color-mix(in srgb, #fff 70%, transparent);
   box-shadow:
@@ -94,17 +94,5 @@
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .cookie-banner__inner {
     background: color-mix(in srgb, var(--color-bg) 22%, white);
-  }
-}
-
-html.has-cookie-banner .fab-stack,
-html.has-cookie-banner .fab-telegram {
-  bottom: calc(var(--fab-offset) + var(--safe-bottom) + 92px);
-}
-
-@media (max-width: 640px) {
-  html.has-cookie-banner .fab-stack,
-  html.has-cookie-banner .fab-telegram {
-    bottom: calc(var(--fab-offset) + var(--safe-bottom) + 132px);
   }
 }

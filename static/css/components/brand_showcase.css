@@ -1,6 +1,6 @@
-/* Morph / crossfade (backup sticky: brand_showcase_stack.css) */
+/* Morph / crossfade brand showcase */
 .brand-showcase {
-  --brand-panel-bg: #fbf9f3;
+  --brand-panel-bg: var(--color-paper);
   --brand-stage-h: clamp(300px, 52vh, 440px);
   --brand-step-h: 72vh;
   --brand-intro-h: 52px;

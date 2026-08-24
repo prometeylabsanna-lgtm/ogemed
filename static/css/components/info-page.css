@@ -172,7 +172,7 @@ body.page-info {
 
 .info-page__note {
   padding: clamp(20px, 3vw, 28px);
-  background: #fbf9f3;
+  background: var(--color-paper);
   border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
 }
 

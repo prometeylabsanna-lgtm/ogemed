@@ -1,10 +1,5 @@
 /* Спільні стани валідації форм (модалка, auth, checkout, кабінет) */
 
-:root {
-  --color-error: #8c2f2f;
-  --color-error-bg: color-mix(in srgb, #8c2f2f 8%, white);
-}
-
 .form-field--error input,
 .form-field--error textarea,
 .form-field--error select,
@@ -23,6 +18,8 @@ select.is-invalid {
 }
 
 .field-error-message,
+.field-error,
+.form-errors,
 .callback-modal__field .field-error,
 .form-field .field-error,
 .form-field .field-error-message {
@@ -31,6 +28,11 @@ select.is-invalid {
   font-size: 12px;
   line-height: 1.4;
   color: var(--color-error);
+}
+
+.form-errors {
+  margin-top: 6px;
+  font-size: 13px;
 }
 
 .field-error-message[hidden],
@@ -81,15 +83,18 @@ button.is-loading {
   .field-char-count {
     font-size: 11px;
   }
-}
 
-@media (min-width: 768px) and (max-width: 1023px) {
-  .field-error-message {
-    font-size: 13px;
+  /* iOS Safari: ≥16px запобігає авто-зуму полів */
+  .callback-modal__field input,
+  .callback-modal__field textarea,
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    font-size: 16px;
   }
 }
 
-@supports (-webkit-touch-callout: none) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .callback-modal__field input,
   .callback-modal__field textarea,
   .form-field input,
