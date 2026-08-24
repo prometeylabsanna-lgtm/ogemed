@@ -323,11 +323,14 @@ def iter_section_blocks(section: ContentSection) -> Iterator[tuple[str, str]]:
 
 
 def build_content_sidebar_items() -> list[dict]:
+    from django.conf import settings
+
+    prefix = (getattr(settings, "ADMIN_URL", "admin") or "admin").strip("/")
     return [
         {
             "title": section.sidebar_title or section.title,
             "icon": section.sidebar_icon,
-            "link": f"/admin/core/{section.admin_model_name}/",
+            "link": f"/{prefix}/core/{section.admin_model_name}/",
         }
         for section in CONTENT_SECTIONS
     ]

@@ -153,6 +153,9 @@ LOGOUT_REDIRECT_URL = "core:home"
 
 SITE_URL = env("SITE_URL", default="http://127.0.0.1:8000")
 
+# Секретний префікс адмінки (літери/цифри). /admin/ завжди віддає 404.
+ADMIN_URL = (env("ADMIN_URL", default="ogm8k2x9p4qh7n") or "ogm8k2x9p4qh7n").strip().strip("/")
+
 # Integration secrets — env only (never SiteSettings / DB / git).
 # Порожні значення = graceful degrade (див. apps.core.integrations / checks).
 RESEND_API_KEY = env("RESEND_API_KEY", default="")

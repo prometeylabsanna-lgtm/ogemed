@@ -6,11 +6,18 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.static import serve as serve_media
 
-from apps.core.views import health
 from apps.core.seo_views import robots_txt, sitemap_xml
+from apps.core.views import health, page_not_found
+
+
+def _admin_decoy(request):
+    """Публічний /admin — завжди 404 (реальна адмінка на settings.ADMIN_URL)."""
+    return page_not_found(request, Exception("Not found"))
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path(f"{settings.ADMIN_URL}/", admin.site.urls),
+    re_path(r"^admin(?:/.*)?$", _admin_decoy),
     path("healthz/", health, name="healthz"),
     path("robots.txt", robots_txt, name="robots_txt"),
     path("sitemap.xml", sitemap_xml, name="sitemap_xml"),

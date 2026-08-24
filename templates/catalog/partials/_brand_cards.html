@@ -16,9 +16,9 @@
         >
         <span class="brand-card__media">
           {% if brand.cover_image %}
-            <img src="{{ brand.cover_image.url }}" alt="{{ brand.name }}" loading="lazy" width="320" height="400">
+            <img src="{{ brand.cover_image.url }}" alt="{{ brand.name }}" loading="lazy" width="320" height="320">
           {% elif brand.logo %}
-            <img class="brand-card__logo" src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy" width="320" height="400">
+            <img class="brand-card__logo" src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy" width="320" height="320">
           {% else %}
             <span class="brand-card__placeholder">{{ brand.name|slice:":1" }}</span>
           {% endif %}

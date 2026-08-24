@@ -39,7 +39,7 @@ python manage.py runserver
 ```
 
 - Вітрина: http://127.0.0.1:8000/
-- Адмінка: http://127.0.0.1:8000/admin/
+- Адмінка: секретний шлях з `ADMIN_URL` у `.env` (за замовчуванням `/ogm8k2x9p4qh7n/`). `/admin/` завжди віддає 404.
 - Health: http://127.0.0.1:8000/healthz/
 
 ## Тести

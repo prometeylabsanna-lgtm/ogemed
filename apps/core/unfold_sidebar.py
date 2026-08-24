@@ -2,10 +2,19 @@
 
 Лінки — звичайні рядки (не reverse_lazy): Vercel серіалізує settings у JSON
 і __str__ у Promise ламає AppRegistryNotReady.
+Префікс береться з settings.ADMIN_URL.
 """
 from __future__ import annotations
 
+from django.conf import settings
+
 from apps.core.site_content_registry import build_content_sidebar_items
+
+
+def _admin_link(*parts: str) -> str:
+    prefix = (getattr(settings, "ADMIN_URL", "admin") or "admin").strip("/")
+    path = "/".join(p.strip("/") for p in parts if p)
+    return f"/{prefix}/{path}/" if path else f"/{prefix}/"
 
 
 def build_unfold_config() -> dict:
@@ -26,7 +35,7 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Налаштування сайту",
                             "icon": "settings",
-                            "link": "/admin/core/sitesettings/",
+                            "link": _admin_link("core", "sitesettings"),
                         },
                     ],
                 },
@@ -43,12 +52,12 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Контент «Про нас»",
                             "icon": "info",
-                            "link": "/admin/cms/aboutcontent/",
+                            "link": _admin_link("cms", "aboutcontent"),
                         },
                         {
                             "title": "CMS-сторінки",
                             "icon": "article",
-                            "link": "/admin/cms/cmspage/",
+                            "link": _admin_link("cms", "cmspage"),
                         },
                     ],
                 },
@@ -60,27 +69,27 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Товари",
                             "icon": "inventory_2",
-                            "link": "/admin/catalog/product/",
+                            "link": _admin_link("catalog", "product"),
                         },
                         {
                             "title": "Категорії",
                             "icon": "category",
-                            "link": "/admin/catalog/category/",
+                            "link": _admin_link("catalog", "category"),
                         },
                         {
                             "title": "Бренди",
                             "icon": "sell",
-                            "link": "/admin/catalog/brand/",
+                            "link": _admin_link("catalog", "brand"),
                         },
                         {
                             "title": "Атрибути / фільтри",
                             "icon": "tune",
-                            "link": "/admin/catalog/attribute/",
+                            "link": _admin_link("catalog", "attribute"),
                         },
                         {
                             "title": "Варіанти",
                             "icon": "qr_code_2",
-                            "link": "/admin/catalog/productvariant/",
+                            "link": _admin_link("catalog", "productvariant"),
                         },
                     ],
                 },
@@ -92,12 +101,12 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Замовлення",
                             "icon": "shopping_cart",
-                            "link": "/admin/orders/order/",
+                            "link": _admin_link("orders", "order"),
                         },
                         {
                             "title": "Ліди",
                             "icon": "support_agent",
-                            "link": "/admin/cms/lead/",
+                            "link": _admin_link("cms", "lead"),
                         },
                     ],
                 },
@@ -108,7 +117,7 @@ def build_unfold_config() -> dict:
                         {
                             "title": "Користувачі",
                             "icon": "group",
-                            "link": "/admin/auth/user/",
+                            "link": _admin_link("auth", "user"),
                         },
                     ],
                 },
