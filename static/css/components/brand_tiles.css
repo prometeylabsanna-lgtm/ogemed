@@ -59,16 +59,15 @@
   flex-direction: column;
   height: 100%;
   background: #fff;
-  border: 1px solid var(--color-divider);
+  border: 0;
   color: var(--color-text);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .brand-tile:hover {
   color: var(--color-text);
-  border-color: var(--color-text);
   box-shadow: var(--shadow-md);
 }
 
@@ -83,7 +82,8 @@
   aspect-ratio: 5 / 4;
   padding: 0;
   overflow: hidden;
-  background: var(--color-neutral-200);
+  background: transparent;
+  border: 0;
 }
 
 .brand-tile__cover {
@@ -93,8 +93,9 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
+  border: 0;
 }
 
 .brand-tile__media .brand-logo__img,
@@ -112,7 +113,8 @@
 
 .brand-tile__name {
   padding: 12px 14px;
-  border-top: 1px solid var(--color-divider);
+  border: 1px solid var(--color-divider);
+  border-top: 0;
   background: var(--color-neutral-100);
   font-size: 14px;
   line-height: 1.35;
@@ -137,8 +139,8 @@
   aspect-ratio: 5 / 4;
   padding: 0;
   overflow: hidden;
-  background: var(--color-neutral-200);
-  border: 1px solid var(--color-divider);
+  background: transparent;
+  border: 0;
 }
 
 .brand-page__cover {
@@ -148,8 +150,9 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
+  border: 0;
 }
 
 .brand-page__logo .brand-logo__img,
@@ -219,7 +222,6 @@
 /* iOS Safari keeps :hover active after a tap — neutralise it on touch devices */
 @media (hover: none) {
   .brand-tile:hover {
-    border-color: var(--color-divider);
     box-shadow: none;
   }
 }

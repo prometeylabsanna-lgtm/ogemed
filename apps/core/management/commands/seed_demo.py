@@ -182,6 +182,8 @@ class Command(BaseCommand):
         else:
             self.stdout.write("AboutContent already exists — skipped")
 
+        self._ensure_demo_admin()
+
         self.stdout.write(
             self.style.SUCCESS(
                 f"Done. New pages: {created_count}, updated: {updated_count}"
@@ -195,3 +197,26 @@ class Command(BaseCommand):
         sources = settings.BASE_DIR / "media" / "brands" / "sources"
         if sources.is_dir():
             call_command("import_brand_covers", src=str(sources))
+
+    def _ensure_demo_admin(self) -> None:
+        """Demo/Vercel: staff superuser admin / admin."""
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+        user, created = User.objects.get_or_create(
+            username="admin",
+            defaults={
+                "email": "admin@ogemed.local",
+                "is_staff": True,
+                "is_superuser": True,
+            },
+        )
+        user.set_password("admin")
+        user.is_staff = True
+        user.is_superuser = True
+        user.is_active = True
+        user.save()
+        if created:
+            self.stdout.write(self.style.SUCCESS("Created superuser admin / admin"))
+        else:
+            self.stdout.write("Updated superuser admin / admin")

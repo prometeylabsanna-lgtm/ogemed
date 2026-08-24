@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "tinymce",
     "django_htmx",
     "django_q",
-    "apps.core",
+    "apps.core.apps.CoreConfig",
     "apps.catalog.apps.CatalogConfig",
     "apps.cart",
     "apps.orders",

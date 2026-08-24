@@ -22,3 +22,27 @@ def sqlite_name() -> str:
     if BUNDLE_DB.is_file() and not RUNTIME_DB.is_file():
         shutil.copy(BUNDLE_DB, RUNTIME_DB)
     return str(RUNTIME_DB)
+
+
+def ensure_vercel_demo_admin() -> None:
+    """Якщо на лямбді немає staff — створити admin/admin (після copy БД з білду)."""
+    if not is_vercel_lambda():
+        return
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+    if User.objects.filter(is_superuser=True).exists():
+        return
+    user, _ = User.objects.get_or_create(
+        username="admin",
+        defaults={
+            "email": "admin@ogemed.local",
+            "is_staff": True,
+            "is_superuser": True,
+        },
+    )
+    user.set_password("admin")
+    user.is_staff = True
+    user.is_superuser = True
+    user.is_active = True
+    user.save()
