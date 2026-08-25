@@ -6,7 +6,7 @@
   --brand-intro-h: 52px;
   --brand-ease: cubic-bezier(0.22, 1, 0.36, 1);
   /* ширший gutter: cutout-фото інакше «їде» до центру */
-  --brand-gutter: clamp(28px, 6.5vw, 80px);
+  --brand-gutter: clamp(20px, 4vw, 52px);
   position: relative;
   isolation: isolate;
   margin-top: clamp(28px, 4vw, 48px);
@@ -157,25 +157,17 @@
     margin-left: auto;
   }
 
-  /* cutout без фону: притискаємо візуал до зовнішнього краю колонки */
-  .brand-panel--left .brand-panel__media {
-    justify-content: flex-end;
-    padding-right: 0;
-  }
-
+  /* cutout: тримаємо візуал ближче до центру секції, не біля краю екрана */
+  .brand-panel--left .brand-panel__media,
   .brand-panel--right .brand-panel__media {
-    justify-content: flex-start;
-    padding-left: 0;
+    justify-content: center;
+    padding-inline: clamp(12px, 3vw, 40px);
   }
 
-  .brand-panel--left .brand-panel__visual {
-    object-position: right center;
-    transform-origin: right center;
-  }
-
+  .brand-panel--left .brand-panel__visual,
   .brand-panel--right .brand-panel__visual {
-    object-position: left center;
-    transform-origin: left center;
+    object-position: center center;
+    transform-origin: center center;
   }
 }
 

@@ -351,17 +351,15 @@ class Command(BaseCommand):
                 )
             else:
                 featured_brand.save()
-            # Дефолт вітрини з media/seed — якщо порожньо або файл зник (не чіпаємо ручний аплоад).
+            # Дефолтні cutout-и вітрини з media/seed (оновлюються при seed).
+            # На бойовому сервері після go-live не ганяти seed_demo — змінюйте через адмінку.
             showcase_path = SEED_DIR / item["showcase"]
-            needs_default = (not featured_brand.showcase_image) or (
-                not featured_brand.has_showcase_image
-            )
-            if needs_default and showcase_path.is_file():
+            if showcase_path.is_file():
                 self._attach_image(featured_brand.showcase_image, showcase_path)
                 featured_brand.save(update_fields=["showcase_image", "updated_at"])
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"Brand showcase default: {item['slug']} ← {item['showcase']}"
+                        f"Brand showcase: {item['slug']} ← {item['showcase']}"
                     )
                 )
             self.stdout.write(self.style.SUCCESS(f"Brand ready: {item['slug']}"))
