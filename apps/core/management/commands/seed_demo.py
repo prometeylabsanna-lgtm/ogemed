@@ -194,8 +194,9 @@ class Command(BaseCommand):
         call_command("seed_catalog")
         call_command("seed_brands")
         call_command("seed_info_sections")
-        # Фото брендів (cover / showcase) — лише через адмінку.
-        # Разовий імпорт з файлів: python3 manage.py import_brand_covers --src media/brands/sources
+        # Фото брендів для вітрини: дефолти з media/seed у seed_catalog
+        # (лише якщо showcase порожній). Покриття каталогу — через адмінку /
+        # разовий import_brand_covers.
 
     def _ensure_demo_admin(self) -> None:
         """Demo: створити admin, якщо немає. Пароль існуючого не чіпати.

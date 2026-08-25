@@ -295,6 +295,7 @@ class Command(BaseCommand):
                 "name_ru": "Pharmely",
                 "tagline_uk": "Фармацевтична якість і клінічно доведена ефективність — формули, яким довіряють професіонали.",
                 "tagline_ru": "Фармацевтическое качество и клинически доказанная эффективность — формулы, которым доверяют профессионалы.",
+                "showcase": "brand-pharmely.png",
             },
             {
                 "slug": "infini-premium",
@@ -303,6 +304,7 @@ class Command(BaseCommand):
                 "name_ru": "Infini Premium",
                 "tagline_uk": "Преміальний догляд із делікатними текстурами для салонних і домашніх ритуалів краси.",
                 "tagline_ru": "Премиальный уход с деликатными текстурами для салонных и домашних ритуалов красоты.",
+                "showcase": "brand-infini-premium.png",
             },
             {
                 "slug": "esthemax",
@@ -311,6 +313,7 @@ class Command(BaseCommand):
                 "name_ru": "Esthemax",
                 "tagline_uk": "Естетична косметологія нового рівня — інноваційні рішення для видимого результату.",
                 "tagline_ru": "Эстетическая косметология нового уровня — инновационные решения для видимого результата.",
+                "showcase": "brand-esthemax.png",
             },
         ]
         for item in brand_defs:
@@ -348,7 +351,19 @@ class Command(BaseCommand):
                 )
             else:
                 featured_brand.save()
-            # cover_image / showcase_image не чіпаємо — тільки адмінка
+            # Дефолт вітрини з media/seed — якщо порожньо або файл зник (не чіпаємо ручний аплоад).
+            showcase_path = SEED_DIR / item["showcase"]
+            needs_default = (not featured_brand.showcase_image) or (
+                not featured_brand.has_showcase_image
+            )
+            if needs_default and showcase_path.is_file():
+                self._attach_image(featured_brand.showcase_image, showcase_path)
+                featured_brand.save(update_fields=["showcase_image", "updated_at"])
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"Brand showcase default: {item['slug']} ← {item['showcase']}"
+                    )
+                )
             self.stdout.write(self.style.SUCCESS(f"Brand ready: {item['slug']}"))
 
         samples = [
