@@ -1,10 +1,16 @@
 """Writable media root on Vercel: seed files from bundle, uploads to /tmp."""
 from __future__ import annotations
 
+import mimetypes
 import os
 from pathlib import Path
 
+from django.core.exceptions import SuspiciousOperation
 from django.core.files.storage import FileSystemStorage
+from django.http import FileResponse, Http404, HttpRequest, HttpResponseNotModified
+from django.utils._os import safe_join
+from django.utils.http import http_date
+from django.views.static import was_modified_since
 
 from config.vercel_sqlite import is_vercel_lambda
 
@@ -18,6 +24,21 @@ def media_root() -> str:
         return str(BUNDLE_MEDIA)
     RUNTIME_MEDIA.mkdir(parents=True, exist_ok=True)
     return str(RUNTIME_MEDIA)
+
+
+def resolve_media_path(relative: str) -> Path | None:
+    """Шлях до файлу: спочатку /tmp (аплоади), потім media/ з білду."""
+    relative = (relative or "").lstrip("/")
+    if not relative:
+        return None
+    for root in (RUNTIME_MEDIA, BUNDLE_MEDIA):
+        try:
+            full = Path(safe_join(str(root), relative))
+        except SuspiciousOperation:
+            return None
+        if full.is_file():
+            return full
+    return None
 
 
 class VercelMediaStorage(FileSystemStorage):
@@ -46,3 +67,27 @@ class VercelMediaStorage(FileSystemStorage):
         if runtime.is_file():
             return True
         return (self.bundle_root / name).is_file()
+
+
+def serve_media(request: HttpRequest, path: str):
+    """Як django.views.static.serve, але з fallback на media/ білду."""
+    full = resolve_media_path(path)
+    if full is None:
+        raise Http404("Media not found")
+
+    statobj = full.stat()
+    if not was_modified_since(
+        request.META.get("HTTP_IF_MODIFIED_SINCE"),
+        statobj.st_mtime,
+        statobj.st_size,
+    ):
+        return HttpResponseNotModified()
+
+    content_type, encoding = mimetypes.guess_type(str(full))
+    content_type = content_type or "application/octet-stream"
+    response = FileResponse(full.open("rb"), content_type=content_type)
+    response.headers["Last-Modified"] = http_date(statobj.st_mtime)
+    if encoding:
+        response.headers["Content-Encoding"] = encoding
+    response.headers["Cache-Control"] = "public, max-age=86400"
+    return response

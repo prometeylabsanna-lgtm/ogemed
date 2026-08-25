@@ -42,10 +42,19 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
 elif getattr(settings, "SERVE_MEDIA", False):
-    urlpatterns += [
-        re_path(
-            r"^media/(?P<path>.*)$",
-            serve_media,
-            {"document_root": settings.MEDIA_ROOT},
-        ),
-    ]
+    # На Vercel MEDIA_ROOT=/tmp — seed-файли лишаються в media/ білду.
+    _default_storage = getattr(settings, "STORAGES", {}).get("default", {}).get("BACKEND")
+    if _default_storage == "config.vercel_media.VercelMediaStorage":
+        from config.vercel_media import serve_media as serve_media_view
+
+        urlpatterns += [
+            re_path(r"^media/(?P<path>.*)$", serve_media_view),
+        ]
+    else:
+        urlpatterns += [
+            re_path(
+                r"^media/(?P<path>.*)$",
+                serve_media,
+                {"document_root": settings.MEDIA_ROOT},
+            ),
+        ]
