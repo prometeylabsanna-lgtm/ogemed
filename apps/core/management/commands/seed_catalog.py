@@ -359,27 +359,37 @@ class Command(BaseCommand):
                 )
             self.stdout.write(self.style.SUCCESS(f"Brand ready: {item['slug']}"))
 
-        # Демо-товари вимкнені: seed їх не створює.
-        # Категорії для майбутніх товарів: cats_by_slug (uhodova-kosmetyka, masky, …).
-        samples: list[dict] = []
+        # Хардкод 1 демо-товар (Pharmely) — і в «Новинках», і в «Хітах».
+        # Не видаляємо інші товари з адмінки: раніше порожній samples
+        # на кожному Vercel build знищував увесь каталог.
+        samples: list[dict] = [
+            {
+                "slug": "bioactive-peptide-serum",
+                "sku": "107",
+                "name_uk": "Bioactive Peptide Serum",
+                "name_ru": "Bioactive Peptide Serum",
+                "brand_slug": "pharmely",
+                "category": cats_by_slug["uhodova-kosmetyka"],
+                "price": "1840.00",
+                "old_price": None,
+                "is_hit": True,
+                "is_new": True,
+                "is_sale": False,
+                "stock": 25,
+                "image": "bioactive-peptide-serum.png",
+                "hover": "bioactive-peptide-serum-hover.jpg",
+            },
+        ]
 
-        seeded_slugs = {item["slug"] for item in samples}
-        # Повністю прибираємо з БД те, чого немає в seed (після редеплою не повертаються).
-        deleted_count, _ = Product.objects.exclude(slug__in=seeded_slugs).delete()
-        if deleted_count:
-            self.stdout.write(
-                self.style.WARNING(
-                    f"Removed {deleted_count} DB object(s) for products not in seed"
-                )
-            )
-
-        # order_by робить порядок незалежним від того, коли бренд додали в базу
         product_brands = list(Brand.objects.filter(is_active=True).order_by("slug"))
+        brands_by_slug = {b.slug: b for b in product_brands}
 
         for item in samples:
             labels = labels_for(item["slug"])
             texts = copy_for(item["slug"])
-            item_brand = brand_for(item["slug"], product_brands)
+            item_brand = brands_by_slug.get(item.get("brand_slug", "")) or brand_for(
+                item["slug"], product_brands
+            )
             product, created = Product.objects.get_or_create(
                 slug=item["slug"],
                 defaults={
@@ -388,6 +398,7 @@ class Command(BaseCommand):
                     "brand": item_brand,
                     "primary_category": item["category"],
                     "availability": Availability.IN_STOCK,
+                    "status": Product.Status.ACTIVE,
                     "is_active": True,
                     "is_hit": item["is_hit"],
                     "is_new": item["is_new"],
@@ -395,7 +406,7 @@ class Command(BaseCommand):
                     "sku": item["sku"],
                     "price": Decimal(item["price"]),
                     "old_price": Decimal(item["old_price"]) if item["old_price"] else None,
-                    "stock": 20,
+                    "stock": item.get("stock", 20),
                     **texts,
                     **labels,
                 },
@@ -409,7 +420,9 @@ class Command(BaseCommand):
                 product.is_hit = item["is_hit"]
                 product.is_new = item["is_new"]
                 product.is_sale = item["is_sale"]
+                product.status = Product.Status.ACTIVE
                 product.is_active = True
+                product.availability = Availability.IN_STOCK
                 product.brand = item_brand
                 product.primary_category = item["category"]
                 product.sku = item["sku"]
@@ -417,7 +430,7 @@ class Command(BaseCommand):
                 product.old_price = (
                     Decimal(item["old_price"]) if item["old_price"] else None
                 )
-                product.stock = 20
+                product.stock = item.get("stock", 20)
                 product.short_description_uk = texts["short_description_uk"]
                 product.short_description_ru = texts["short_description_ru"]
                 product.description_uk = texts["description_uk"]
@@ -427,6 +440,9 @@ class Command(BaseCommand):
                 product.save()
                 self.stdout.write(f"Updated product {item['slug']}")
 
+            # get_or_create defaults не завжди викликають Product.save() з sync variant
+            product.refresh_from_db()
+            product.sync_commerce_variant()
             product.categories.set([item["category"]])
 
             img_path = SEED_DIR / item["image"]
@@ -443,40 +459,9 @@ class Command(BaseCommand):
             product.images.exclude(pk=main.pk).update(is_main=False)
             self.stdout.write(self.style.SUCCESS(f"Image set for {item['slug']}"))
 
-            # Hover: завжди інший товарний файл (для помітної анімації).
-            # Новинки (PNG packshot) → лише інший PNG без фону.
-            # Хіти / lifestyle (JPG) → JPG з фоном.
-            main_is_packshot = img_path.suffix.lower() == ".png"
-            if main_is_packshot:
-                hover_pool = [
-                    "novinka-v5-serum-amber-drop.png",
-                    "novinka-v5-cream-bamboo.png",
-                    "novinka-v5-oil-glow-mist.png",
-                    "novinka-v5-cream-rose-soft.png",
-                    "novinka-v5-serum-pure-active.png",
-                    "novinka-v5-balm-repair-pot.png",
-                    "novinka-v5-ampoules-collagen.png",
-                ]
-            else:
-                hover_pool = [
-                    "serum-vitamin-c.jpg",
-                    "body-lotion-pure.jpg",
-                    "serum-pump-gold.jpg",
-                    "cream-cheek-glow.jpg",
-                    "balm-silk.jpg",
-                    "cream-hydra.jpg",
-                    "cream-velvet.jpg",
-                    "toner-fresh.jpg",
-                    "cream-spa-band.jpg",
-                    "makeup-studio-kit.jpg",
-                    "cream-rose-jar.jpg",
-                    "foundation-glow.jpg",
-                ]
-            hover_pool = [
-                f for f in hover_pool if f != item["image"] and (SEED_DIR / f).is_file()
-            ]
-            if hover_pool:
-                hover_name = random.Random(f"{item['slug']}:hover-file").choice(hover_pool)
+            hover_name = item.get("hover")
+            hover_path = SEED_DIR / hover_name if hover_name else None
+            if hover_path and hover_path.is_file():
                 hover = (
                     product.images.exclude(pk=main.pk).order_by("sort_order", "id").first()
                 )
@@ -485,7 +470,7 @@ class Command(BaseCommand):
                 else:
                     hover.is_main = False
                     hover.sort_order = 1
-                self._attach_image(hover.image, SEED_DIR / hover_name)
+                self._attach_image(hover.image, hover_path)
                 hover.alt_uk = item["name_uk"]
                 hover.alt_ru = item["name_ru"]
                 hover.save()
