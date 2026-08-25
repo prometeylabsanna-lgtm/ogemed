@@ -443,3 +443,23 @@ fieldset.product-attrs-grid .select2-selection {
   }
 }
 
+/* М’яке попередження розміру фото товару (не блокує збереження) */
+.product-image-size-warn {
+  margin: 0.4rem 0 0;
+  padding: 0.45rem 0.65rem;
+  max-width: 28rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #7a4a00;
+  background: #fff6e5;
+  border: 1px solid #e6c27a;
+  border-radius: 0.35rem;
+}
+
+@media (max-width: 767px) {
+  .product-image-size-warn {
+    max-width: 100%;
+    font-size: 0.75rem;
+  }
+}
+

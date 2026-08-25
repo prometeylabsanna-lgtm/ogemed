@@ -510,7 +510,10 @@ class ProductImage(TimeStampedModel):
     image = OptimizedImageField(
         _("Зображення"),
         upload_to="products/",
-        help_text=_("Від 1600px по довгій стороні — фото збільшується на сторінці товару."),
+        help_text=_(
+            "Рекомендовано від 1600px по довгій стороні — інакше збільшення "
+            "на сторінці товару може бути розмитим. Менше фото все одно можна зберегти."
+        ),
         max_side=MAX_SIDE_PRODUCT,
     )
     alt_uk = models.CharField(_("Назва (UK)"), max_length=255, blank=True)

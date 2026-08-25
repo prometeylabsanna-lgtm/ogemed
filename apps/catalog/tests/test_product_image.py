@@ -16,16 +16,15 @@ def _png(width: int, height: int) -> SimpleUploadedFile:
 
 
 class ProductImageFormTests(SimpleTestCase):
-    def test_rejects_small_upload(self):
+    def test_accepts_small_upload(self):
         form = ProductImageForm(data={}, files={"image": _png(800, 600)})
-        self.assertFalse(form.is_valid())
-        self.assertIn("image", form.errors)
-        self.assertIn(str(MIN_IMAGE_SIDE), form.errors["image"][0])
+        form.is_valid()
+        self.assertNotIn("image", form.errors)
 
     def test_accepts_large_enough_upload(self):
         form = ProductImageForm(data={}, files={"image": _png(MIN_IMAGE_SIDE, 1200)})
         form.is_valid()
-        # продукт не заданий — але саме image має пройти перевірку розміру
+        # продукт не заданий — але саме image має пройти перевірку
         self.assertNotIn("image", form.errors)
 
 
