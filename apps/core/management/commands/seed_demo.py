@@ -200,24 +200,30 @@ class Command(BaseCommand):
             call_command("import_brand_covers", src=str(sources))
 
     def _ensure_demo_admin(self) -> None:
-        """Demo/Vercel: staff superuser admin / admin."""
+        """Demo: створити admin, якщо немає. Пароль існуючого не чіпати.
+
+        На Vercel пароль синхронізує ensure_vercel_demo_admin() з env.
+        На DigitalOcean / локалі зміна пароля в адмінці зберігається в БД.
+        """
         from django.contrib.auth import get_user_model
 
+        from config.vercel_sqlite import demo_admin_password
+
         User = get_user_model()
-        user, created = User.objects.get_or_create(
+        if User.objects.filter(username="admin").exists():
+            self.stdout.write("Superuser admin already exists — password unchanged")
+            return
+
+        password = demo_admin_password()
+        user = User.objects.create_superuser(
             username="admin",
-            defaults={
-                "email": "admin@ogemed.local",
-                "is_staff": True,
-                "is_superuser": True,
-            },
+            email="admin@ogemed.local",
+            password=password,
         )
-        user.set_password("admin")
         user.is_staff = True
         user.is_superuser = True
         user.is_active = True
-        user.save()
-        if created:
-            self.stdout.write(self.style.SUCCESS("Created superuser admin / admin"))
-        else:
-            self.stdout.write("Updated superuser admin / admin")
+        user.save(update_fields=["is_staff", "is_superuser", "is_active"])
+        self.stdout.write(
+            self.style.SUCCESS("Created superuser admin (password from env or default)")
+        )

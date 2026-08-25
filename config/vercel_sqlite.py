@@ -16,6 +16,15 @@ def is_vercel_lambda() -> bool:
     )
 
 
+def demo_admin_password() -> str:
+    """Пароль демо-адміна: env DEMO_ADMIN_PASSWORD / ADMIN_PASSWORD, інакше admin."""
+    return (
+        (os.environ.get("DEMO_ADMIN_PASSWORD") or os.environ.get("ADMIN_PASSWORD") or "admin")
+        .strip()
+        or "admin"
+    )
+
+
 def sqlite_name() -> str:
     if not is_vercel_lambda():
         return str(BUNDLE_DB)
@@ -25,14 +34,17 @@ def sqlite_name() -> str:
 
 
 def ensure_vercel_demo_admin() -> None:
-    """Якщо на лямбді немає staff — створити admin/admin (після copy БД з білду)."""
+    """На лямбді: staff admin з паролем з env (усі інстанси однакові).
+
+    Зміна пароля в UI на Vercel не тримається: /tmp SQLite ефемерний і
+    копіюється з білду. Задавайте DEMO_ADMIN_PASSWORD у Vercel → Redeploy.
+    """
     if not is_vercel_lambda():
         return
     from django.contrib.auth import get_user_model
 
     User = get_user_model()
-    if User.objects.filter(is_superuser=True).exists():
-        return
+    password = demo_admin_password()
     user, _ = User.objects.get_or_create(
         username="admin",
         defaults={
@@ -41,8 +53,10 @@ def ensure_vercel_demo_admin() -> None:
             "is_superuser": True,
         },
     )
-    user.set_password("admin")
+    # Синхронізуємо з env на кожному cold start — інакше різні /tmp інстанси
+    # матимуть різні паролі після «Змінити пароль» в адмінці.
+    user.set_password(password)
     user.is_staff = True
     user.is_superuser = True
     user.is_active = True
-    user.save()
+    user.save(update_fields=["password", "is_staff", "is_superuser", "is_active"])
