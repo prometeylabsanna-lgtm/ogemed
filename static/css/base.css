@@ -1,3 +1,40 @@
+/* Self-hosted Literata (latin + cyrillic; 400/600) — no Google Fonts CDN */
+@font-face {
+  font-family: "Literata";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/literata-cyrillic-400.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Literata";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/literata-latin-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Literata";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/literata-cyrillic-600.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Literata";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/literata-latin-600.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* OGEMED for you — design tokens from Homepage Prototype (organic DS) */
 :root {
   --color-bg: #f5ead8;
@@ -27,6 +64,9 @@
   --color-neutral-700: #645c50;
   --color-neutral-800: #474238;
   --color-neutral-900: #2e2b25;
+
+  /* Secondary text: darker for WCAG contrast (was neutral-500) */
+  --color-text-muted: var(--color-neutral-700);
 
   /* CTA «До кошика»: бордовий, на крок темніший за --color-accent-700 */
   --color-cta: #7a443f;

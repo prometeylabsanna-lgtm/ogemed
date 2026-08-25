@@ -150,7 +150,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Версія для {% vstatic %} у проді (у DEBUG використовується mtime файлу)
-STATIC_VERSION = env("STATIC_VERSION", default="1")
+STATIC_VERSION = env("STATIC_VERSION", default="2")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

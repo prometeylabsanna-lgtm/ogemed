@@ -258,14 +258,14 @@
 .site-footer__copy {
   font-size: 12px;
   line-height: 1.2;
-  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  color: var(--color-text-muted);
 }
 
 .site-footer__credit {
   margin: 0;
   font-size: 16px;
   line-height: 1.3;
-  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 

@@ -1,0 +1,1314 @@
+/* AUTO-GENERATED: catalog.css — do not edit; run build_static_bundles */
+
+/* === css/components/product_card.css === */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.product-card__media {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-neutral-500);
+}
+
+/* Звичайні lifestyle-фото: заповнюють фіксовану рамку */
+.product-card__media img,
+.product-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.product-card__img {
+  transition: opacity 0.4s ease;
+}
+
+.product-card__img--main {
+  z-index: 1;
+  opacity: 1;
+}
+
+.product-card__img--hover {
+  z-index: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Packshot PNG (Новинки): увесь обʼєкт видно, без обрізання — і main, і hover */
+.product-card--packshot .product-card__img--main,
+.product-card--packshot .product-card__img--hover {
+  object-fit: contain;
+  object-position: center;
+  padding: 10%;
+  background: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-card--has-hover .product-card__media:hover .product-card__img--main,
+  .product-card--has-hover .product-card__media:focus-visible .product-card__img--main {
+    opacity: 0;
+  }
+
+  .product-card--has-hover .product-card__media:hover .product-card__img--hover,
+  .product-card--has-hover .product-card__media:focus-visible .product-card__img--hover {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+  }
+}
+
+/* Touch: не лишати «залиплий» hover після тапу */
+@media (hover: none) {
+  .product-card--has-hover .product-card__media:hover .product-card__img--main {
+    opacity: 1;
+  }
+
+  .product-card--has-hover .product-card__media:hover .product-card__img--hover {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card__img {
+    transition: none;
+  }
+}
+
+.product-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: var(--color-neutral-400);
+}
+
+.product-card__badge {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: auto;
+  bottom: auto;
+  left: 10px;
+  width: max-content;
+  max-width: calc(100% - 20px);
+  height: fit-content;
+  padding: 5px 9px;
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+.product-card__badge--new {
+  top: 10px;
+  right: 10px;
+  bottom: auto;
+  left: auto;
+  background: var(--color-accent-700);
+  color: #fff;
+}
+
+.product-card__badge--sale {
+  top: auto;
+  right: auto;
+  bottom: 10px;
+  left: 10px;
+  background: var(--color-accent-900);
+  color: var(--color-accent-100);
+}
+
+.product-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.product-card__brand {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-card__title {
+  margin: 0;
+  min-height: calc(1.3em * 2);
+  font-family: var(--font-display);
+  font-size: clamp(16px, 2.2vw, 18px);
+  font-weight: 400;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.product-card__title a {
+  color: var(--color-text);
+}
+
+.product-card__title a:hover {
+  color: var(--color-neutral-700);
+}
+
+.product-card__price {
+  margin: 2px 0 0;
+  min-height: 1.35em;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: var(--color-text);
+}
+
+.product-card__price-old {
+  font-size: 12px;
+  font-weight: 400;
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.product-card__stock {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+.product-card__add {
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.product-card__btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-cta);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--color-cta);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    color 0.22s ease,
+    text-decoration-color 0.22s ease,
+    text-underline-offset 0.22s ease,
+    opacity 0.22s ease;
+}
+
+.product-card__btn:hover,
+.product-card__btn:focus-visible {
+  color: var(--color-cta-hover);
+  text-decoration-color: var(--color-cta-hover);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 7px;
+  background: transparent;
+  opacity: 0.85;
+}
+
+.product-card__btn:active {
+  color: var(--color-cta-active);
+  opacity: 0.7;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .product-card {
+    gap: 8px;
+  }
+
+  .product-card__media {
+    border-radius: 10px;
+  }
+
+  .product-card__badge {
+    top: 8px;
+    left: 8px;
+    padding: 4px 7px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .product-card__badge--new {
+    top: 8px;
+    left: auto;
+    right: 8px;
+    bottom: auto;
+  }
+
+  .product-card__badge--sale {
+    top: auto;
+    bottom: 8px;
+    left: 8px;
+    right: auto;
+  }
+
+  .product-card__title {
+    font-size: 15px;
+    min-height: calc(1.3em * 2);
+  }
+
+  .product-card__btn {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .product-card__btn {
+    padding-block: 10px;
+  }
+}
+
+/* --- list view (каталог: сітка ↔ список) --- */
+
+.product-grid[data-view="list"] .product-card {
+  flex-direction: row;
+  align-items: stretch;
+  gap: 14px;
+  height: auto;
+}
+
+.product-grid[data-view="list"] .product-card__media {
+  flex: 0 0 112px;
+  width: 112px;
+  max-width: 112px;
+  aspect-ratio: 3 / 4;
+  border-radius: 10px;
+}
+
+.product-grid[data-view="list"] .product-card__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: center;
+  gap: 2px;
+}
+
+.product-grid[data-view="list"] .product-card__title {
+  min-height: 0;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.product-grid[data-view="list"] .product-card__brand,
+.product-grid[data-view="list"] .product-card__stock {
+  min-height: 0;
+}
+
+.product-grid[data-view="list"] .product-card__add {
+  margin-top: 8px;
+  padding-top: 0;
+}
+
+@media (min-width: 640px) {
+  .product-grid[data-view="list"] .product-card {
+    gap: 20px;
+  }
+
+  .product-grid[data-view="list"] .product-card__media {
+    flex: 0 0 148px;
+    width: 148px;
+    max-width: 148px;
+    border-radius: 12px;
+  }
+
+  .product-grid[data-view="list"] .product-card__title {
+    font-size: clamp(17px, 2vw, 20px);
+  }
+}
+
+@media (min-width: 900px) {
+  .product-grid[data-view="list"] .product-card {
+    gap: 28px;
+  }
+
+  .product-grid[data-view="list"] .product-card__media {
+    flex: 0 0 180px;
+    width: 180px;
+    max-width: 180px;
+  }
+
+  .product-grid[data-view="list"] .product-card__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto auto;
+    column-gap: 24px;
+    row-gap: 4px;
+    align-content: center;
+  }
+
+  .product-grid[data-view="list"] .product-card__brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .product-grid[data-view="list"] .product-card__title {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .product-grid[data-view="list"] .product-card__price {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .product-grid[data-view="list"] .product-card__stock {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .product-grid[data-view="list"] .product-card__add {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: center;
+    margin-top: 0;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 767px) {
+  .product-grid[data-view="list"] .product-card {
+    gap: 12px;
+  }
+
+  .product-grid[data-view="list"] .product-card__media {
+    flex: 0 0 96px;
+    width: 96px;
+    max-width: 96px;
+    border-radius: 8px;
+  }
+
+  .product-grid[data-view="list"] .product-card__title {
+    font-size: 14px;
+  }
+}
+
+/* === css/components/product_grid.css === */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 16px;
+  align-items: stretch;
+}
+
+.product-grid > .product-card {
+  width: 100%;
+  min-width: 0;
+}
+
+.product-grid[data-view="list"] {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 36px 24px;
+  }
+
+  .product-grid[data-view="list"] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 40px 28px;
+  }
+
+  .product-grid[data-view="list"] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+  font-size: 14px;
+}
+
+.catalog__empty {
+  padding: 40px 0;
+  text-align: center;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+}
+
+/* === css/components/catalog.css === */
+/* Сторінки каталогу світліші за решту сайту — в тон сторінки товару */
+body.page-catalog {
+  background: var(--color-bg-light);
+}
+
+.catalog__title {
+  margin: 0 0 24px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 400;
+}
+
+.catalog-controls {
+  display: block;
+  margin-bottom: clamp(20px, 3vw, 32px);
+}
+
+.catalog__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+
+.catalog__grid {
+  min-width: 0;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  max-width: 520px;
+}
+
+.search-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-divider);
+  background: var(--color-surface);
+  font: inherit;
+  /* 16px keeps iOS Safari from zooming the viewport on focus */
+  font-size: 16px;
+  color: var(--color-text);
+  border-radius: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (min-width: 900px) {
+  .catalog__layout {
+    grid-template-columns: minmax(0, 1fr) 216px;
+    /* повітря між сіткою та вертикальною лінією сортування;
+       поля сторінки не змінюються — відступ усередині контейнера */
+    column-gap: clamp(24px, 3vw, 40px);
+    align-items: stretch;
+  }
+
+  .catalog__grid {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* No sort rail to place beside the grid */
+  .catalog__layout--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* === css/components/catalog_brands.css === */
+.brand-filter {
+  margin-bottom: clamp(24px, 4vw, 40px);
+}
+
+.brand-filter__title {
+  margin: 0 0 16px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-accent-700);
+}
+
+/* Один рядок із горизонтальним скролом: смуга прокрутки прихована,
+   свайп/трекпад працюють, клавіатурна навігація по радіо теж */
+.brand-filter__row {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 4px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.brand-filter__row::-webkit-scrollbar {
+  display: none;
+}
+
+.brand-filter__item {
+  /* Вужчі портретні картки */
+  flex: 0 0 128px;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.brand-card {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.brand-card__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.brand-card__media {
+  position: relative;
+  display: block;
+  /* Вищі за ширину — вертикальні packshot + низ товару в кадрі */
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #fff;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+  transition: box-shadow 0.2s ease;
+}
+
+.brand-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  /* Низ упаковки (напр. «30 Peel») лишається в кадрі */
+  object-position: center bottom;
+  border: 0;
+  outline: none;
+  /* Обрізає сіру рамку, вшиту в cover-файли */
+  transform: scale(1.08);
+  transform-origin: center bottom;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.brand-card__logo {
+  object-fit: contain;
+  padding: 12%;
+  box-sizing: border-box;
+  background: var(--color-neutral-100);
+  transform: none;
+}
+
+.brand-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-neutral-200);
+  font-family: var(--font-display);
+  font-size: clamp(20px, 4vw, 28px);
+  color: var(--color-accent-700);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.brand-card__name {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-700);
+  transition: color 0.2s ease;
+}
+
+.brand-card:hover .brand-card__media {
+  box-shadow: none;
+}
+
+.brand-card__input:checked ~ .brand-card__media {
+  box-shadow: 0 0 0 2px var(--color-text);
+}
+
+.brand-card__input:checked ~ .brand-card__name {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.brand-card__input:focus-visible ~ .brand-card__media {
+  box-shadow: 0 0 0 2px var(--color-accent-700);
+}
+
+@media (min-width: 640px) {
+  .brand-filter__row {
+    gap: 12px;
+  }
+
+  .brand-filter__item {
+    flex-basis: 142px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-filter__row {
+    gap: 14px;
+  }
+
+  .brand-filter__item {
+    flex-basis: 156px;
+  }
+}
+
+@media (hover: none) {
+  .brand-card:hover .brand-card__media {
+    box-shadow: none;
+  }
+}
+
+/* === css/components/catalog_toolbar.css === */
+.catalog-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.catalog-bar__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.catalog-bar__reset {
+  flex: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+  border-bottom: 1px solid currentColor;
+  padding-block: 12px;
+}
+
+/* Активна мітка з головної: чіп зі скла, хрестик знімає фільтр */
+.cat-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-divider);
+  background: color-mix(in srgb, #fff 52%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  color: var(--color-accent-700);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  --label-icon-size: 18px;
+}
+
+.cat-chip:hover {
+  background: color-mix(in srgb, #fff 64%, transparent);
+  border-color: var(--color-text);
+}
+
+/* Знятий чекбокс = фільтр уже скинуто (HTMX перемалював лише сітку) */
+.cat-chip:has(.cat-chip__input:not(:checked)) {
+  display: none;
+}
+
+.cat-chip__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.cat-chip__text {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.cat-chip__x {
+  display: flex;
+  color: var(--color-neutral-600);
+  transition: color 0.2s ease;
+}
+
+.cat-chip:hover .cat-chip__x {
+  color: var(--color-text);
+}
+
+.cat-chip__input:focus-visible ~ .cat-chip__x,
+.cat-chip:focus-within {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+/* --- dropdown --- */
+
+.cat-dd {
+  position: relative;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+/* Матове скло, як панель кошика: заливка напівпрозора, межу тримає divider,
+   бо біла рамка на світлому фоні сторінки не читалася б */
+.cat-dd__toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  background: color-mix(in srgb, #fff 52%, transparent);
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 80%, transparent) inset;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  font: inherit;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.cat-dd__toggle:hover,
+.cat-dd.is-open .cat-dd__toggle {
+  background: color-mix(in srgb, #fff 64%, transparent);
+  border-color: var(--color-text);
+}
+
+.cat-dd__toggle:focus-visible {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+.cat-dd__label {
+  flex: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  white-space: nowrap;
+}
+
+.cat-dd__value {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cat-dd__chevron {
+  flex: none;
+  color: var(--color-neutral-600);
+  transition: transform 0.2s ease;
+}
+
+.cat-dd.is-open .cat-dd__chevron {
+  transform: rotate(180deg);
+}
+
+.cat-dd__panel {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% - 1px);
+  left: 0;
+  right: 0;
+  min-width: 100%;
+  max-height: min(60dvh, 380px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0;
+  background: color-mix(in srgb, #fff 62%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 34%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 80%, transparent) inset,
+    var(--shadow-md);
+  backdrop-filter: blur(36px) saturate(165%);
+  -webkit-backdrop-filter: blur(36px) saturate(165%);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Без підтримки backdrop-filter панель мусить лишатися непрозорою */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cat-dd__toggle {
+    background: var(--color-neutral-100);
+  }
+
+  .cat-dd__panel {
+    background: var(--color-neutral-100);
+  }
+}
+
+.cat-dd__panel[hidden] {
+  display: none;
+}
+
+.cat-dd__list,
+.cat-dd__sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cat-dd__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--color-text);
+  transition: background 0.15s ease;
+}
+
+/* напівпрозорий сірий, щоб підсвітка не читалась як інший колір на матовому склі */
+.cat-dd__link:hover {
+  background: color-mix(in srgb, var(--color-neutral-900) 7%, transparent);
+  color: var(--color-text);
+}
+
+.cat-dd__link--child {
+  padding-left: 32px;
+  font-size: 13px;
+  color: var(--color-neutral-700);
+}
+
+.cat-dd__link.is-selected {
+  background: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
+  font-weight: 600;
+}
+
+.cat-dd__check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.15s ease;
+}
+
+.cat-dd__check:hover {
+  background: color-mix(in srgb, var(--color-neutral-900) 7%, transparent);
+}
+
+.cat-dd__check input {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--color-text);
+}
+
+.cat-dd__panel--price {
+  padding: 14px 16px;
+}
+
+.cat-dd__price-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cat-dd__price-row input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  background: color-mix(in srgb, #fff 62%, transparent);
+  font: inherit;
+  /* 16px keeps iOS Safari from zooming the viewport on focus */
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.cat-dd__dash {
+  flex: none;
+  color: var(--color-neutral-600);
+}
+
+.cat-dd__apply {
+  width: auto;
+  max-width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+}
+
+/* --- sort rail --- */
+
+.catalog-sort {
+  min-width: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.catalog-sort__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.catalog-sort__form {
+  margin: 0;
+}
+
+.catalog-sort__title {
+  margin: 0 0 12px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-neutral-600);
+}
+
+.catalog-sort__list,
+.catalog-view__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.catalog-sort__list::-webkit-scrollbar,
+.catalog-view__list::-webkit-scrollbar {
+  display: none;
+}
+
+.catalog-sort__item,
+.catalog-view__item {
+  flex: none;
+  /* Contains the clipped radio so it cannot widen the document */
+  position: relative;
+}
+
+.catalog-sort__input,
+.catalog-view__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.catalog-sort__option,
+.catalog-view__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-divider);
+  font-size: 13px;
+  color: var(--color-neutral-700);
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.catalog-sort__input:checked + .catalog-sort__option,
+.catalog-view__input:checked + .catalog-view__option {
+  border-color: var(--color-text);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.catalog-sort__input:focus-visible + .catalog-sort__option,
+.catalog-view__input:focus-visible + .catalog-view__option {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+.catalog-view__icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  background: currentColor;
+  opacity: 0.85;
+}
+
+.catalog-view__icon--grid {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='1' width='6' height='6'/%3E%3Crect x='9' y='1' width='6' height='6'/%3E%3Crect x='1' y='9' width='6' height='6'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='1' width='6' height='6'/%3E%3Crect x='9' y='1' width='6' height='6'/%3E%3Crect x='1' y='9' width='6' height='6'/%3E%3Crect x='9' y='9' width='6' height='6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.catalog-view__icon--list {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='14' height='3'/%3E%3Crect x='1' y='6.5' width='14' height='3'/%3E%3Crect x='1' y='11' width='14' height='3'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='14' height='3'/%3E%3Crect x='1' y='6.5' width='14' height='3'/%3E%3Crect x='1' y='11' width='14' height='3'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+@media (min-width: 640px) {
+  /* Keep the controls compact instead of stretching across the whole row */
+  .cat-dd {
+    flex: 0 1 260px;
+  }
+}
+
+@media (min-width: 900px) {
+  .catalog-sort {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 0 0 28px;
+    border-bottom: 0;
+    border-left: 1px solid var(--color-text);
+  }
+
+  .catalog-sort__inner {
+    position: sticky;
+    top: calc(var(--header-height) + 16px);
+    gap: 28px;
+  }
+
+  .catalog-sort__list,
+  .catalog-view__list {
+    flex-direction: column;
+    gap: 2px;
+    overflow: visible;
+  }
+
+  .catalog-sort__option,
+  .catalog-view__option {
+    min-height: 36px;
+    padding: 6px 0;
+    border: 0;
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  .catalog-sort__input:checked + .catalog-sort__option,
+  .catalog-view__input:checked + .catalog-view__option {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+  }
+}
+
+/* iOS Safari keeps :hover active after a tap — neutralise it on touch devices */
+@media (hover: none) {
+  .cat-dd__toggle:hover {
+    border-color: var(--color-divider);
+    background: color-mix(in srgb, #fff 52%, transparent);
+  }
+
+  .cat-dd.is-open .cat-dd__toggle:hover {
+    background: color-mix(in srgb, #fff 64%, transparent);
+    border-color: var(--color-text);
+  }
+
+  .cat-dd__link:hover,
+  .cat-dd__check:hover {
+    background: transparent;
+  }
+
+  .cat-dd__link.is-selected:hover {
+    background: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
+  }
+}
+
+/* === css/components/catalog_more.css === */
+/* «Показати ще» у каталозі */
+
+.catalog-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(20px, 3vw, 28px) 0 8px;
+}
+
+.catalog-more__btn {
+  min-height: 44px;
+  min-width: min(100%, 220px);
+  padding: 10px 22px;
+}
+
+.catalog-more__btn.htmx-request {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.catalog-more__meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-neutral-700);
+}
+
+.pagination--fallback {
+  display: none;
+}
+
+@supports not (selector(:has(*))) {
+  .pagination--fallback {
+    display: flex;
+  }
+}
+
+@media (max-width: 479px) {
+  .catalog-more__btn {
+    width: 100%;
+  }
+}
+
+/* === css/components/label_icons.css === */
+/* Маски-іконки міток товару: спільні для сторінки товару, меню на головній і фільтрів.
+   Розмір задає --label-icon-size, колір — currentColor батьківського елемента,
+   URL маски — --label-mask (з шаблону або fallback нижче). */
+.label-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: var(--label-icon-size, 38px);
+  height: var(--label-icon-size, 38px);
+  background: currentColor;
+  -webkit-mask-image: var(--label-mask);
+  mask-image: var(--label-mask);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* Fallback, якщо --label-mask не передано */
+.label-icon--perfume_off {
+  --label-mask: url("../../img/labels/perfume_off.png");
+}
+
+.label-icon--branch {
+  --label-mask: url("../../img/labels/branch.png");
+}
+
+.label-icon--face_check {
+  --label-mask: url("../../img/labels/face_check.png");
+}
+
+.label-icon--leaf_soft {
+  --label-mask: url("../../img/labels/leaf_soft.png");
+}
+
+.label-icon--hand_drop {
+  --label-mask: url("../../img/labels/hand_drop.png");
+}
+
+.label-icon--flask_off {
+  --label-mask: url("../../img/labels/flask_off.png");
+}
+
+.label-icon--bunny_off {
+  --label-mask: url("../../img/labels/bunny_off.png");
+}
+
+.label-icon--face_care {
+  --label-mask: url("../../img/labels/face_care.png");
+}

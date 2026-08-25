@@ -1,0 +1,285 @@
+/* AUTO-GENERATED: cart_page.css — do not edit; run build_static_bundles */
+
+/* === css/components/cart_page.css === */
+/* Сторінка кошика — layout як checkout / about */
+
+body.page-cart {
+  background: var(--color-bg-light);
+}
+
+body.page-cart .site-footer {
+  margin-top: 0;
+}
+
+.cart-page__head {
+  max-width: 42rem;
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+
+.cart-page__kicker {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.cart-page__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+/* Дві колонки: товари | sticky glass summary */
+.cart-page .cart-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(28px, 4vw, 48px);
+  align-items: start;
+}
+
+.cart-page .cart-line {
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 14px 16px;
+  padding: 18px 0;
+}
+
+.cart-page .cart-line__media img,
+.cart-page .cart-line__placeholder {
+  width: 72px;
+  height: 90px;
+}
+
+.cart-page .cart-line__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 24px;
+  align-items: start;
+}
+
+.cart-page .cart-line__controls {
+  justify-content: start;
+  align-items: start;
+}
+
+.cart-page .cart-line__name {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cart-page .cart-line__total-value {
+  font-size: 14px;
+}
+
+.cart-page .cart-line__qty,
+.cart-page .cart-line__qty:hover {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  isolation: auto;
+  overflow: visible;
+}
+
+.cart-page .cart-line__qty-text {
+  padding: 0;
+}
+
+.cart-page .cart-line__qty input {
+  border: none;
+  background: transparent;
+}
+
+.cart-page .cart-line__remove {
+  background: transparent;
+  font-size: 12px;
+  color: var(--color-accent-700);
+}
+
+.cart-page .cart-line__remove:hover,
+.cart-page .cart-line__remove:focus-visible {
+  background: transparent;
+  color: var(--color-accent-800);
+  transform: none;
+}
+
+/* Summary — лише лінії, без рамки */
+.cart-page .cart-panel__summary {
+  padding: 0;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.cart-page .cart-panel__summary-inner {
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.cart-page .cart-panel__summary-title {
+  margin: 0 0 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.cart-page .cart-panel__row {
+  padding: 14px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+}
+
+.cart-page .cart-panel__row dt {
+  color: var(--color-text);
+  letter-spacing: 0.08em;
+}
+
+.cart-page .cart-panel__total {
+  font-size: clamp(22px, 2.6vw, 28px);
+  margin: 0 0 22px;
+  padding-top: 16px;
+  border-top: none;
+}
+
+.cart-page .cart-panel__total-value {
+  color: var(--cart-accent, #402322);
+}
+
+.cart-page .cart-panel__checkout {
+  border-radius: 0;
+}
+
+.cart-page .cart-empty-wrap {
+  max-width: 28rem;
+  padding: 8px 0 24px;
+}
+
+.cart-page .cart-empty {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+/* на повній сторінці лінк «повна сторінка» зайвий */
+.cart-page .cart-empty__link--full {
+  display: none;
+}
+
+.cart-page .cart-empty__actions {
+  justify-content: flex-start;
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 899px) {
+  .cart-page .cart-line__body {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-page .cart-line__controls {
+    justify-content: start;
+    width: auto;
+  }
+}
+
+/* Desktop: sticky glass summary */
+@media (min-width: 900px) {
+  .cart-page .cart-panel {
+    grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.75fr);
+    gap: clamp(36px, 5vw, 64px);
+  }
+
+  .cart-page .cart-panel__summary {
+    position: -webkit-sticky;
+    position: sticky;
+    top: calc(
+      var(--header-height, 64px) + env(safe-area-inset-top, 0px) + 12px
+    );
+    align-self: start;
+  }
+}
+
+/* Mobile — один лівий край для назви, ціни, кількості, суми */
+@media (max-width: 767px) {
+  .cart-page__head {
+    margin-bottom: 24px;
+  }
+
+  .cart-page__title {
+    font-size: clamp(28px, 9vw, 36px);
+  }
+
+  .cart-page .cart-line {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px 14px;
+    padding: 16px 0;
+  }
+
+  .cart-page .cart-line__media img,
+  .cart-page .cart-line__placeholder {
+    width: 64px;
+    height: 80px;
+  }
+
+  .cart-page .cart-line__body {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cart-page .cart-line__info {
+    padding-right: 0;
+  }
+
+  .cart-page .cart-line__controls {
+    width: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    justify-content: start;
+  }
+
+  .cart-page .cart-line:hover {
+    background: transparent;
+  }
+
+  .cart-page .cart-panel__checkout {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-page .cart-line__qty {
+    transition: none;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .cart-page .cart-panel__checkout,
+  .cart-page .cart-line__remove,
+  .cart-page .cart-line__qty-btn {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .cart-page .cart-line:hover {
+      background: transparent;
+    }
+
+    .cart-page .cart-line__qty:hover {
+      border: none;
+      background: transparent;
+    }
+  }
+}

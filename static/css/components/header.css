@@ -372,12 +372,12 @@
   min-height: 32px;
   min-width: 36px;
   padding: 4px 10px;
-  color: var(--color-text);
-  opacity: 0.45;
+  color: var(--color-text-muted);
+  opacity: 1;
   font-weight: 400;
   transition:
-    opacity var(--header-ease),
-    color var(--header-ease);
+    color var(--header-ease),
+    font-weight var(--header-ease);
 }
 
 .site-header__lang-link:hover,

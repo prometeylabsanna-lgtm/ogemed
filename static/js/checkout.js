@@ -94,6 +94,7 @@
     input.setAttribute("aria-autocomplete", "list");
     input.setAttribute("aria-expanded", "false");
     input.setAttribute("aria-controls", listEl.id);
+    input.setAttribute("aria-haspopup", "listbox");
     input.setAttribute("autocomplete", "off");
 
     input.addEventListener("input", () => {

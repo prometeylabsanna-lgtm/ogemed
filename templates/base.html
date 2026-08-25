@@ -24,23 +24,13 @@
   {% endif %}
   <meta property="og:locale" content="{% if LANGUAGE_CODE == 'ru' %}ru_RU{% else %}uk_UA{% endif %}">
   <meta property="og:locale:alternate" content="{% if LANGUAGE_CODE == 'ru' %}uk_UA{% else %}ru_RU{% endif %}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400;1,7..72,500&display=swap" rel="stylesheet">
+  {% block head_preload %}{% endblock %}
+  <link rel="preload" href="{% vstatic 'fonts/literata-cyrillic-400.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% vstatic 'fonts/literata-latin-400.woff2' %}" as="font" type="font/woff2" crossorigin>
   <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
-  <link rel="stylesheet" href="{% vstatic 'css/base.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/nav_arrow.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/header.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/search_suggest.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/footer.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/mobile_nav.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/breadcrumbs.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/cart.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/cart_popup.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/callback_modal.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/form_validation.css' %}">
-  <link rel="stylesheet" href="{% vstatic 'css/components/cookie_banner.css' %}">
+  <link rel="stylesheet" href="{% vstatic 'css/bundles/shell.css' %}">
   {% block extra_css %}{% endblock %}
+  <link rel="stylesheet" href="{% vstatic 'css/bundles/overlays.css' %}">
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <a class="skip-link" href="#main">{% trans "Перейти до контенту" %}</a>

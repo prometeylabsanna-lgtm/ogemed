@@ -66,6 +66,28 @@ if _ON_VERCEL:
     SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=86400)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+SECURE_HSTS_PRELOAD = env.bool("SECURE_HSTS_PRELOAD", default=False)
+
+# Static cache: ?v=STATIC_VERSION busts on deploy
+WHITENOISE_MAX_AGE = 31536000
+
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "apps.core.middleware.ContentSecurityPolicyMiddleware",
+    "apps.core.middleware.MediaCacheControlMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "apps.core.middleware.ForceAdminUkrainianMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
+]
 
 STORAGES = {
     "default": {

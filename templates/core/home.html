@@ -2,12 +2,17 @@
 {% load i18n static vstatic ogemed_content %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% vstatic 'css/components/product_card.css' %}">
-<link rel="stylesheet" href="{% vstatic 'css/components/product_grid.css' %}">
-<link rel="stylesheet" href="{% vstatic 'css/components/product_slider.css' %}">
-<link rel="stylesheet" href="{% vstatic 'css/components/home.css' %}">
-<link rel="stylesheet" href="{% vstatic 'css/components/slider_bars.css' %}">
-<link rel="stylesheet" href="{% vstatic 'css/components/brand_showcase.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/bundles/home.css' %}">
+{% endblock %}
+
+{% block head_preload %}
+{% if hero_slides %}
+{% with first=hero_slides.0 %}
+{% if first.image %}
+<link rel="preload" as="image" href="{{ first.image.url }}" fetchpriority="high">
+{% endif %}
+{% endwith %}
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -18,7 +23,16 @@
   {% for slide in hero_slides %}
   <div class="home-hero-slide{% if forloop.first %} is-active{% endif %}">
     {% if slide.image %}
-    <img class="home-hero-slide__bg" src="{{ slide.image.url }}" alt="" aria-hidden="true">
+    <img
+      class="home-hero-slide__bg"
+      src="{{ slide.image.url }}"
+      alt=""
+      aria-hidden="true"
+      width="1600"
+      height="900"
+      decoding="async"
+      {% if forloop.first %}fetchpriority="high" loading="eager"{% else %}fetchpriority="low" loading="lazy"{% endif %}
+    >
     {% endif %}
     <div class="home-hero-slide__content container">
       <p class="home-hero__kicker">OGEMED for you</p>

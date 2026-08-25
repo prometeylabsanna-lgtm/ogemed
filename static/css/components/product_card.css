@@ -160,7 +160,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 500;
-  color: var(--color-neutral-500);
+  color: var(--color-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -204,7 +204,7 @@
   font-size: 12px;
   font-weight: 400;
   text-decoration: line-through;
-  color: var(--color-neutral-500);
+  color: var(--color-text-muted);
 }
 
 .product-card__stock {
@@ -212,7 +212,7 @@
   min-height: 1.4em;
   font-size: 11px;
   line-height: 1.4;
-  color: var(--color-neutral-500);
+  color: var(--color-text-muted);
 }
 
 .product-card__add {

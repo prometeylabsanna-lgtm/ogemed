@@ -236,22 +236,37 @@
 }
 
 .brand-showcase__dot {
-  width: 8px;
-  height: 8px;
+  position: relative;
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--color-text) 28%, transparent);
+  border: none;
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+}
+
+.brand-showcase__dot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border: 1px solid color-mix(in srgb, var(--color-text) 28%, transparent);
+  border-radius: 50%;
+  background: transparent;
   transition:
     background-color 0.28s var(--brand-ease),
     border-color 0.28s var(--brand-ease),
     transform 0.28s var(--brand-ease);
 }
 
-.brand-showcase__dot.is-active {
+.brand-showcase__dot.is-active::before {
   background: var(--color-text);
   border-color: var(--color-text);
   transform: scale(1.15);
@@ -399,8 +414,14 @@
   }
 
   .brand-showcase__dot {
+    width: 44px;
+    height: 44px;
+  }
+
+  .brand-showcase__dot::before {
     width: 10px;
     height: 10px;
+    margin: -5px 0 0 -5px;
   }
 }
 

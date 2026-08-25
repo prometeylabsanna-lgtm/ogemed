@@ -9,8 +9,10 @@
               class="site-header__logo-img"
               src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% vstatic 'img/logo.png' %}{% endif %}"
               alt="OGEMED for you"
-              width="691"
-              height="131"
+              width="295"
+              height="56"
+              decoding="async"
+              sizes="(max-width: 768px) 140px, 180px"
             >
           </a>
 
@@ -71,9 +73,11 @@
                   placeholder="{% trans 'за назвою або артикулом' %}"
                   value="{{ request.GET.q }}"
                   autocomplete="off"
+                  role="combobox"
                   aria-autocomplete="list"
                   aria-controls="header-suggest"
                   aria-expanded="false"
+                  aria-haspopup="listbox"
                   data-search-input
                 >
                 <ul

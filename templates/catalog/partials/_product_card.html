@@ -1,27 +1,12 @@
-{% load i18n %}
+{% load i18n responsive_img %}
 {% with images=product.card_images %}
 {% with img=images.0 hover=images.1 %}
 <article class="product-card{% if img and '.png' in img.image.name %} product-card--packshot{% endif %}{% if hover %} product-card--has-hover{% endif %}">
   <a class="product-card__media" href="{{ product.get_absolute_url }}">
       {% if img %}
-        <img
-          class="product-card__img product-card__img--main"
-          src="{{ img.image.url }}"
-          alt="{{ product.name }}"
-          loading="lazy"
-          width="300"
-          height="400"
-        >
+        {% responsive_img img.image alt=product.name class_name="product-card__img product-card__img--main" sizes="(max-width: 768px) 45vw, 200px" width=300 height=400 loading="lazy" %}
         {% if hover %}
-        <img
-          class="product-card__img product-card__img--hover"
-          src="{{ hover.image.url }}"
-          alt=""
-          loading="lazy"
-          width="300"
-          height="400"
-          aria-hidden="true"
-        >
+        {% responsive_img hover.image alt="" class_name="product-card__img product-card__img--hover" sizes="(max-width: 768px) 45vw, 200px" width=300 height=400 loading="lazy" aria_hidden=True %}
         {% endif %}
       {% else %}
         <span class="product-card__placeholder">{{ product.name|truncatechars:1 }}</span>

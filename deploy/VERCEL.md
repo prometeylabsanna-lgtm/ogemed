@@ -26,3 +26,10 @@
 4. Deploy → `https://<project>.vercel.app/` і `/healthz/`
 
 Пізніше на Droplet: Postgres + `DATABASE_URL` + постійний `MEDIA_ROOT` (див. `deploy/DEPLOY.md`).
+
+## Performance / PageSpeed (після деплою)
+
+1. Env `STATIC_VERSION` — інкрементуйте на кожному релізі зі змінами CSS/JS/шрифтів (cache-bust для `?v=`).
+2. Self-hosted Literata + CSS-бандли збираються на білді (`build_static_bundles` → `collectstatic`).
+3. **Ручний re-upload зображень** (hero / product / brand showcase) через адмінку → `OptimizedImageField` збереже WebP + `_thumb.webp`. Без цього seed PNG/JPG лишаються важкими; код уже вміє `srcset`/thumb, коли thumb існує.
+4. Перевірка: [PageSpeed Insights](https://pagespeed.web.dev/) для mobile на головній — ціль Performance ≥ 90.

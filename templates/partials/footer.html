@@ -6,9 +6,11 @@
         class="site-footer__logo-img"
         src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% vstatic 'img/logo.png' %}{% endif %}"
         alt="OGEMED for you"
-        width="691"
-        height="131"
+        width="295"
+        height="56"
         loading="lazy"
+        decoding="async"
+        sizes="(max-width: 768px) 200px, 295px"
       >
       {% if site_settings.brand_tagline %}
       <p class="site-footer__tagline">{{ site_settings.brand_tagline }}</p>

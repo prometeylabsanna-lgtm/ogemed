@@ -4,8 +4,7 @@
 {% block title %}{% if order %}{% trans "Дякуємо за замовлення" %}{% else %}{% trans "Замовлення не знайдено" %}{% endif %} — OGEMED for you{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% vstatic 'css/components/checkout_thankyou.css' %}">
-<link rel="stylesheet" href="{% vstatic 'css/components/thankyou_fop.css' %}">
+<link rel="stylesheet" href="{% vstatic 'css/bundles/thankyou.css' %}">
 {% endblock %}
 
 {% block body_class %}page-thankyou{% endblock %}

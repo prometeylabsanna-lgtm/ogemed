@@ -23,6 +23,8 @@ def main() -> None:
     execute_from_command_line(["manage.py", "seed_site_blocks"])
     print("vercel_build: seed_info_sections", flush=True)
     execute_from_command_line(["manage.py", "seed_info_sections"])
+    print("vercel_build: build_static_bundles", flush=True)
+    execute_from_command_line(["manage.py", "build_static_bundles"])
     print("vercel_build: collectstatic", flush=True)
     execute_from_command_line(["manage.py", "collectstatic", "--noinput"])
     print("vercel_build: done", flush=True)

@@ -164,7 +164,7 @@
 
 .care-selection__subtitle {
   margin: 12px 0 0;
-  color: var(--color-neutral-600);
+  color: var(--color-text-muted);
   font-size: clamp(14px, 1.6vw, 16px);
   line-height: 1.5;
 }

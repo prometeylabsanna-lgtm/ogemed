@@ -1,0 +1,821 @@
+/* AUTO-GENERATED: pdp.css — do not edit; run build_static_bundles */
+
+/* === css/components/label_icons.css === */
+/* Маски-іконки міток товару: спільні для сторінки товару, меню на головній і фільтрів.
+   Розмір задає --label-icon-size, колір — currentColor батьківського елемента,
+   URL маски — --label-mask (з шаблону або fallback нижче). */
+.label-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: var(--label-icon-size, 38px);
+  height: var(--label-icon-size, 38px);
+  background: currentColor;
+  -webkit-mask-image: var(--label-mask);
+  mask-image: var(--label-mask);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* Fallback, якщо --label-mask не передано */
+.label-icon--perfume_off {
+  --label-mask: url("../../img/labels/perfume_off.png");
+}
+
+.label-icon--branch {
+  --label-mask: url("../../img/labels/branch.png");
+}
+
+.label-icon--face_check {
+  --label-mask: url("../../img/labels/face_check.png");
+}
+
+.label-icon--leaf_soft {
+  --label-mask: url("../../img/labels/leaf_soft.png");
+}
+
+.label-icon--hand_drop {
+  --label-mask: url("../../img/labels/hand_drop.png");
+}
+
+.label-icon--flask_off {
+  --label-mask: url("../../img/labels/flask_off.png");
+}
+
+.label-icon--bunny_off {
+  --label-mask: url("../../img/labels/bunny_off.png");
+}
+
+.label-icon--face_care {
+  --label-mask: url("../../img/labels/face_care.png");
+}
+
+/* === css/components/pdp.css === */
+/* Сторінка товару світліша за решту сайту — в тон хедера */
+body.page-pdp {
+  background: var(--color-bg-light);
+}
+
+.pdp {
+  --pdp-title-size: clamp(32px, 6vw, 54px);
+  /* половина першого рядка назви (line-height 1.08) — щоб вирівняти верх фото по її центру */
+  --pdp-title-half: calc(var(--pdp-title-size) * 0.54);
+  /* блок бренду над назвою: 12px × 1.5 + 8px відступу */
+  --pdp-brand-block: 26px;
+  /* повітря між смисловими блоками колонки: опис — іконки — опис — кнопка */
+  --pdp-block-gap: 48px;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "gallery"
+    "info"
+    "desc"
+    "attrs";
+  gap: 28px;
+}
+
+.pdp__gallery {
+  grid-area: gallery;
+  min-width: 0;
+  width: 100%;
+  /* фото цілком у видимій зоні мобільного екрана: 0.8 = 4/5 */
+  max-width: min(100%, 460px, calc((100vh - 180px) * 0.8));
+  max-width: min(100%, 460px, calc((100svh - 180px) * 0.8));
+  margin-inline: auto;
+}
+
+.pdp__info {
+  grid-area: info;
+  min-width: 0;
+}
+
+.pdp-gallery__stage {
+  position: relative;
+  background: transparent;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.pdp-gallery__slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.pdp-gallery__slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.pdp-gallery__slide img,
+.pdp__placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  background: transparent;
+}
+
+.pdp-gallery__slide img {
+  cursor: zoom-in;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.pdp-gallery__slide img[src$=".png"] {
+  object-fit: contain;
+  padding: 6%;
+}
+
+.pdp__placeholder {
+  aspect-ratio: 4 / 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 64px;
+  color: var(--color-accent-700);
+}
+
+.pdp__brand {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.pdp__title {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: var(--pdp-title-size);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.pdp__subtitle {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-neutral-800);
+}
+
+.pdp__price {
+  margin-bottom: 18px;
+}
+
+.pdp__pricing {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.pdp__sku {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--color-neutral-600);
+}
+
+.pdp__availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-stock-out);
+}
+
+/* Кружечок статусу підхоплює колір самого напису */
+.pdp__availability::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.pdp__availability--in_stock {
+  color: var(--color-stock-in);
+}
+
+.pdp__availability--on_order {
+  color: var(--color-stock-order);
+}
+
+/* Ціна — головний акцент колонки: найбільший кегль після назви + колір бренду */
+.pdp__price-current {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--color-accent-700);
+}
+
+.pdp__price-old {
+  font-size: 17px;
+  text-decoration: line-through;
+  color: var(--color-neutral-500);
+}
+
+.pdp__description {
+  grid-area: desc;
+  margin-top: 0;
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-neutral-800);
+}
+
+.pdp__description p,
+.pdp__description ul,
+.pdp__description ol {
+  margin: 0 0 1em;
+}
+
+.pdp__description ul,
+.pdp__description ol {
+  padding-left: 1.2em;
+}
+
+.pdp__description li {
+  margin-bottom: 0.4em;
+}
+
+.pdp__description strong {
+  font-weight: 700;
+}
+
+.pdp__description em {
+  font-style: italic;
+}
+
+.pdp__description u {
+  text-decoration: underline;
+}
+
+.pdp__attrs {
+  grid-area: attrs;
+  margin-top: 0;
+  max-width: none;
+  width: 100%;
+}
+
+.pdp__attrs-title,
+.pdp__attrs h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.pdp__attrs-list,
+.pdp__attrs dl {
+  margin: 0;
+}
+
+.pdp__attrs-row,
+.pdp__attrs dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 12px 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.pdp__attrs-row dt,
+.pdp__attrs dt {
+  color: var(--color-neutral-600);
+  overflow-wrap: anywhere;
+}
+
+.pdp__attrs-row dd,
+.pdp__attrs dd {
+  margin: 0;
+  text-align: right;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.pdp-labels {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  margin: var(--pdp-block-gap) 0 0;
+  padding: 0;
+}
+
+.pdp-label {
+  position: relative;
+  flex: 0 0 auto;
+  /* колір маски-іконки (.label-icon) і підпису — один */
+  color: var(--color-accent-700);
+  --label-icon-size: 64px;
+}
+
+/* крайні підказки тримаються краю рамки, а не центру іконки — інакше зрізає */
+.pdp-label:first-child {
+  --tip-left: 0;
+  --tip-x: 0;
+}
+
+.pdp-label:last-child {
+  --tip-left: auto;
+  --tip-right: 0;
+  --tip-x: 0;
+}
+
+.pdp-label__trigger {
+  display: block;
+  padding: 4px;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: help;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  /* довге натискання на iOS не має відкривати системне меню/виділення */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: opacity 0.2s ease;
+}
+
+.pdp-label__trigger:focus-visible {
+  outline: 2px solid var(--color-accent-700);
+  outline-offset: 2px;
+}
+
+.pdp-label__text {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: var(--tip-left, 50%);
+  right: var(--tip-right, auto);
+  z-index: 2;
+  width: max-content;
+  max-width: min(124px, calc(100vw - 32px));
+  transform: translate(var(--tip-x, -50%), -4px);
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.pdp-label.is-open .pdp-label__text,
+.pdp-label__trigger:focus-visible ~ .pdp-label__text {
+  opacity: 1;
+  transform: translate(var(--tip-x, -50%), 0);
+}
+
+@media (hover: hover) {
+  .pdp-label__trigger:hover {
+    opacity: 0.75;
+  }
+
+  .pdp-label__trigger:hover ~ .pdp-label__text {
+    opacity: 1;
+    transform: translate(var(--tip-x, -50%), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-label__text {
+    transition: none;
+    transform: translate(var(--tip-x, -50%), 0);
+  }
+}
+
+.pdp__cta {
+  margin-top: var(--pdp-block-gap);
+}
+
+.pdp__add {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.btn.pdp__add-btn {
+  width: auto;
+  max-width: 420px;
+  min-height: 54px;
+  border-radius: 0;
+  font-size: 12.5px;
+  letter-spacing: 0.16em;
+}
+
+.pdp__unavailable {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-neutral-700);
+}
+
+@media (max-width: 479px) {
+  .pdp__attrs-row,
+  .pdp__attrs dl > div {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 480px) {
+  .pdp-label {
+    --label-icon-size: 72px;
+  }
+
+  .pdp-label__text {
+    font-size: 13px;
+    max-width: 140px;
+  }
+}
+
+@media (min-width: 900px) {
+  .pdp {
+    --pdp-block-gap: 60px;
+    /* вужчий блок, центрований контейнером: колонки ближче, відступи від країв однакові */
+    max-width: 1100px;
+    /* колонка галереї дорівнює ширині фото — відступи ліворуч і праворуч однакові */
+    grid-template-columns: minmax(0, 1fr) 460px;
+    grid-template-areas:
+      "info gallery"
+      "desc attrs";
+    column-gap: clamp(48px, 5.5vw, 88px);
+    row-gap: var(--pdp-block-gap);
+    align-items: start;
+  }
+
+  .pdp__gallery {
+    margin-inline: 0;
+    margin-top: var(--pdp-title-half);
+    justify-self: end;
+    max-width: 460px;
+  }
+
+  .pdp:has(.pdp__brand) .pdp__gallery {
+    margin-top: calc(var(--pdp-brand-block) + var(--pdp-title-half));
+  }
+
+  .pdp__attrs {
+    justify-self: stretch;
+    width: 100%;
+    max-width: 460px;
+  }
+}
+
+/* === css/components/pdp_variants.css === */
+/* PDP variant selectors: text + underline / checkbox / color swatch */
+
+.pdp__variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+
+.pdp__variants-wrap {
+  margin-top: var(--pdp-block-gap);
+}
+
+.pdp__variants-wrap:not(:has(.pdp__variants)) {
+  margin-top: 0;
+}
+
+.pdp__variant-group {
+  width: 100%;
+  margin: 0 0 16px;
+}
+
+.pdp__variant-group:last-child {
+  margin-bottom: 0;
+}
+
+.pdp__variant-group-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+
+.pdp__variant-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.pdp__variant {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 1.3;
+  text-decoration: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.pdp__variant-label {
+  text-decoration: none;
+  text-underline-offset: 0.22em;
+}
+
+.pdp__variant.is-active {
+  color: var(--color-neutral-700);
+}
+
+.pdp__variant.is-active .pdp__variant-label {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--color-neutral-500);
+}
+
+.pdp__variant:hover {
+  color: var(--color-neutral-700);
+}
+
+.pdp__variant.is-soft {
+  opacity: 0.55;
+}
+
+.pdp__variant.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pdp__check {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-text) 14%, transparent);
+  position: relative;
+}
+
+.pdp__variant.is-active .pdp__check {
+  background: var(--color-neutral-500);
+}
+
+.pdp__variant.is-active .pdp__check::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border-right: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  transform: rotate(45deg);
+}
+
+.pdp__variant--swatch {
+  gap: 8px;
+}
+
+.pdp__swatch {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.pdp__swatch--empty {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.pdp__variant--swatch.is-active .pdp__swatch {
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 0 0 1.5px var(--color-neutral-500);
+}
+
+@media (max-width: 479px) {
+  .pdp__variant-options {
+    gap: 8px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp__variant {
+    transition: none;
+  }
+}
+
+/* === css/components/pdp_zoom.css === */
+/* Лупа в рамці галереї + повноекранний перегляд фото товару */
+
+/* Тільки мишка: на тач-екранах збільшення відкривається тапом */
+@media (hover: hover) and (pointer: fine) {
+  .pdp-gallery__stage .pdp-gallery__slide img {
+    transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+    transition: transform 0.3s ease;
+    will-change: transform;
+  }
+
+  .pdp-gallery__stage.is-zoomed .pdp-gallery__slide.is-active img {
+    /* transform-origin змінюється без анімації, тому картинка йде за курсором одразу.
+       Масштаб рахує скрипт із роздільності файлу */
+    transform: scale(var(--zoom-scale, 2));
+    transition: transform 0.3s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-gallery__stage .pdp-gallery__slide img {
+    transition: none;
+  }
+}
+
+.pdp-zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  padding-bottom: calc(16px + var(--safe-bottom));
+  background: color-mix(in srgb, var(--color-neutral-900) 88%, transparent);
+  overscroll-behavior: contain;
+}
+
+.pdp-zoom[hidden] {
+  display: none;
+}
+
+.pdp-zoom__canvas {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: zoom-in;
+  /* жести обробляє скрипт: браузер не має гортати сторінку під оверлеєм */
+  touch-action: none;
+}
+
+.pdp-zoom__canvas.is-zoomed {
+  cursor: grab;
+}
+
+.pdp-zoom__canvas img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center;
+  will-change: transform;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.pdp-zoom__canvas img.is-eased {
+  transition: transform 0.22s ease;
+}
+
+.pdp-zoom__close {
+  position: absolute;
+  top: calc(8px + env(safe-area-inset-top, 0px));
+  right: calc(8px + env(safe-area-inset-right, 0px));
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.pdp-zoom__close:hover,
+.pdp-zoom__close:focus-visible {
+  opacity: 1;
+}
+
+.pdp-zoom__counter {
+  margin: 0 0 4px;
+  min-height: 18px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, #fff 70%, transparent);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-zoom__canvas img.is-eased,
+  .pdp-zoom__close {
+    transition: none;
+  }
+}
+
+/* === css/components/slider_bars.css === */
+/* Індикатори слайдерів: активна риска довша, неактивні — короткі */
+.slider-bars {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  z-index: 3;
+}
+
+.slider-bars__item {
+  position: relative;
+  width: 14px;
+  height: 3px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: color-mix(in srgb, #fff 45%, transparent);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: width 0.28s ease, background-color 0.28s ease;
+}
+
+/* Збільшена зона натискання, візуально риска лишається тонкою */
+.slider-bars__item::after {
+  content: "";
+  position: absolute;
+  inset: -11px -4px;
+}
+
+.slider-bars__item.is-active {
+  width: 34px;
+  background: #fff;
+}
+
+.slider-bars__item:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* Варіант для світлих фото (галерея товару) */
+.slider-bars--ink .slider-bars__item {
+  background: color-mix(in srgb, var(--color-text) 28%, transparent);
+}
+
+.slider-bars--ink .slider-bars__item.is-active {
+  background: var(--color-text);
+}
+
+.slider-bars--ink .slider-bars__item:focus-visible {
+  outline-color: var(--color-text);
+}
+
+@media (max-width: 480px) {
+  .slider-bars {
+    bottom: 12px;
+    gap: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider-bars__item {
+    transition: none;
+  }
+}

@@ -1,4 +1,4 @@
-{% load i18n ogemed_content %}
+{% load i18n ogemed_content responsive_img %}
 {% section_visible "home" "brands_section_visible" as brands_ok %}
 {% if brands_ok and featured_brands %}
 <section class="brand-showcase" data-brand-showcase>
@@ -25,15 +25,11 @@
               {% comment %}Вітрина тримає окреме фото (зазвичай PNG без фону); фолбек — плитка каталогу{% endcomment %}
               {% with showcase=brand.showcase_image|default:brand.cover_image %}
               {% if showcase %}
-              <img
-                class="brand-panel__visual"
-                src="{{ showcase.url }}"
-                alt="{{ brand.name }}"
-                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                width="800"
-                height="1000"
-                decoding="async"
-              >
+              {% if forloop.first %}
+              {% responsive_img showcase alt=brand.name class_name="brand-panel__visual" sizes="(max-width: 768px) 90vw, 400px" width=800 height=1000 loading="eager" decoding="async" %}
+              {% else %}
+              {% responsive_img showcase alt=brand.name class_name="brand-panel__visual" sizes="(max-width: 768px) 90vw, 400px" width=800 height=1000 loading="lazy" decoding="async" fetchpriority="low" %}
+              {% endif %}
               {% endif %}
               {% endwith %}
             </div>

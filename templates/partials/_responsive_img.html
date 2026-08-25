@@ -1,0 +1,14 @@
+{% if src %}
+<img
+  {% if class_name %}class="{{ class_name }}"{% endif %}
+  src="{{ src }}"
+  {% if srcset %}srcset="{{ srcset }}" sizes="{{ sizes }}"{% endif %}
+  alt="{{ alt }}"
+  {% if width %}width="{{ width }}"{% endif %}
+  {% if height %}height="{{ height }}"{% endif %}
+  {% if loading %}loading="{{ loading }}"{% endif %}
+  {% if decoding %}decoding="{{ decoding }}"{% endif %}
+  {% if fetchpriority %}fetchpriority="{{ fetchpriority }}"{% endif %}
+  {% if aria_hidden %}aria-hidden="true"{% endif %}
+>
+{% endif %}
