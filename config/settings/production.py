@@ -64,6 +64,11 @@ CSRF_COOKIE_SAMESITE = "Lax"
 # Vercel: SQLite у /tmp не спільний між лямбдами — кошик зникав на /oformlennya/.
 if _ON_VERCEL:
     SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+    # Адмінка + повідомлення роздувають cookie; без цього сесія «рветься».
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_AGE = 60 * 60 * 12
+    SESSION_SAVE_EVERY_REQUEST = False
+    MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=86400)
@@ -104,6 +109,14 @@ STORAGES = {
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = env("MEDIA_ROOT", default=str(BASE_DIR / "media"))
+
+if _ON_VERCEL:
+    from config.vercel_media import media_root
+
+    MEDIA_ROOT = media_root()
+    STORAGES["default"] = {
+        "BACKEND": "config.vercel_media.VercelMediaStorage",
+    }
 
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="")
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default="")

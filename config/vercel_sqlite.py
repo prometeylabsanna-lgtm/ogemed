@@ -36,8 +36,8 @@ def sqlite_name() -> str:
 def ensure_vercel_demo_admin() -> None:
     """На лямбді: staff admin з паролем з env (усі інстанси однакові).
 
-    Зміна пароля в UI на Vercel не тримається: /tmp SQLite ефемерний і
-    копіюється з білду. Задавайте DEMO_ADMIN_PASSWORD у Vercel → Redeploy.
+    Важно: set_password() лише коли пароль реально інший. Інакше новий hash
+    на кожному cold start інвалідує signed-cookie сесію → «викидає» з адмінки.
     """
     if not is_vercel_lambda():
         return
@@ -45,7 +45,7 @@ def ensure_vercel_demo_admin() -> None:
 
     User = get_user_model()
     password = demo_admin_password()
-    user, _ = User.objects.get_or_create(
+    user, created = User.objects.get_or_create(
         username="admin",
         defaults={
             "email": "admin@ogemed.local",
@@ -53,10 +53,18 @@ def ensure_vercel_demo_admin() -> None:
             "is_superuser": True,
         },
     )
-    # Синхронізуємо з env на кожному cold start — інакше різні /tmp інстанси
-    # матимуть різні паролі після «Змінити пароль» в адмінці.
-    user.set_password(password)
-    user.is_staff = True
-    user.is_superuser = True
-    user.is_active = True
-    user.save(update_fields=["password", "is_staff", "is_superuser", "is_active"])
+    update_fields: list[str] = []
+    if created or not user.check_password(password):
+        user.set_password(password)
+        update_fields.append("password")
+    if not user.is_staff:
+        user.is_staff = True
+        update_fields.append("is_staff")
+    if not user.is_superuser:
+        user.is_superuser = True
+        update_fields.append("is_superuser")
+    if not user.is_active:
+        user.is_active = True
+        update_fields.append("is_active")
+    if update_fields:
+        user.save(update_fields=update_fields)
