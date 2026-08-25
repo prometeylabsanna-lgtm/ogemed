@@ -11,7 +11,7 @@
       <div class="brand-showcase__stage" data-brand-stage>
         {% for brand in featured_brands %}
         <article
-          class="brand-panel{% if forloop.counter|divisibleby:2 %} brand-panel--right{% else %} brand-panel--left{% endif %}{% if forloop.counter == 1 or forloop.counter == 3 %} brand-panel--md-media{% elif forloop.counter == 2 %} brand-panel--sm-media{% endif %}"
+          class="brand-panel{% if forloop.counter|divisibleby:2 %} brand-panel--right{% else %} brand-panel--left{% endif %} brand-panel--md-media"
           data-brand-panel
           data-brand-index="{{ forloop.counter0 }}"
           {% if not forloop.first %}aria-hidden="true"{% endif %}

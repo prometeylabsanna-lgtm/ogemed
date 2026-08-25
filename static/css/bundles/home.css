@@ -998,11 +998,9 @@
 }
 
 .brand-showcase .container {
-  padding-inline: max(
-    var(--brand-gutter),
-    env(safe-area-inset-left, 0px),
-    env(safe-area-inset-right, 0px)
-  );
+  padding-inline: max(var(--brand-gutter),
+      env(safe-area-inset-left, 0px),
+      env(safe-area-inset-right, 0px));
 }
 
 .brand-showcase__scroll {
@@ -1186,6 +1184,12 @@
 .brand-panel--md-media .brand-panel__visual {
   max-width: 48%;
   max-height: calc(var(--brand-stage-h) * 0.62);
+}
+
+/* Sesderma / вузькі флакони — трохи більші за md */
+.brand-panel--md-media.brand-panel--right .brand-panel__visual {
+  max-width: 56%;
+  max-height: calc(var(--brand-stage-h) * 0.72);
 }
 
 .brand-panel--sm-media .brand-panel__visual {
