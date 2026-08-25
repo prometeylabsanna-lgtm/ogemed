@@ -298,13 +298,13 @@ class Command(BaseCommand):
                 "showcase": "brand-pharmely.png",
             },
             {
-                "slug": "infini-premium",
+                "slug": "sesderma",
                 "sort_order": 2,
-                "name_uk": "Infini Premium",
-                "name_ru": "Infini Premium",
-                "tagline_uk": "Преміальний догляд із делікатними текстурами для салонних і домашніх ритуалів краси.",
-                "tagline_ru": "Премиальный уход с деликатными текстурами для салонных и домашних ритуалов красоты.",
-                "showcase": "brand-infini-premium.png",
+                "name_uk": "Sesderma",
+                "name_ru": "Sesderma",
+                "tagline_uk": "Іспанська дерматокосметика з нанотехнологіями — сироватки та догляд для видимого оновлення шкіри.",
+                "tagline_ru": "Испанская дерматокосметика с нанотехнологиями — сыворотки и уход для видимого обновления кожи.",
+                "showcase": "brand-sesderma.png",
             },
             {
                 "slug": "esthemax",
@@ -316,6 +316,11 @@ class Command(BaseCommand):
                 "showcase": "brand-esthemax.png",
             },
         ]
+        featured_slugs = {item["slug"] for item in brand_defs}
+        # Знімаємо з вітрини бренди, яких більше немає в трійці (напр. Infini Premium)
+        Brand.objects.filter(is_featured=True).exclude(slug__in=featured_slugs).update(
+            is_featured=False
+        )
         for item in brand_defs:
             featured_brand, created = Brand.objects.get_or_create(
                 slug=item["slug"],
