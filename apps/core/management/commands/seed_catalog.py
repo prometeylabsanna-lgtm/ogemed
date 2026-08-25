@@ -276,16 +276,6 @@ class Command(BaseCommand):
             cats_by_slug[item["slug"]] = cat
             self.stdout.write(self.style.SUCCESS(f"Category ready: {item['slug']}"))
 
-        care = cats_by_slug["uhodova-kosmetyka"]
-        toning = cats_by_slug["tonizatsiya"]
-        masks = cats_by_slug["masky"]
-        cleansing = cats_by_slug["ochyshchennya"]
-        peels = cats_by_slug["pilinhy"]
-        # keep aliases for product seed mapping
-        face = care
-        body = care
-        makeup = care
-
         # Brands featured on the homepage showcase block
         brand_defs = [
             {
@@ -369,184 +359,19 @@ class Command(BaseCommand):
                 )
             self.stdout.write(self.style.SUCCESS(f"Brand ready: {item['slug']}"))
 
-        samples = [
-            # Каталог / хіти (не в блоці Новинки)
-            {
-                "slug": "serum-vitamin-c",
-                "name_uk": "Сироватка Vitamin C",
-                "name_ru": "Сыворотка Vitamin C",
-                "category": face,
-                "is_hit": True,
-                "is_new": False,
-                "is_sale": True,
-                "sku": "OGM-SER-C30",
-                "price": "890.00",
-                "old_price": "1090.00",
-                "label_uk": "30 мл",
-                "image": "serum-vitamin-c.jpg",
-            },
-            {
-                "slug": "body-lotion-pure",
-                "name_uk": "Лосьйон для тіла Pure",
-                "name_ru": "Лосьон для тела Pure",
-                "category": body,
-                "is_hit": True,
-                "is_new": False,
-                "is_sale": False,
-                "sku": "OGM-LOT-PR200",
-                "price": "680.00",
-                "old_price": None,
-                "label_uk": "200 мл",
-                "image": "body-lotion-pure.jpg",
-            },
-            {
-                "slug": "serum-pump-gold",
-                "name_uk": "Сироватка Gold Pump",
-                "name_ru": "Сыворотка Gold Pump",
-                "category": care,
-                "is_hit": True,
-                "is_new": False,
-                "is_sale": False,
-                "sku": "OGM-SER-GP50",
-                "price": "1120.00",
-                "old_price": None,
-                "label_uk": "50 мл",
-                "image": "serum-pump-gold.jpg",
-            },
-            {
-                "slug": "cream-cheek-glow",
-                "name_uk": "Крем Cheek Glow",
-                "name_ru": "Крем Cheek Glow",
-                "category": care,
-                "is_hit": True,
-                "is_new": False,
-                "is_sale": False,
-                "sku": "OGM-CRM-CG50",
-                "price": "850.00",
-                "old_price": None,
-                "label_uk": "50 мл",
-                "image": "cream-cheek-glow.jpg",
-            },
-            {
-                "slug": "balm-silk",
-                "name_uk": "Бальзам Silk Touch",
-                "name_ru": "Бальзам Silk Touch",
-                "category": care,
-                "is_hit": True,
-                "is_new": False,
-                "is_sale": True,
-                "sku": "OGM-BL-ST75",
-                "price": "590.00",
-                "old_price": "720.00",
-                "label_uk": "75 мл",
-                "image": "balm-silk.jpg",
-            },
-            # Новинки (7) — прозорі PNG packshots
-            {
-                "slug": "cream-soft-bamboo",
-                "name_uk": "Крем Soft Bamboo",
-                "name_ru": "Крем Soft Bamboo",
-                "category": face,
-                "is_hit": True,
-                "is_new": True,
-                "is_sale": False,
-                "sku": "OGM-CRM-SB50",
-                "price": "890.00",
-                "old_price": None,
-                "label_uk": "50 мл",
-                "image": "novinka-v5-cream-bamboo.png",
-            },
-            {
-                "slug": "oil-glow-mist",
-                "name_uk": "Олія Glow Mist",
-                "name_ru": "Масло Glow Mist",
-                "category": care,
-                "is_hit": False,
-                "is_new": True,
-                "is_sale": True,
-                "sku": "OGM-OIL-GM100",
-                "price": "720.00",
-                "old_price": "890.00",
-                "label_uk": "100 мл",
-                "image": "novinka-v5-oil-glow-mist.png",
-            },
-            {
-                "slug": "serum-amber-drop",
-                "name_uk": "Сироватка Amber Drop",
-                "name_ru": "Сыворотка Amber Drop",
-                "category": care,
-                "is_hit": True,
-                "is_new": True,
-                "is_sale": False,
-                "sku": "OGM-SER-AD30",
-                "price": "1180.00",
-                "old_price": None,
-                "label_uk": "30 мл",
-                "image": "novinka-v5-serum-amber-drop.png",
-            },
-            {
-                "slug": "cream-rose-soft-care",
-                "name_uk": "Крем Rose Soft Care",
-                "name_ru": "Крем Rose Soft Care",
-                "category": face,
-                "is_hit": False,
-                "is_new": True,
-                "is_sale": False,
-                "sku": "OGM-CRM-RSC50",
-                "price": "810.00",
-                "old_price": None,
-                "label_uk": "50 мл",
-                "image": "novinka-v5-cream-rose-soft.png",
-            },
-            {
-                "slug": "ampoules-collagen-boost",
-                "name_uk": "Ампули Collagen Boost",
-                "name_ru": "Ампулы Collagen Boost",
-                "category": peels,
-                "is_hit": True,
-                "is_new": True,
-                "is_sale": True,
-                "sku": "OGM-AMP-CB7",
-                "price": "1450.00",
-                "old_price": "1690.00",
-                "label_uk": "10 мл",
-                "image": "novinka-v5-ampoules-collagen.png",
-            },
-            {
-                "slug": "serum-pure-active",
-                "name_uk": "Сироватка Pure Active",
-                "name_ru": "Сыворотка Pure Active",
-                "category": care,
-                "is_hit": False,
-                "is_new": True,
-                "is_sale": False,
-                "sku": "OGM-SER-PA50",
-                "price": "980.00",
-                "old_price": None,
-                "label_uk": "50 мл",
-                "image": "novinka-v5-serum-pure-active.png",
-            },
-            {
-                "slug": "balm-repair-pot",
-                "name_uk": "Бальзам Repair Pot",
-                "name_ru": "Бальзам Repair Pot",
-                "category": masks,
-                "is_hit": True,
-                "is_new": True,
-                "is_sale": True,
-                "sku": "OGM-BL-RP30",
-                "price": "640.00",
-                "old_price": "780.00",
-                "label_uk": "30 мл",
-                "image": "novinka-v5-balm-repair-pot.png",
-            },
-        ]
+        # Демо-товари вимкнені: seed їх не створює.
+        # Категорії для майбутніх товарів: cats_by_slug (uhodova-kosmetyka, masky, …).
+        samples: list[dict] = []
 
         seeded_slugs = {item["slug"] for item in samples}
-        Product.objects.exclude(slug__in=seeded_slugs).filter(is_active=True).update(
-            is_active=False,
-            status="inactive",
-        )
+        # Повністю прибираємо з БД те, чого немає в seed (після редеплою не повертаються).
+        deleted_count, _ = Product.objects.exclude(slug__in=seeded_slugs).delete()
+        if deleted_count:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"Removed {deleted_count} DB object(s) for products not in seed"
+                )
+            )
 
         # order_by робить порядок незалежним від того, коли бренд додали в базу
         product_brands = list(Brand.objects.filter(is_active=True).order_by("slug"))
