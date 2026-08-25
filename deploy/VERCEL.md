@@ -8,6 +8,10 @@
 
 **Медіа:** URL `/media/...` віддає файли з `/tmp` (нові аплоади) **або** з закоміченого `media/` білду (seed). Без fallback seed-картинки дають 404.
 
+**Фото брендів:** `cover_image` / `showcase_image` задаються лише в адмінці. `seed_demo` більше не викликає `import_brand_covers` і не перезаписує showcase. Разовий імпорт: `python3 manage.py import_brand_covers --src media/brands/sources`.
+
+На Vercel SQLite у `/tmp` ефемерний: після нового інстансу/деплою зміни з адмінки зникають, доки немає Postgres + S3.
+
 ## Адмінка (логін)
 
 - Логін: `admin`

@@ -72,7 +72,11 @@ def _to_cover(path: Path) -> bytes:
 
 
 class Command(BaseCommand):
-    help = "Імпорт cover_image брендів із теки (ім'я файлу = slug бренду). Вітрину на головній не чіпає."
+    help = (
+        "Імпорт cover_image брендів із теки (ім'я файлу = slug). "
+        "За замовчуванням НЕ перезаписує існуючі фото; --force щоб замінити. "
+        "Не викликається з seed_demo — фото брендів лише через адмінку."
+    )
 
     def add_arguments(self, parser):
         parser.add_argument("--src", required=True, help="Тека з фото брендів")

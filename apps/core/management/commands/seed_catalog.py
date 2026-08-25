@@ -295,7 +295,6 @@ class Command(BaseCommand):
                 "name_ru": "Pharmely",
                 "tagline_uk": "Фармацевтична якість і клінічно доведена ефективність — формули, яким довіряють професіонали.",
                 "tagline_ru": "Фармацевтическое качество и клинически доказанная эффективность — формулы, которым доверяют профессионалы.",
-                "image": "brand-pharmely.png",
             },
             {
                 "slug": "infini-premium",
@@ -304,7 +303,6 @@ class Command(BaseCommand):
                 "name_ru": "Infini Premium",
                 "tagline_uk": "Преміальний догляд із делікатними текстурами для салонних і домашніх ритуалів краси.",
                 "tagline_ru": "Премиальный уход с деликатными текстурами для салонных и домашних ритуалов красоты.",
-                "image": "brand-infini-premium.png",
             },
             {
                 "slug": "esthemax",
@@ -313,7 +311,6 @@ class Command(BaseCommand):
                 "name_ru": "Esthemax",
                 "tagline_uk": "Естетична косметологія нового рівня — інноваційні рішення для видимого результату.",
                 "tagline_ru": "Эстетическая косметология нового уровня — инновационные решения для видимого результата.",
-                "image": "brand-esthemax.png",
             },
         ]
         for item in brand_defs:
@@ -337,11 +334,21 @@ class Command(BaseCommand):
                 featured_brand.is_featured = True
                 featured_brand.is_active = True
                 featured_brand.sort_order = item["sort_order"]
-            # Вітрина на головній — окреме поле; cover_image для каталогу/brendy
-            # лишається з import_brand_covers (media/brands/sources).
-            # Джерела packshot: assets/gen2-{cream-bamboo,serum,spray}.png → media/seed/brand-*.png
-            self._attach_image(featured_brand.showcase_image, SEED_DIR / item["image"])
-            featured_brand.save()
+                featured_brand.save(
+                    update_fields=[
+                        "name_uk",
+                        "name_ru",
+                        "tagline_uk",
+                        "tagline_ru",
+                        "is_featured",
+                        "is_active",
+                        "sort_order",
+                        "updated_at",
+                    ]
+                )
+            else:
+                featured_brand.save()
+            # cover_image / showcase_image не чіпаємо — тільки адмінка
             self.stdout.write(self.style.SUCCESS(f"Brand ready: {item['slug']}"))
 
         samples = [
