@@ -30,6 +30,17 @@ class AdminImagePreviewWidget(UnfoldAdminImageFieldWidget):
         attrs.setdefault("accept", "image/*")
         super().__init__(attrs=attrs)
 
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        missing = False
+        if value and getattr(value, "name", None):
+            try:
+                missing = not value.storage.exists(value.name)
+            except Exception:
+                missing = True
+        context["widget"]["file_missing"] = missing
+        return context
+
 
 IMAGE_FORMFIELD_OVERRIDES = {
     models.ImageField: {"widget": AdminImagePreviewWidget},

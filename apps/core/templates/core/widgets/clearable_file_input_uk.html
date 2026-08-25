@@ -1,6 +1,11 @@
 {% load i18n %}
 
-{% if widget.attrs.accept == 'image/*' and widget.is_initial %}
+{% if widget.file_missing %}
+    <p class="mb-3 text-sm text-red-700 dark:text-red-400">
+        Файл з БД недоступний на цьому сервері (типово для Vercel без S3).
+        Поставте «Очистити» і завантажте фото знову після підключення Postgres + S3/R2.
+    </p>
+{% elif widget.attrs.accept == 'image/*' and widget.is_initial %}
     <div class="mb-4 max-w-48">
         <a href="{{ widget.value.url }}" target="_blank" rel="noopener noreferrer">
             <img src="{{ widget.value.url }}" alt="Превʼю" class="block rounded" />
@@ -25,7 +30,7 @@
             <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} />
         </div>
 
-        {% if widget.is_initial %}
+        {% if widget.is_initial and not widget.file_missing %}
             <a href="{{ widget.value.url }}" class="border-r border-base-200 cursor-pointer text-base-400 px-3 hover:text-base-700 dark:border-base-700 dark:text-base-500 dark:hover:text-base-200" target="_blank" rel="noopener noreferrer">
                 <span class="material-symbols-outlined">download</span>
             </a>

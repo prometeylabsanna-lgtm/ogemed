@@ -11,7 +11,7 @@
 <section class="brand-page container section-gap">
   <header class="brand-page__head">
     <div class="brand-page__logo">
-      {% if brand.cover_image %}
+      {% if brand.has_cover_image %}
         <img
           class="brand-page__cover"
           src="{{ brand.cover_image.url }}"

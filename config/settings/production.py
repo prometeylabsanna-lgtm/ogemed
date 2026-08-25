@@ -36,12 +36,14 @@ if _ON_VERCEL:
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ["*"]
 
-_database_url = "" if _ON_VERCEL else os.environ.get("DATABASE_URL", "")
+# Postgres на Vercel — якщо заданий DATABASE_URL (Neon тощо).
+# Інакше демо-SQLite у /tmp (зміни адмінки між інстансами не тримаються).
+_database_url = (os.environ.get("DATABASE_URL") or "").strip()
 if _database_url:
     DATABASES = {"default": env.db("DATABASE_URL")}
     DATABASES["default"]["CONN_MAX_AGE"] = 0 if _ON_VERCEL else 60
     DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
-    if _ON_VERCEL:
+    if _ON_VERCEL or "sslmode" in _database_url or "neon.tech" in _database_url:
         DATABASES["default"].setdefault("OPTIONS", {})
         DATABASES["default"]["OPTIONS"].setdefault("sslmode", "require")
 else:
@@ -110,14 +112,6 @@ STORAGES = {
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = env("MEDIA_ROOT", default=str(BASE_DIR / "media"))
 
-if _ON_VERCEL:
-    from config.vercel_media import media_root
-
-    MEDIA_ROOT = media_root()
-    STORAGES["default"] = {
-        "BACKEND": "config.vercel_media.VercelMediaStorage",
-    }
-
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="")
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default="")
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default="")
@@ -130,14 +124,29 @@ AWS_DEFAULT_ACL = None
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
-if AWS_STORAGE_BUCKET_NAME:
+_use_s3 = bool(AWS_STORAGE_BUCKET_NAME)
+
+# Vercel без S3: писати в /tmp, читати також seed з білду.
+if _ON_VERCEL and not _use_s3:
+    from config.vercel_media import media_root
+
+    MEDIA_ROOT = media_root()
+    STORAGES["default"] = {
+        "BACKEND": "config.vercel_media.VercelMediaStorage",
+    }
+
+if _use_s3:
     STORAGES["default"] = {
         "BACKEND": "storages.backends.s3.S3Storage",
     }
     if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
-SERVE_MEDIA = not bool(_database_url)
+# Віддавати /media/ самим Django лише для локального FS (не для S3).
+SERVE_MEDIA = STORAGES["default"]["BACKEND"] in (
+    "django.core.files.storage.FileSystemStorage",
+    "config.vercel_media.VercelMediaStorage",
+)
 NOTIFY_USE_QUEUE = False if (_ON_VERCEL or not _database_url) else NOTIFY_USE_QUEUE
 
 if _ON_VERCEL:

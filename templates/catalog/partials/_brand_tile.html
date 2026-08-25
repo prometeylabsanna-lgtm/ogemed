@@ -1,7 +1,7 @@
 <li class="brand-tiles__item">
   <a class="brand-tile" href="{{ brand.get_absolute_url }}">
     <span class="brand-tile__media">
-      {% if brand.cover_image %}
+      {% if brand.has_cover_image %}
         <img
           class="brand-tile__cover"
           src="{{ brand.cover_image.url }}"

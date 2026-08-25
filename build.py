@@ -1,4 +1,4 @@
-"""Vercel build: migrate + demo seed. Always SQLite, unbuffered logs."""
+"""Vercel build: migrate + demo seed. Unbuffered logs."""
 from __future__ import annotations
 
 import os
@@ -7,13 +7,16 @@ import traceback
 
 os.environ["VERCEL"] = "1"
 os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.production"
-os.environ.pop("DATABASE_URL", None)
+# Демо-SQLite лише без DATABASE_URL. Якщо в Vercel задано Neon/Postgres — лишаємо.
+if not (os.environ.get("DATABASE_URL") or "").strip():
+    os.environ.pop("DATABASE_URL", None)
 if not (os.environ.get("SECRET_KEY") or "").strip():
     os.environ["SECRET_KEY"] = "vercel-demo-insecure-key-not-for-real-production"
 
 
 def main() -> None:
-    print("vercel_build: migrate", flush=True)
+    db = "postgres" if (os.environ.get("DATABASE_URL") or "").strip() else "sqlite"
+    print(f"vercel_build: migrate ({db})", flush=True)
     from django.core.management import execute_from_command_line
 
     execute_from_command_line(["manage.py", "migrate", "--noinput"])

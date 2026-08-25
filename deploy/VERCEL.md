@@ -1,43 +1,56 @@
 # Деплой на Vercel (тестовий продакшен)
 
-Без платних env і без зовнішньої БД. На білді: SQLite + `seed_demo` (товари, hero, бренди, фото з `media/seed` і `media/brands/sources`). Картинки віддає сама function з `/media/`.
+## Демо без зовнішніх сервісів
 
-Замовлення/сесії на інстансі не зберігаються назавжди (диск `/tmp`). Це вітрина, не бойовий магазин.
+На білді: SQLite + `seed_demo`. Медіа — seed з білду + аплоади в `/tmp`.
 
-**Адмінка на Vercel:** сесія в signed cookie; пароль демо-адміна не перезаписується на кожному cold start (інакше «викидає» з панелі). Завантаження фото йде в `/tmp` (персистентно лише в межах інстанса; для постійних файлів потрібен S3/R2).
+**Обмеження:** SQLite і файли в `/tmp` **не спільні між лямбдами**. Тому фото бренду з адмінки може з’явитись на хвилину і зникнути після оновлення сторінки — це не баг адмінки, а архітектура Vercel-демо.
 
-**Медіа:** URL `/media/...` віддає файли з `/tmp` (нові аплоади) **або** з закоміченого `media/` білду (seed). Без fallback seed-картинки дають 404.
+## Постійна адмінка на Vercel (рекомендовано)
 
-**Фото брендів:** `cover_image` / `showcase_image` задаються лише в адмінці. `seed_demo` більше не викликає `import_brand_covers` і не перезаписує showcase. Разовий імпорт: `python3 manage.py import_brand_covers --src media/brands/sources`.
+У Vercel → Settings → Environment Variables додайте **обидва** шари:
 
-На Vercel SQLite у `/tmp` ефемерний: після нового інстансу/деплою зміни з адмінки зникають, доки немає Postgres + S3.
+1. **Postgres** (Neon / Supabase): `DATABASE_URL=postgres://...`
+2. **S3-сумісне сховище** (Cloudflare R2 / AWS S3 / DO Spaces):
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+   - `AWS_STORAGE_BUCKET_NAME`
+   - `AWS_S3_ENDPOINT_URL` (для R2)
+   - `AWS_S3_CUSTOM_DOMAIN` (публічний CDN/URL бакету)
+   - `AWS_S3_REGION_NAME=auto` (або регіон)
+
+Після цього Redeploy. Аплоади з адмінки підуть у бакет, записи — у Postgres і **переживуть** refresh.
+
+Без S3 навіть з Postgres файли знову опиняться в `/tmp` і зникнуть.
 
 ## Адмінка (логін)
 
 - Логін: `admin`
 - Пароль за замовчуванням: `admin`
-- **Зміна пароля в UI на Vercel не зберігається** (SQLite у `/tmp`, різні інстанси, білд знову кладе seed).
+- На демо-SQLite зміна пароля в UI не тримається між інстансами.
 
-Щоб свій пароль на демо:
+Свій пароль на демо: env `DEMO_ADMIN_PASSWORD` → Redeploy.
 
-1. Vercel → Project → Settings → Environment Variables
-2. Додайте `DEMO_ADMIN_PASSWORD` = ваш пароль
-3. Redeploy
+## Фото брендів
 
-Після деплою вхід: `admin` + значення з `DEMO_ADMIN_PASSWORD`.
+Лише через адмінку (`cover_image` / `showcase_image`). Seed їх не перезаписує.  
+Разовий імпорт з файлів (локально/Droplet):  
+`python3 manage.py import_brand_covers --src media/brands/sources`
+
+Якщо в адмінці «поламане превʼю» — у БД лишився шлях до файлу, якого немає на цьому інстансі: поставте «Очистити» і завантажте знову (після Postgres+S3).
 
 ## Деплой
 
-1. Закоміть `media/seed/` і `media/brands/sources/` (вони більше не в `.gitignore`).
-2. Репозиторій → [vercel.com/new](https://vercel.com/new), Root = корінь репо.
-3. За бажанням: env `DEMO_ADMIN_PASSWORD` (див. вище).
+1. Закоміть `media/seed/` (і за потреби `media/brands/sources/`).
+2. Vercel → Root = корінь репо.
+3. Env (опційно): `DEMO_ADMIN_PASSWORD`, або `DATABASE_URL` + `AWS_*`.
 4. Deploy → `https://<project>.vercel.app/` і `/healthz/`
 
-Пізніше на Droplet: Postgres + `DATABASE_URL` + постійний `MEDIA_ROOT` (див. `deploy/DEPLOY.md`).
+Бойовий варіант без serverless: Droplet + Postgres + постійний `MEDIA_ROOT` (див. `deploy/DEPLOY.md`).
 
-## Performance / PageSpeed (після деплою)
+## Performance / PageSpeed
 
-1. Env `STATIC_VERSION` — інкрементуйте на кожному релізі зі змінами CSS/JS/шрифтів (cache-bust для `?v=`).
-2. Self-hosted Literata + CSS-бандли збираються на білді (`build_static_bundles` → `collectstatic`).
-3. **Ручний re-upload зображень** (hero / product / brand showcase) через адмінку → `OptimizedImageField` збереже WebP + `_thumb.webp`. Без цього seed PNG/JPG лишаються важкими; код уже вміє `srcset`/thumb, коли thumb існує.
-4. Перевірка: [PageSpeed Insights](https://pagespeed.web.dev/) для mobile на головній — ціль Performance ≥ 90.
+1. Env `STATIC_VERSION` — інкремент на релізі зі змінами CSS/JS.
+2. Бандли збираються на білді (`build_static_bundles` → `collectstatic`).
+3. Після підключення S3 — re-upload важких фото через адмінку (WebP + thumb).
+4. PageSpeed mobile на головній — ціль ≥ 90.

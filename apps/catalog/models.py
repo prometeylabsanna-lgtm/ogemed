@@ -118,6 +118,32 @@ class Brand(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
     def get_absolute_url(self) -> str:
         return reverse("catalog:brand_detail", kwargs={"slug": self.slug})
 
+    def _image_file_exists(self, field) -> bool:
+        if not field or not getattr(field, "name", None):
+            return False
+        try:
+            return field.storage.exists(field.name)
+        except Exception:
+            return False
+
+    @property
+    def has_cover_image(self) -> bool:
+        """True лише якщо файл реально є в storage (не «битий» шлях у БД)."""
+        return self._image_file_exists(self.cover_image)
+
+    @property
+    def has_showcase_image(self) -> bool:
+        return self._image_file_exists(self.showcase_image)
+
+    @property
+    def display_cover(self):
+        """Обкладинка для вітрини: showcase → cover → None."""
+        if self.has_showcase_image:
+            return self.showcase_image
+        if self.has_cover_image:
+            return self.cover_image
+        return None
+
 
 class Attribute(TimeStampedModel, LocalizedCharMixin):
     slug = models.SlugField(_("Slug"), max_length=80, unique=True)
