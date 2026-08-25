@@ -2,7 +2,7 @@
 from pathlib import Path
 from unittest.mock import patch
 
-from django.test import SimpleTestCase
+from django.test import RequestFactory, SimpleTestCase
 
 from config import vercel_media
 
@@ -24,3 +24,16 @@ class VercelMediaResolveTests(SimpleTestCase):
 
     def test_resolve_rejects_traversal(self):
         self.assertIsNone(vercel_media.resolve_media_path("../secrets.txt"))
+
+    def test_serve_media_returns_200(self):
+        media = vercel_media.BUNDLE_MEDIA
+        sample = next(
+            (p for p in (media / "seed").rglob("*") if p.is_file()),
+            None,
+        )
+        if sample is None:
+            self.skipTest("no media/seed files")
+        rel = f"seed/{sample.name}"
+        request = RequestFactory().get(f"/media/{rel}")
+        response = vercel_media.serve_media(request, rel)
+        self.assertEqual(response.status_code, 200)

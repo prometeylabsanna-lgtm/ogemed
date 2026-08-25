@@ -76,18 +76,18 @@ def serve_media(request: HttpRequest, path: str):
         raise Http404("Media not found")
 
     statobj = full.stat()
+    # Django 5.2+: was_modified_since(header, mtime) — без size
     if not was_modified_since(
         request.META.get("HTTP_IF_MODIFIED_SINCE"),
         statobj.st_mtime,
-        statobj.st_size,
     ):
         return HttpResponseNotModified()
 
     content_type, encoding = mimetypes.guess_type(str(full))
     content_type = content_type or "application/octet-stream"
     response = FileResponse(full.open("rb"), content_type=content_type)
-    response.headers["Last-Modified"] = http_date(statobj.st_mtime)
+    response["Last-Modified"] = http_date(statobj.st_mtime)
     if encoding:
-        response.headers["Content-Encoding"] = encoding
-    response.headers["Cache-Control"] = "public, max-age=86400"
+        response["Content-Encoding"] = encoding
+    response["Cache-Control"] = "public, max-age=86400"
     return response
