@@ -208,6 +208,12 @@
   max-height: calc(var(--brand-stage-h) * 0.92);
 }
 
+/* Pharmely / широкі packshot-банки — менше за дефолт */
+.brand-panel--md-media .brand-panel__visual {
+  max-width: 48%;
+  max-height: calc(var(--brand-stage-h) * 0.62);
+}
+
 .brand-panel--sm-media .brand-panel__visual {
   max-width: 52%;
   max-height: calc(var(--brand-stage-h) * 0.56);
@@ -389,12 +395,18 @@
   .brand-panel__visual,
   .brand-panel--left .brand-panel__visual,
   .brand-panel--right .brand-panel__visual,
+  .brand-panel--md-media .brand-panel__visual,
   .brand-panel--sm-media .brand-panel__visual,
   .brand-panel--lg-media .brand-panel__visual {
     max-width: min(100%, 220px);
     max-height: calc(var(--brand-stage-h) * 0.46);
     margin: 0 auto;
     justify-self: center;
+  }
+
+  .brand-panel--md-media .brand-panel__visual {
+    max-width: min(100%, 168px);
+    max-height: calc(var(--brand-stage-h) * 0.4);
   }
 
   .brand-showcase__footer {
