@@ -16,7 +16,7 @@ from apps.catalog.models import AttributeValue
 # slug Attribute → підпис фільтра в адмінці
 PRODUCT_ATTR_FILTERS: tuple[tuple[str, str], ...] = (
     ("typ-shkiry", "Тип шкіри"),
-    ("typ-doglyadu", "Тип догляду"),
+    ("zastosuvannya", "Застосування"),
     ("obyem", "Обʼєм"),
     ("kraina", "Країна виробник"),
 )

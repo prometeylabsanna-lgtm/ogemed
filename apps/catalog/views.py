@@ -24,6 +24,7 @@ from .services import (
     get_active_variant,
     has_active_filters,
     is_skin_type_select,
+    product_characteristics,
     published_products,
     resolve_catalog_view,
     search_products,
@@ -70,6 +71,7 @@ class CatalogListView(ListView):
         ctx["selected_skin_type"] = (
             "" if skin_type == SKIN_TYPE_SELECT else skin_type
         )
+        ctx["selected_application"] = (self.request.GET.get("application") or "").strip()
         ctx["skin_type_select"] = is_skin_type_select(self.request.GET)
         ctx["filter_query"] = catalog_query_string(self.request.GET)
         ctx["has_active_filters"] = has_active_filters(self.request.GET)
@@ -220,6 +222,7 @@ class ProductDetailView(DetailView):
         ctx["variant_option_groups"] = option_groups
         ctx["variant_flat_labels"] = uses_flat_variant_labels(variants, option_groups)
         ctx["gallery"] = variant_gallery(product, variant)
+        ctx["characteristics"] = product_characteristics(product)
         ctx.update(
             seo_from_object(
                 product,

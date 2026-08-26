@@ -76,3 +76,4 @@ class StockNotifyLeadTests(TestCase):
         r = self.client.get(reverse("catalog:list"))
         self.assertContains(r, "До кошика")
         self.assertNotContains(r, 'data-stock-notify-trigger')
+        self.assertNotContains(r, 'data-price-inquiry-trigger')

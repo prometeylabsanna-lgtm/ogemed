@@ -129,8 +129,8 @@ class Command(BaseCommand):
                 "phone": "+380 44 123 45 67",
                 "email": "hello@ogemed.ua",
                 "manager_email": "manager@ogemed.ua",
-                "address_uk": "м. Київ, вул. Хрещатик, 1",
-                "address_ru": "г. Киев, ул. Крещатик, 1",
+                "address_uk": "м. Запоріжжя, вул. Фортечна 92, офіс 201",
+                "address_ru": "г. Запорожье, ул. Фортечная 92, офис 201",
                 "work_hours_uk": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
                 "work_hours_ru": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
                 "map_embed_url": (
@@ -139,7 +139,7 @@ class Command(BaseCommand):
                     "&marker=50.4501,30.5234"
                 ),
                 "telegram_url": "https://t.me/ogemed",
-                "instagram_url": "https://instagram.com/ogemed",
+                "instagram_url": "https://instagram.com/infini.zp",
                 "telegram_consultant_url": "https://t.me/ogemed",
             },
         )

@@ -214,6 +214,63 @@ class CatalogStorefrontTests(TestCase):
         self.assertContains(r, "Сироватка тест")
         self.assertNotContains(r, "Крем тест")
 
+    def test_application_filter_matches_attribute(self):
+        attr = Attribute.objects.create(
+            slug="zastosuvannya",
+            name_uk="Застосування",
+            name_ru="Применение",
+            is_filterable=True,
+        )
+        home = AttributeValue.objects.create(
+            attribute=attr,
+            slug="dlya-domashnogo-doglyadu",
+            name_uk="Для домашнього догляду",
+            name_ru="Для домашнего ухода",
+        )
+        pro = AttributeValue.objects.create(
+            attribute=attr,
+            slug="dlya-kosmetologiv",
+            name_uk="Для косметологів",
+            name_ru="Для косметологов",
+        )
+        self.product.attribute_values.set([home])
+
+        other_product = Product.objects.create(
+            slug="pro-product",
+            name_uk="Проф товар",
+            name_ru="Проф товар",
+            brand=self.brand,
+            primary_category=self.cat,
+            availability=Availability.IN_STOCK,
+            is_active=True,
+        )
+        other_product.attribute_values.set([pro])
+        ProductVariant.objects.create(
+            product=other_product,
+            sku="PRO-001",
+            label_uk="10 мл",
+            price=Decimal("90.00"),
+            stock=2,
+            is_active=True,
+        )
+
+        qs = apply_catalog_filters(
+            published_products(), {"application": "dlya-domashnogo-doglyadu"}
+        )
+        self.assertEqual(list(qs.values_list("slug", flat=True)), ["serum-test"])
+        self.assertTrue(
+            has_active_filters({"application": "dlya-domashnogo-doglyadu"})
+        )
+
+        r = self.client.get(
+            reverse("catalog:list"),
+            {"application": "dlya-domashnogo-doglyadu"},
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Сироватка тест")
+        self.assertNotContains(r, "Проф товар")
+        self.assertContains(r, 'name="application"')
+
     def test_availability_filter_and_stock_on_card(self):
         other = Product.objects.create(
             slug="serum-order",

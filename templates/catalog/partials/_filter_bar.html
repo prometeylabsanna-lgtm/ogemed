@@ -87,6 +87,10 @@
               <input type="radio" name="skin_type" value="{{ value.slug }}"
                      data-label="{{ value.name }}"
                      {% if value.slug == selected_skin_type %}checked{% endif %}>
+              {% elif attr.slug == "zastosuvannya" %}
+              <input type="radio" name="application" value="{{ value.slug }}"
+                     data-label="{{ value.name }}"
+                     {% if value.slug == selected_application %}checked{% endif %}>
               {% else %}
               <input type="checkbox" name="attr" value="{{ value.slug }}"
                      data-label="{{ value.name }}"

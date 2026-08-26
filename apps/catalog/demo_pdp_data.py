@@ -62,7 +62,7 @@ def seed_catalog_attributes() -> dict[str, AttributeValue]:
     _attr("kolir", "Колір", "Цвет", 20, is_filterable=False)
     rozmir = _attr("rozmir", "Розмір", "Размер", 30, is_filterable=False)
     kraina = _attr("kraina", "Країна виробник", "Страна производитель", 40)
-    care = _attr("typ-doglyadu", "Тип догляду", "Тип ухода", 45)
+    application = _attr("zastosuvannya", "Застосування", "Применение", 46)
     typ = _attr("typ-shkiry", "Тип шкіри", "Тип кожи", 50)
     ingredients = _attr(
         "aktyvni-ingredienty",
@@ -94,12 +94,19 @@ def seed_catalog_attributes() -> dict[str, AttributeValue]:
         "country_ua": _value(kraina, "ukrayina", "Україна", "Украина", 1),
         "country_kr": _value(kraina, "koreya", "Корея", "Корея", 2),
         "country_fr": _value(kraina, "frantsiya", "Франція", "Франция", 3),
-        "care_home": _value(
-            care,
+        "apply_home": _value(
+            application,
             "dlya-domashnogo-doglyadu",
             "Для домашнього догляду",
             "Для домашнего ухода",
             1,
+        ),
+        "apply_pro": _value(
+            application,
+            "dlya-kosmetologiv",
+            "Для косметологів",
+            "Для косметологов",
+            2,
         ),
         "skin_sensitive": _value(typ, "chutlyva", "Чутлива", "Чувствительная", 1),
         "skin_dry": _value(typ, "sukha", "Суха", "Сухая", 2),
@@ -180,6 +187,8 @@ def seed_catalog_attributes() -> dict[str, AttributeValue]:
     }
     AttributeValue.objects.filter(attribute=obyem, slug="7x2-ml").delete()
     AttributeValue.objects.filter(attribute__slug="kolir").delete()
+    AttributeValue.objects.filter(attribute__slug="typ-doglyadu").delete()
+    Attribute.objects.filter(slug="typ-doglyadu").delete()
     return values
 
 

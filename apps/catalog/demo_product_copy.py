@@ -33,7 +33,7 @@ PRODUCT_COPY: dict[str, dict] = {
             "country_ua",
             "skin_mature",
             "ing_peptides",
-            "care_home",
+            "apply_home",
         ],
     },
     "serum-vitamin-c": {
@@ -65,7 +65,7 @@ PRODUCT_COPY: dict[str, dict] = {
             "В первые недели возможно лёгкое покалывание. "
             "Не смешивайте в одном слое с высокими концентрациями ретинола."
         ),
-        "attrs": ["vol_30", "country_ua", "skin_dull", "ing_vit_c", "care_home"],
+        "attrs": ["vol_30", "country_ua", "skin_dull", "ing_vit_c", "apply_home"],
     },
     "body-lotion-pure": {
         "short_uk": (
@@ -91,7 +91,7 @@ PRODUCT_COPY: dict[str, dict] = {
             "тяжёлых отдушек делают средство удобным для всей семьи.\n\n"
             "Наносите на влажную кожу массажными движениями. Для локтей и колен повторите слой."
         ),
-        "attrs": ["vol_200", "country_ua", "skin_dry", "ing_ceramides", "care_home"],
+        "attrs": ["vol_200", "country_ua", "skin_dry", "ing_ceramides", "apply_home"],
     },
     "serum-pump-gold": {
         "short_uk": (
@@ -280,7 +280,7 @@ PRODUCT_COPY: dict[str, dict] = {
             "country_fr",
             "skin_sensitive",
             "ing_panthenol",
-            "care_home",
+            "apply_home",
         ],
     },
     "ampoules-collagen-boost": {
@@ -339,7 +339,7 @@ PRODUCT_COPY: dict[str, dict] = {
             "country_ua",
             "skin_sensitive",
             "ing_niacinamide",
-            "care_home",
+            "apply_home",
         ],
     },
     "balm-repair-pot": {

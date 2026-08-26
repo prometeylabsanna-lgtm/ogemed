@@ -31,10 +31,24 @@ CATALOG_FILTER_KEYS = (
     "availability",
     "label",
     "skin_type",
+    "application",
 )
 
 SKIN_TYPE_ATTR_SLUG = "typ-shkiry"
 SKIN_TYPE_SELECT = "select"
+APPLICATION_ATTR_SLUG = "zastosuvannya"
+
+
+HIDDEN_CHARACTERISTIC_ATTR_SLUGS = frozenset({"typ-doglyadu"})
+
+
+def product_characteristics(product: Product) -> list:
+    """Атрибути для блоку «Характеристики» на PDP (без застарілих)."""
+    return [
+        av
+        for av in product.attribute_values.all()
+        if av.attribute.slug not in HIDDEN_CHARACTERISTIC_ATTR_SLUGS
+    ]
 
 
 def resolve_catalog_view(params) -> str:
@@ -94,6 +108,13 @@ def apply_catalog_filters(qs: QuerySet[Product], params) -> QuerySet[Product]:
         qs = qs.filter(
             attribute_values__slug=skin_type,
             attribute_values__attribute__slug=SKIN_TYPE_ATTR_SLUG,
+        ).distinct()
+
+    application = (params.get("application") or "").strip()
+    if application:
+        qs = qs.filter(
+            attribute_values__slug=application,
+            attribute_values__attribute__slug=APPLICATION_ATTR_SLUG,
         ).distinct()
 
     return qs

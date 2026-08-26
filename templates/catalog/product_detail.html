@@ -59,7 +59,7 @@
   <div class="pdp__description">{{ product.description|safe }}</div>
   {% endif %}
 
-  {% with attrs=product.attribute_values.all %}
+  {% with attrs=characteristics %}
   {% if attrs %}
   <div class="pdp__attrs">
     <h2 class="pdp__attrs-title">{% trans "Характеристики" %}</h2>

@@ -10,6 +10,7 @@
     "availability",
     "label",
     "skin_type",
+    "application",
   ];
 
   const currentFilters = () => {
