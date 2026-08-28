@@ -49,6 +49,8 @@ class ContentSecurityPolicyMiddleware:
             "base-uri 'self'; "
             "object-src 'none'; "
             "frame-ancestors 'none'; "
+            "frame-src 'self' https://www.google.com https://maps.google.com "
+            "https://www.openstreetmap.org; "
             "form-action 'self'; "
             f"img-src {img_src}; "
             "font-src 'self'; "

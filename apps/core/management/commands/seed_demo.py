@@ -135,9 +135,8 @@ class Command(BaseCommand):
                 "work_hours_uk": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
                 "work_hours_ru": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
                 "map_embed_url": (
-                    "https://www.openstreetmap.org/export/embed.html"
-                    "?bbox=30.515,50.445,30.530,50.455&layer=mapnik"
-                    "&marker=50.4501,30.5234"
+                    "https://www.google.com/maps/embed?origin=mfe"
+                    "&pb=!1m3!2m1!1s47.828823,35.185549!6i17!3m1!1suk!5m1!1suk"
                 ),
                 "telegram_url": "https://t.me/ogemed",
                 "instagram_url": "https://instagram.com/infini.zp",
