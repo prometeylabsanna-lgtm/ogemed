@@ -16,6 +16,7 @@ class SiteSettingsAdmin(ModelAdmin):
             {
                 "fields": (
                     "phone",
+                    "phone_2",
                     "email",
                     "manager_email",
                     "address_uk",

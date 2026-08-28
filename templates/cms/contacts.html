@@ -45,10 +45,17 @@
   <div class="contacts__layout">
     <div class="contacts__col contacts__col--info">
       <ul class="contacts__list" role="list">
-        {% if site_settings.phone %}
+        {% if site_settings.phone or site_settings.phone_2 %}
         <li class="contacts__item">
           <span class="contacts__label">{% trans "Телефон" %}</span>
-          <a class="contacts__value contacts__value--link" href="tel:{{ site_settings.phone|cut:' '|cut:'-' }}">{{ site_settings.phone }}</a>
+          <div class="contacts__phones">
+            {% if site_settings.phone %}
+            <a class="contacts__value contacts__value--link" href="tel:{{ site_settings.phone|cut:' '|cut:'-' }}">{{ site_settings.phone }}</a>
+            {% endif %}
+            {% if site_settings.phone_2 %}
+            <a class="contacts__value contacts__value--link" href="tel:{{ site_settings.phone_2|cut:' '|cut:'-' }}">{{ site_settings.phone_2 }}</a>
+            {% endif %}
+          </div>
         </li>
         {% endif %}
 

@@ -113,6 +113,17 @@ body.page-contacts {
   transition: color 0.22s ease, opacity 0.22s ease;
 }
 
+.contacts__phones {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.contacts__phones .contacts__value {
+  display: inline-block;
+}
+
 .contacts__value--link:hover,
 .contacts__value--link:focus-visible {
   color: var(--color-accent-700);

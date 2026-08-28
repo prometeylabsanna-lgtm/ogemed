@@ -17,6 +17,7 @@ class SiteSettings(models.Model):
         allow_svg=True,
     )
     phone = models.CharField(_("Телефон"), max_length=32, blank=True)
+    phone_2 = models.CharField(_("Телефон 2"), max_length=32, blank=True)
     email = models.EmailField(_("Email"), blank=True)
     manager_email = models.EmailField(_("Email менеджера"), blank=True)
     address_uk = models.CharField(_("Адреса (UK)"), max_length=255, blank=True)

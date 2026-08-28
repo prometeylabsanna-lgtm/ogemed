@@ -12,7 +12,8 @@ class FooterDeveloperLinkTests(TestCase):
     def setUpTestData(cls):
         SiteSettings.objects.create(
             pk=1,
-            phone="+380 44 123 45 67",
+            phone="+380664247233",
+            phone_2="+380973086063",
             email="hello@ogemed.ua",
         )
         CMSPage.objects.create(

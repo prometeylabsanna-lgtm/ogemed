@@ -37,7 +37,7 @@ from apps.core.site_content_registry import (
 
 SECTION_VISIBLE_FIELD = "section_visible"
 LANGS = ("uk", "ru")
-HEADER_BRAND_FIELDS = ("logo", "phone")
+HEADER_BRAND_FIELDS = ("logo", "phone", "phone_2")
 
 
 class HeaderBrandForm(forms.ModelForm):
@@ -49,6 +49,7 @@ class HeaderBrandForm(forms.ModelForm):
         widgets = {
             "logo": AdminImagePreviewWidget(),
             "phone": CmsAdminTextInputWidget(),
+            "phone_2": CmsAdminTextInputWidget(),
         }
 
 

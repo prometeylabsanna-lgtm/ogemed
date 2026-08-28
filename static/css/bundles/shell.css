@@ -889,6 +889,21 @@ a:hover {
   transition: color var(--header-ease);
 }
 
+.site-header__contact-phones {
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.site-header__contact-phones .site-header__contact-phone {
+  min-height: 0;
+  padding: 2px 8px;
+  line-height: 1.2;
+  font-size: 12.5px;
+}
+
 .site-header__contact-phone:hover,
 .site-header__contact-phone:focus-visible,
 .site-header__contact-phone:active {
@@ -1232,6 +1247,19 @@ a:hover {
   transition: color var(--header-ease);
 }
 
+.mobile-menu__phones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  align-self: center;
+}
+
+.mobile-menu__phones .mobile-menu__phone {
+  min-height: 40px;
+  padding: 6px 12px;
+}
+
 .mobile-menu__phone:hover,
 .mobile-menu__phone:focus-visible {
   color: var(--color-text);
@@ -1422,6 +1450,15 @@ a:hover {
   .site-header__contact-phone,
   .site-header__lang {
     font-size: 14.5px;
+  }
+
+  .site-header__contact-phones {
+    display: flex;
+  }
+
+  .site-header__contact-phones .site-header__contact-phone {
+    display: inline-flex;
+    font-size: 13px;
   }
 
   .site-header__contact-phone {

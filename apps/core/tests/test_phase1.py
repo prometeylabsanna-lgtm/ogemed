@@ -11,7 +11,8 @@ class Phase1SmokeTests(TestCase):
     def setUpTestData(cls):
         SiteSettings.objects.create(
             pk=1,
-            phone="+380 44 123 45 67",
+            phone="+380664247233",
+            phone_2="+380973086063",
             email="hello@ogemed.ua",
             telegram_consultant_url="https://t.me/ogemed",
         )
@@ -93,7 +94,10 @@ class Phase1SmokeTests(TestCase):
         self.assertContains(response, "Обличчя")
         self.assertContains(response, "/katalog/oblychchya/")
         self.assertContains(response, 'class="site-header__contact-phone"')
-        self.assertContains(response, "+380 44 123 45 67")
+        self.assertContains(response, "+380664247233")
+        self.assertContains(response, "+380973086063")
+        self.assertContains(response, 'href="tel:+380664247233"')
+        self.assertContains(response, 'href="tel:+380973086063"')
 
     def test_cookie_banner_present(self):
         response = self.client.get("/")

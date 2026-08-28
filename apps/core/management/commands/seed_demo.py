@@ -126,7 +126,8 @@ class Command(BaseCommand):
         settings_obj, created = SiteSettings.objects.get_or_create(
             pk=1,
             defaults={
-                "phone": "+380 44 123 45 67",
+                "phone": "+380664247233",
+                "phone_2": "+380973086063",
                 "email": "hello@ogemed.ua",
                 "manager_email": "manager@ogemed.ua",
                 "address_uk": "м. Запоріжжя, вул. Фортечна 92, офіс 201",

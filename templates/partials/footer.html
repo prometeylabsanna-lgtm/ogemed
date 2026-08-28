@@ -73,6 +73,9 @@
           {% if site_settings.phone %}
           <li><a href="tel:{{ site_settings.phone|cut:' '|cut:'-' }}">{{ site_settings.phone }}</a></li>
           {% endif %}
+          {% if site_settings.phone_2 %}
+          <li><a href="tel:{{ site_settings.phone_2|cut:' '|cut:'-' }}">{{ site_settings.phone_2 }}</a></li>
+          {% endif %}
           {% if site_settings.email %}
           <li><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></li>
           {% endif %}
