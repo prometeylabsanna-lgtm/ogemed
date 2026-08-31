@@ -29,6 +29,7 @@ media/**
 .env.local
 .env.*.local
 !.env.example
+!.env.docker.example
 .vercel/
 
 # IDE / OS / local scratch

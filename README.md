@@ -10,7 +10,7 @@
 - Admin: базова Django Admin
 - Email: Resend API · Notify: Telegram / Viber (best-effort)
 - Оплата: LiqPay + COD · Доставка: Нова Пошта + курʼєр
-- Deploy: Vercel (Django Function) + PostgreSQL + S3/R2 media; або DigitalOcean Droplet → Nginx + Gunicorn + PostgreSQL
+- Deploy: DigitalOcean Droplet (Docker: nginx + gunicorn + PostgreSQL); опційно Vercel demo
 
 **Фаза 2 інфраструктури — Redis + черга:** Django-Q2 підключено.
 Увімкнення: `NOTIFY_USE_QUEUE=True` (+ опційно `REDIS_URL`). Воркер: `python manage.py qcluster`.
@@ -21,7 +21,7 @@
 1. **Category ↔ Product:** `primary_category` FK (breadcrumbs) + `categories` M2M.
 2. **i18n контенту:** поля `*_uk` / `*_ru` + property; UI — gettext.
 3. **URL категорій:** плаский `/katalog/<slug>/`, дерево через `parent`.
-4. **Deploy без Docker** (Nginx + systemd Gunicorn).
+4. **Deploy:** Droplet + Docker Compose (nginx + gunicorn + Postgres); Vercel — лише демо.
 5. **Thank-you security:** `access_token` / session / owner — без IDOR.
 6. **Cart session:** лише `{variant_id: qty}`, ціни з БД.
 
@@ -50,8 +50,8 @@ python manage.py test
 
 ## Деплой
 
-- Vercel (вітрина без env): [deploy/VERCEL.md](deploy/VERCEL.md)
-- Droplet: [deploy/DEPLOY.md](deploy/DEPLOY.md), `deploy/nginx.conf.example`, `deploy/gunicorn.service.example`, `gunicorn.conf.py`.
+- Droplet (oge.in.ua): [deploy/DEPLOY.md](deploy/DEPLOY.md) — Docker Compose, SSL, покроково
+- Vercel (демо): [deploy/VERCEL.md](deploy/VERCEL.md)
 
 ## URL (SITE_MAP)
 
