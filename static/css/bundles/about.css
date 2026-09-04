@@ -362,6 +362,15 @@ body.page-about .site-footer {
   -webkit-tap-highlight-color: transparent;
 }
 
+.about-paper__card:focus {
+  outline: none;
+}
+
+.about-paper__card:focus-visible .about-paper__frame {
+  outline: 2px solid color-mix(in srgb, var(--color-accent-900, #8c4f49) 55%, transparent);
+  outline-offset: 3px;
+}
+
 .about-paper__frame {
   position: relative;
   width: 100%;
@@ -371,15 +380,13 @@ body.page-about .site-footer {
   overflow: hidden;
   isolation: isolate;
   background-color: var(--paper-milk);
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.97 0 0 0 0 0.955 0 0 0 0 0.95 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(../components/%23n)'/%3E%3C/svg%3E"),
-    linear-gradient(
-      165deg,
-      #fffcfb 0%,
-      var(--paper-milk) 48%,
-      var(--paper-milk-deep) 100%
-    );
-  background-size: 160px 160px, auto;
+  background-image: linear-gradient(
+    165deg,
+    #fffcfb 0%,
+    var(--paper-milk) 48%,
+    var(--paper-milk-deep) 100%
+  );
+  background-size: auto;
   border: 1px solid color-mix(in srgb, #d4cbc7 40%, #fff);
   border-radius: 0;
   box-shadow:

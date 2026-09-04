@@ -123,30 +123,44 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        settings_obj, created = SiteSettings.objects.get_or_create(
-            pk=1,
-            defaults={
-                "phone": "+380664247233",
-                "phone_2": "+380973086063",
-                "email": "hello@ogemed.ua",
-                "manager_email": "manager@ogemed.ua",
-                "address_uk": "м. Запоріжжя, вул. Фортечна 92, офіс 201",
-                "address_ru": "г. Запорожье, ул. Фортечная 92, офис 201",
-                "work_hours_uk": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
-                "work_hours_ru": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
-                "map_embed_url": (
-                    "https://www.google.com/maps/embed?origin=mfe"
-                    "&pb=!1m3!2m1!1s47.828823,35.185549!6i17!3m1!1suk!5m1!1suk"
-                ),
-                "telegram_url": "https://t.me/ogemed",
-                "instagram_url": "https://instagram.com/infini.zp",
-                "telegram_consultant_url": "https://t.me/ogemed",
-            },
-        )
+        settings_obj, created = SiteSettings.objects.get_or_create(pk=1)
+        contact_defaults = {
+            "phone": "+380664247233",
+            "phone_2": "+380973086063",
+            "email": "hello@ogemed.ua",
+            "manager_email": "manager@ogemed.ua",
+            "address_uk": "м. Запоріжжя, вул. Фортечна 92, офіс 201",
+            "address_ru": "г. Запорожье, ул. Фортечная 92, офис 201",
+            "work_hours_uk": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
+            "work_hours_ru": "Пн–Пт 10:00–19:00, Сб 11:00–16:00",
+            "map_embed_url": (
+                "https://www.google.com/maps?q=47.828823,35.185549"
+                "&z=17&hl=uk&output=embed"
+            ),
+            "telegram_url": "https://t.me/ogemed",
+            "instagram_url": "https://instagram.com/infini.zp",
+            "telegram_consultant_url": "https://t.me/ogemed",
+        }
         if created:
+            for field, value in contact_defaults.items():
+                setattr(settings_obj, field, value)
+            settings_obj.save()
             self.stdout.write(self.style.SUCCESS("Created SiteSettings"))
         else:
-            self.stdout.write("SiteSettings already exists — skipped")
+            filled = []
+            for field, value in contact_defaults.items():
+                if not (getattr(settings_obj, field, "") or "").strip():
+                    setattr(settings_obj, field, value)
+                    filled.append(field)
+            if filled:
+                settings_obj.save(update_fields=filled)
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        "Filled empty SiteSettings: " + ", ".join(filled)
+                    )
+                )
+            else:
+                self.stdout.write("SiteSettings already exists — skipped")
 
         created_count = 0
         updated_count = 0

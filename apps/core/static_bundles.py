@@ -115,7 +115,11 @@ def _rewrite_urls(css_text: str, source_rel: str, out_rel_dir: str) -> str:
 
     def repl(match: re.Match[str]) -> str:
         quote, raw = match.group(1), match.group(2).strip()
-        if not raw or raw.startswith(("data:", "http://", "https://", "/", "#")):
+        # data:/http(s)/absolute/fragment (#id або %23id всередині SVG data-URI)
+        if (
+            not raw
+            or raw.startswith(("data:", "http://", "https://", "/", "#", "%23"))
+        ):
             return match.group(0)
         resolved = (source_dir / raw).as_posix()
         # normalize .. segments
