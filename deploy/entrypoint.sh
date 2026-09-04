@@ -31,6 +31,13 @@ print("==> FATAL: Database not ready after 60s")
 sys.exit(1)
 WAIT_DB
 
+# Volume /app/media порожній на першому старті — підкласти seed з образу
+if [ -d /opt/seed ] && [ "$(ls -A /opt/seed 2>/dev/null || true)" ]; then
+  echo "==> Sync media/seed from image"
+  mkdir -p /app/media/seed
+  cp -an /opt/seed/. /app/media/seed/ || cp -a /opt/seed/. /app/media/seed/
+fi
+
 echo "==> Django check"
 python manage.py check --deploy || true
 

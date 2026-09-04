@@ -231,11 +231,25 @@ docker compose -f docker-compose.yml exec web python manage.py createsuperuser
 
 Адмінка: `http://oge.in.ua/<ADMIN_URL>/` (значення з `.env`, не `/admin/`).
 
-Опційно демо-дані (лише порожня БД):
+### E5. Демо-каталог + картинки (обовʼязково на порожній БД)
+
+Volume `media` спочатку порожній — спочатку скопіюй seed у контейнер, потім seed:
 
 ```bash
-docker compose -f docker-compose.yml exec web python manage.py seed_demo
+cd /var/www/ogemed
+# HTTP-стек:
+COMPOSE="docker compose -f docker-compose.yml"
+# після SSL:
+# COMPOSE="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
+
+$COMPOSE exec web mkdir -p /app/media/seed
+$COMPOSE cp media/seed/. web:/app/media/seed/
+$COMPOSE exec web python manage.py seed_demo
+$COMPOSE exec web python manage.py seed_site_blocks
 ```
+
+Перевірка: `https://oge.in.ua/` — hero-фото, товар Bioactive Peptide Serum, блоки головної.  
+Адмін `admin` від `createsuperuser` не чіпається. Після go-live не ганяти `seed_demo` знову (перезапише демо-контент).
 
 ---
 

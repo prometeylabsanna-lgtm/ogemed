@@ -30,7 +30,9 @@ COPY --from=builder /root/.local /root/.local
 
 COPY . .
 
-RUN mkdir -p /app/staticfiles /app/media \
+# Копія seed поза volume: media_volume перекриває /app/media при старті
+RUN mkdir -p /app/staticfiles /app/media /opt/seed \
+    && if [ -d /app/media/seed ]; then cp -a /app/media/seed/. /opt/seed/; fi \
     && chmod +x deploy/entrypoint.sh
 
 EXPOSE 8000
