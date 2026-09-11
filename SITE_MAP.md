@@ -267,11 +267,14 @@
 | Канал | Призначення | Налаштування |
 |---|---|---|
 | **Telegram** | Бот → chat_id адміна/менеджера | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ADMIN_CHAT_ID` (env) |
-| **Viber** | Сповіщення адміну (bot / business) | `VIBER_AUTH_TOKEN`, `VIBER_ADMIN_ID` (env) |
+| **Viber** | TurboSMS HTTP API → телефон власника | `TURBOSMS_API_TOKEN`, `TURBOSMS_VIBER_SENDER`, `TURBOSMS_OWNER_PHONE` (env) |
 
-**Події для адміна (Telegram + Viber):**
+**Події для адміна (Telegram + Viber + email менеджеру):**
 - нове замовлення (номер, ПІБ, телефон, сума, спосіб доставки/оплати)
+- зміна статусу / оплата (LiqPay callback → PAID → PROCESSING)
 - нова заявка «Передзвоніть мені» / зворотний зв’язок
+
+**Кабінет TurboSMS:** Шлюз (API) → HTTP API увімкнено; токен; схвалений Viber-відправник; транзакційний шаблон (інакше відхилення при «Відхилити повідомлення»).
 
 **Правила:** best-effort; збій месенджера не блокує оформлення; email через Resend лишається основним архівним каналом.
 
@@ -304,7 +307,7 @@
 ### 6.3. Контент і налаштування
 - Hero-слайди головної
 - CMS-сторінки (інфо)
-- SiteSettings: контакти, соцмережі, email менеджера, лінк Telegram-консультанта; секрети (`RESEND_*`, `TELEGRAM_*`, `VIBER_*`) — лише env
+- SiteSettings: контакти, соцмережі, email менеджера, лінк Telegram-консультанта; секрети (`RESEND_*`, `TELEGRAM_*`, `TURBOSMS_*`) — лише env
 - Ліди / заявки «Передзвоніть мені»
 
 ### 6.4. Користувачі

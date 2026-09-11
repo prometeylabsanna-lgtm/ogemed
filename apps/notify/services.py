@@ -1,4 +1,4 @@
-"""Notify adapters — best-effort email / Telegram / Viber (queue-ready)."""
+"""Notify adapters — best-effort email / Telegram / TurboSMS Viber (queue-ready)."""
 from __future__ import annotations
 
 import json
@@ -101,27 +101,32 @@ def send_telegram(text: str) -> None:
 
 
 def send_viber(text: str) -> None:
-    token = (settings.VIBER_AUTH_TOKEN or "").strip()
-    admin_id = (settings.VIBER_ADMIN_ID or "").strip()
-    if not token or not admin_id:
-        logger.info("Viber not configured — skipped")
+    """Owner Viber via TurboSMS HTTP API. No-op when token/phone/sender missing."""
+    token = (settings.TURBOSMS_API_TOKEN or "").strip()
+    phone = (settings.TURBOSMS_OWNER_PHONE or "").strip().lstrip("+")
+    sender = (settings.TURBOSMS_VIBER_SENDER or "").strip()
+    if not token or not phone or not sender:
+        logger.info("TurboSMS Viber not configured — skipped")
         return
     payload = {
-        "receiver": admin_id,
-        "type": "text",
-        "text": text[:1000],
-        "sender": {"name": "OGEMED"},
+        "recipients": [phone],
+        "viber": {
+            "sender": sender,
+            "text": text[:1000],
+            "ttl": 3600,
+            "is_transactional": True,
+        },
     }
     req = urlrequest.Request(
-        "https://chatapi.viber.com/pa/send_message",
+        "https://api.turbosms.ua/message/send.json",
         data=json.dumps(payload).encode(),
         headers={
-            "X-Viber-Auth-Token": token,
+            "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         },
         method="POST",
     )
-    with urlrequest.urlopen(req, timeout=15) as resp:
+    with urlrequest.urlopen(req, timeout=20) as resp:
         resp.read()
 
 
@@ -167,7 +172,7 @@ def task_notify_order_status(order_id: int, previous_status: str) -> None:
     from apps.orders.models import Order, OrderStatus
 
     order = Order.objects.filter(pk=order_id).first()
-    if not order or not order.customer_email:
+    if not order:
         return
     if previous_status == order.status:
         return
@@ -181,7 +186,19 @@ def task_notify_order_status(order_id: int, previous_status: str) -> None:
         },
     )
     subject = f"Статус замовлення {order.order_number}: {order.get_status_display()}"
-    send_email(order.customer_email, subject, html_body, text_body)
+    messenger_text = (
+        f"Статус {order.order_number}: {previous_label} → {order.get_status_display()}\n"
+        f"{order.customer_name}, {order.customer_phone}\n"
+        f"Сума: {order.total} грн\n"
+        f"Оплата: {order.get_payment_type_display()}"
+    )
+    manager = _manager_email()
+    if manager:
+        send_email(manager, subject, html_body, text_body)
+    if order.customer_email:
+        send_email(order.customer_email, subject, html_body, text_body)
+    send_telegram(messenger_text)
+    send_viber(messenger_text)
 
 
 def task_notify_new_lead(lead_id: int) -> None:
@@ -210,7 +227,7 @@ def notify_new_order(order) -> None:
 
 
 def notify_order_status_changed(order, *, previous_status: str) -> None:
-    if not order.customer_email or previous_status == order.status:
+    if previous_status == order.status:
         return
     _enqueue_or_run(
         "apps.notify.services.task_notify_order_status",

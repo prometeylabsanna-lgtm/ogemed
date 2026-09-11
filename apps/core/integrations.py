@@ -46,8 +46,12 @@ def telegram_status() -> IntegrationStatus:
 
 
 def viber_status() -> IntegrationStatus:
-    ok = _present(settings.VIBER_AUTH_TOKEN, settings.VIBER_ADMIN_ID)
-    detail = "ok" if ok else "VIBER_* missing — admin Viber skipped"
+    ok = _present(
+        settings.TURBOSMS_API_TOKEN,
+        settings.TURBOSMS_OWNER_PHONE,
+        settings.TURBOSMS_VIBER_SENDER,
+    )
+    detail = "ok" if ok else "TURBOSMS_* missing — owner Viber skipped"
     return IntegrationStatus("viber", ok, detail)
 
 

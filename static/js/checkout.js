@@ -170,7 +170,7 @@
     listEl: whList,
     refInput: whRef,
     emptyLabel: (whList && whList.dataset.emptyLabel) || "Нічого не знайдено",
-    minChars: 0,
+    minChars: 2,
     buildUrl: (q) => {
       const ref = cityRef ? cityRef.value : "";
       return `/api/np/warehouses/?city_ref=${encodeURIComponent(ref)}&q=${encodeURIComponent(q)}`;
@@ -183,7 +183,8 @@
   if (whInput) {
     whInput.addEventListener("focus", () => {
       if (whInput.disabled) return;
-      if (!whInput.value.trim()) {
+      const q = whInput.value.trim();
+      if (q.length >= 2) {
         whInput.dispatchEvent(new Event("input", { bubbles: true }));
       }
     });

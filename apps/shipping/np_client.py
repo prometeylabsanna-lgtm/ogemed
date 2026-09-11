@@ -73,24 +73,33 @@ class NovaPoshtaClient:
         return [{"ref": r.get("Ref"), "name": r.get("Description")} for r in rows]
 
     def get_warehouses(self, city_ref: str, query: str = "") -> list[dict[str, Any]]:
-        props: dict[str, str] = {
-            "CityRef": city_ref,
-            "Page": "1",
-            "Limit": "100",
-        }
-        if query:
-            props["FindByString"] = query
-        rows = self.call("Address", "getWarehouses", props)
-        return [
-            {
-                "ref": r.get("Ref"),
-                "name": r.get("Description"),
-                "point_type": (
-                    "locker"
-                    if "Поштомат" in (r.get("Description") or "")
-                    or str(r.get("CategoryOfWarehouse")) == "Postomat"
-                    else "warehouse"
-                ),
+        """Fetch warehouses + postomats for a city; paginate until all pages are read."""
+        page_size = 100
+        max_pages = 50  # safety cap (5000 points)
+        rows: list[dict] = []
+        for page in range(1, max_pages + 1):
+            props: dict[str, str] = {
+                "CityRef": city_ref,
+                "Page": str(page),
+                "Limit": str(page_size),
             }
-            for r in rows
-        ]
+            if query:
+                props["FindByString"] = query
+            chunk = self.call("Address", "getWarehouses", props)
+            if not chunk:
+                break
+            rows.extend(chunk)
+            if len(chunk) < page_size:
+                break
+        return [self._map_warehouse(r) for r in rows]
+
+    @staticmethod
+    def _map_warehouse(row: dict) -> dict[str, Any]:
+        description = row.get("Description") or ""
+        category = str(row.get("CategoryOfWarehouse") or "")
+        is_locker = "Поштомат" in description or category == "Postomat"
+        return {
+            "ref": row.get("Ref"),
+            "name": description,
+            "point_type": "locker" if is_locker else "warehouse",
+        }

@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.test import TestCase, override_settings
 
-from apps.notify.services import notify_new_order, notify_order_status_changed
+from apps.notify.services import notify_new_order, send_viber
 from apps.orders.models import DeliveryType, Order, OrderStatus, PaymentType
 from apps.orders.services_status import OrderStatusService
 
@@ -28,14 +28,31 @@ class NotifyTemplatesTests(TestCase):
 
     @override_settings(RESEND_API_KEY="test-key", FROM_EMAIL="shop@example.com")
     @patch("apps.notify.services.send_email")
-    def test_status_transition_emails_customer(self, send_email):
+    @patch("apps.notify.services.send_telegram")
+    @patch("apps.notify.services.send_viber")
+    def test_status_transition_emails_customer(self, _viber, _tg, send_email):
         with self.captureOnCommitCallbacks(execute=True):
             OrderStatusService.transition(self.order, OrderStatus.SHIPPED, notify=True)
-        send_email.assert_called_once()
-        args, _kwargs = send_email.call_args
-        self.assertEqual(args[0], "client@example.com")
+        self.assertTrue(send_email.called)
+        customer_calls = [
+            c for c in send_email.call_args_list if c[0][0] == "client@example.com"
+        ]
+        self.assertEqual(len(customer_calls), 1)
+        args, _kwargs = customer_calls[0]
         self.assertIn(self.order.order_number, args[1])
         self.assertIn("Відправлено", args[2])
+
+    @override_settings(RESEND_API_KEY="test-key", FROM_EMAIL="shop@example.com")
+    @patch("apps.notify.services.send_email")
+    @patch("apps.notify.services.send_telegram")
+    @patch("apps.notify.services.send_viber")
+    def test_status_notifies_owner_messengers(self, send_viber_mock, send_tg, _email):
+        with self.captureOnCommitCallbacks(execute=True):
+            OrderStatusService.transition(self.order, OrderStatus.SHIPPED, notify=True)
+        send_tg.assert_called_once()
+        send_viber_mock.assert_called_once()
+        self.assertIn(self.order.order_number, send_viber_mock.call_args[0][0])
+        self.assertIn("Відправлено", send_viber_mock.call_args[0][0])
 
     @override_settings(RESEND_API_KEY="test-key", FROM_EMAIL="shop@example.com")
     @patch("apps.notify.services.send_email")
@@ -76,11 +93,45 @@ class NotifyTemplatesTests(TestCase):
             )
             mocked.assert_not_called()
 
-    def test_status_notify_without_email_noop(self):
+    @override_settings(RESEND_API_KEY="test-key", FROM_EMAIL="shop@example.com")
+    @patch("apps.notify.services.send_email")
+    @patch("apps.notify.services.send_telegram")
+    @patch("apps.notify.services.send_viber")
+    def test_status_notify_without_customer_email_still_owner(
+        self, send_viber_mock, send_tg, send_email
+    ):
         self.order.customer_email = ""
         self.order.save(update_fields=["customer_email"])
-        with patch("apps.notify.services.send_email") as send_email:
-            notify_order_status_changed(
-                self.order, previous_status=OrderStatus.PROCESSING
-            )
-            send_email.assert_not_called()
+        with self.captureOnCommitCallbacks(execute=True):
+            OrderStatusService.transition(self.order, OrderStatus.SHIPPED, notify=True)
+        send_tg.assert_called_once()
+        send_viber_mock.assert_called_once()
+        for call in send_email.call_args_list:
+            self.assertNotEqual(call[0][0], "")
+
+    @override_settings(
+        TURBOSMS_API_TOKEN="tok",
+        TURBOSMS_OWNER_PHONE="380664247233",
+        TURBOSMS_VIBER_SENDER="Ogemed",
+    )
+    @patch("apps.notify.services.urlrequest.urlopen")
+    def test_send_viber_turbosms_payload(self, urlopen):
+        class _Resp:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return b"{}"
+
+        urlopen.return_value = _Resp()
+        send_viber("Тест замовлення")
+        req = urlopen.call_args[0][0]
+        self.assertEqual(req.full_url, "https://api.turbosms.ua/message/send.json")
+        self.assertEqual(req.get_header("Authorization"), "Bearer tok")
+        body = req.data.decode()
+        self.assertIn("380664247233", body)
+        self.assertIn("Ogemed", body)
+        self.assertIn("is_transactional", body)

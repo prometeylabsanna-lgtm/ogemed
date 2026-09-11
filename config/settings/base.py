@@ -186,8 +186,10 @@ NP_SENDER_PHONE = env("NP_SENDER_PHONE", default="")
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", default="")
 TELEGRAM_ADMIN_CHAT_ID = env("TELEGRAM_ADMIN_CHAT_ID", default="")
 
-VIBER_AUTH_TOKEN = env("VIBER_AUTH_TOKEN", default="")
-VIBER_ADMIN_ID = env("VIBER_ADMIN_ID", default="")
+# TurboSMS (owner Viber). Token from кабінет → Шлюз (API).
+TURBOSMS_API_TOKEN = env("TURBOSMS_API_TOKEN", default="")
+TURBOSMS_VIBER_SENDER = env("TURBOSMS_VIBER_SENDER", default="Ogemed")
+TURBOSMS_OWNER_PHONE = env("TURBOSMS_OWNER_PHONE", default="")
 
 # Notify queue (Django-Q2). False = sync after on_commit (dev / MVP).
 NOTIFY_USE_QUEUE = env.bool("NOTIFY_USE_QUEUE", default=False)
