@@ -11,7 +11,6 @@ from .info_page_models import InfoPageMeta, InfoPageSection  # noqa: F401
 
 
 class CMSPage(models.Model):
-    """Informational CMS page with manual uk/ru content fields."""
 
     slug = models.SlugField(_("Slug"), max_length=120, unique=True)
     page_key = models.CharField(

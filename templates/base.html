@@ -30,7 +30,10 @@
   <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
   <link rel="stylesheet" href="{% vstatic 'css/bundles/shell.css' %}">
   {% block extra_css %}{% endblock %}
-  <link rel="stylesheet" href="{% vstatic 'css/bundles/overlays.css' %}">
+  <link rel="stylesheet" href="{% vstatic 'css/bundles/overlays.css' %}" media="print" data-defer-css>
+  <noscript>
+    <link rel="stylesheet" href="{% vstatic 'css/bundles/overlays.css' %}">
+  </noscript>
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <a class="skip-link" href="#main">{% trans "Перейти до контенту" %}</a>
@@ -91,7 +94,6 @@
   <script src="{% vstatic 'js/form-validation.js' %}" defer></script>
   <script src="{% vstatic 'js/main.js' %}" defer></script>
   <script src="{% vstatic 'js/search-suggest.js' %}" defer></script>
-  <script src="{% vstatic 'js/info-cta-sheet.js' %}" defer></script>
   <script src="{% vstatic 'js/cookie-banner.js' %}" defer></script>
   <script src="{% vstatic 'js/footer-accordion.js' %}" defer></script>
   {% block extra_js %}{% endblock %}

@@ -5,15 +5,7 @@
       <div class="site-header__bar">
         <div class="site-header__inner">
           <a class="site-header__logo" href="{% url 'core:home' %}">
-            <img
-              class="site-header__logo-img"
-              src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% vstatic 'img/logo.png' %}{% endif %}"
-              alt="OGEMED for you"
-              width="295"
-              height="56"
-              decoding="async"
-              sizes="(max-width: 768px) 140px, 180px"
-            >
+            {% include "partials/site_logo.html" with class_name="site-header__logo-img" %}
           </a>
 
           <nav class="site-header__nav" aria-label="{% trans 'Головна навігація' %}">

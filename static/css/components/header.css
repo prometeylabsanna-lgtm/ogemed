@@ -176,6 +176,12 @@
   opacity: 0.75;
 }
 
+.site-header__logo picture {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
+
 .site-header__logo-img {
   height: 24px;
   width: auto;

@@ -18,7 +18,6 @@ from apps.catalog.models import (
     Category,
     Product,
     ProductImage,
-    ProductVariant,
 )
 from apps.cms.models import HeroSlide
 

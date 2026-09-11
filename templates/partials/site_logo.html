@@ -1,0 +1,15 @@
+{% load vstatic %}
+<picture>
+  {% if not site_settings.logo %}
+  <source type="image/webp" srcset="{% vstatic 'img/logo.webp' %}">
+  {% endif %}
+  <img
+    class="{{ class_name }}"
+    src="{% if site_settings.logo %}{{ site_settings.logo.url }}{% else %}{% vstatic 'img/logo.png' %}{% endif %}"
+    alt="OGEMED for you"
+    width="295"
+    height="56"
+    decoding="async"
+    {% if loading %}loading="{{ loading }}"{% endif %}
+  >
+</picture>

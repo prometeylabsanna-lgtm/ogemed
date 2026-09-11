@@ -28,7 +28,6 @@ def hreflang_map(request, *, path: str | None = None) -> dict[str, str]:
     base_path = path or request.path
     uk = translate_path_for_language(base_path, "uk")
     ru = translate_path_for_language(base_path, "ru")
-    # Strip query if translate kept it from a full path — path-only here.
     uk = uk.split("?", 1)[0]
     ru = ru.split("?", 1)[0]
     return {

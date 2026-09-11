@@ -52,7 +52,6 @@ class NovaPoshtaClient:
             "searchSettlements",
             {"CityName": query, "Limit": str(limit)},
         )
-        # searchSettlements nests addresses
         result = []
         for row in rows:
             for addr in row.get("Addresses") or []:
@@ -64,7 +63,6 @@ class NovaPoshtaClient:
                 )
         if result:
             return result
-        # Fallback getCities
         rows = self.call(
             "Address",
             "getCities",

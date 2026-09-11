@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Protocol
 from urllib import request as urlrequest
 from urllib.parse import urlencode
 
@@ -12,10 +11,6 @@ from django.db import transaction
 from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
-
-
-class Notifier(Protocol):
-    def send(self, subject: str, body: str, **kwargs) -> None: ...
 
 
 def _manager_email() -> str:

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from decimal import Decimal, InvalidOperation
 
-from django.db.models import Min, Prefetch, Q, QuerySet
+from django.db.models import Prefetch, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 
 from .labels import label_by_slug

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static vstatic ogemed_content %}
+{% load i18n static vstatic ogemed_content responsive_img %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% vstatic 'css/bundles/home.css' %}">
@@ -23,16 +23,11 @@
   {% for slide in hero_slides %}
   <div class="home-hero-slide{% if forloop.first %} is-active{% endif %}">
     {% if slide.image %}
-    <img
-      class="home-hero-slide__bg"
-      src="{{ slide.image.url }}"
-      alt=""
-      aria-hidden="true"
-      width="1600"
-      height="900"
-      decoding="async"
-      {% if forloop.first %}fetchpriority="high" loading="eager"{% else %}fetchpriority="low" loading="lazy"{% endif %}
-    >
+    {% if forloop.first %}
+    {% responsive_img slide.image alt="" class_name="home-hero-slide__bg" sizes="100vw" width=1600 height=900 loading="eager" fetchpriority="high" aria_hidden=True prefer_full=True %}
+    {% else %}
+    {% responsive_img slide.image alt="" class_name="home-hero-slide__bg" sizes="100vw" width=1600 height=900 fetchpriority="low" aria_hidden=True prefer_full=True defer_src=True %}
+    {% endif %}
     {% endif %}
     <div class="home-hero-slide__content container">
       <p class="home-hero__kicker">OGEMED for you</p>

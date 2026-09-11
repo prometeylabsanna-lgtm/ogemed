@@ -24,3 +24,7 @@ class StaticBundlesTests(SimpleTestCase):
         text = shell.read_text(encoding="utf-8")
         self.assertIn("../../fonts/literata-cyrillic-400.woff2", text)
         self.assertNotIn('url("../fonts/literata', text)
+
+    def test_cookie_banner_lives_in_shell_not_overlays(self):
+        self.assertIn("css/components/cookie_banner.css", BUNDLE_SOURCES["shell.css"])
+        self.assertNotIn("css/components/cookie_banner.css", BUNDLE_SOURCES["overlays.css"])

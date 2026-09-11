@@ -177,11 +177,6 @@ LIQPAY_SERVER_URL = env("LIQPAY_SERVER_URL", default="")
 LIQPAY_SANDBOX = env.bool("LIQPAY_SANDBOX", default=True)
 
 NP_API_KEY = env("NP_API_KEY", default="")
-NP_SENDER_REF = env("NP_SENDER_REF", default="")
-NP_SENDER_CONTACT_REF = env("NP_SENDER_CONTACT_REF", default="")
-NP_SENDER_CITY_REF = env("NP_SENDER_CITY_REF", default="")
-NP_SENDER_ADDRESS_REF = env("NP_SENDER_ADDRESS_REF", default="")
-NP_SENDER_PHONE = env("NP_SENDER_PHONE", default="")
 
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", default="")
 TELEGRAM_ADMIN_CHAT_ID = env("TELEGRAM_ADMIN_CHAT_ID", default="")

@@ -1,8 +1,13 @@
 {% if src %}
 <img
   {% if class_name %}class="{{ class_name }}"{% endif %}
+  {% if defer_src %}
+  data-src="{{ src }}"
+  {% if srcset %}data-srcset="{{ srcset }}" data-sizes="{{ sizes }}"{% endif %}
+  {% else %}
   src="{{ src }}"
   {% if srcset %}srcset="{{ srcset }}" sizes="{{ sizes }}"{% endif %}
+  {% endif %}
   alt="{{ alt }}"
   {% if width %}width="{{ width }}"{% endif %}
   {% if height %}height="{{ height }}"{% endif %}

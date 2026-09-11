@@ -17,7 +17,6 @@ def np_cities(request):
 def np_warehouses(request):
     city_ref = (request.GET.get("city_ref") or "").strip()
     q = (request.GET.get("q") or "").strip()
-    # Search from 2+ chars — avoid dumping full city lists into autocomplete.
     if not city_ref or len(q) < 2:
         return JsonResponse({"results": []})
     client = NovaPoshtaClient()

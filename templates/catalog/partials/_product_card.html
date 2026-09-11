@@ -6,7 +6,7 @@
       {% if img %}
         {% responsive_img img.image alt=product.name class_name="product-card__img product-card__img--main" sizes="(max-width: 768px) 45vw, 200px" width=300 height=400 loading="lazy" %}
         {% if hover %}
-        {% responsive_img hover.image alt="" class_name="product-card__img product-card__img--hover" sizes="(max-width: 768px) 45vw, 200px" width=300 height=400 loading="lazy" aria_hidden=True %}
+        {% responsive_img hover.image alt="" class_name="product-card__img product-card__img--hover" sizes="(max-width: 768px) 45vw, 200px" width=300 height=400 loading="lazy" aria_hidden=True defer_src=True %}
         {% endif %}
       {% else %}
         <span class="product-card__placeholder">{{ product.name|truncatechars:1 }}</span>

@@ -79,8 +79,6 @@
     });
   };
 
-  // htmx only swaps the grid, so category links keep the querystring rendered on
-  // the initial load — rebuild them from the live URL at click time.
   const carryFiltersOver = (link) => {
     const url = new URL(link.getAttribute("href"), window.location.href);
     const params = currentFilters();
@@ -224,7 +222,6 @@
     openSkinTypeSelect();
   };
 
-  // Empty inputs are still serialised by FormData; drop them so the pushed URL stays clean.
   document.addEventListener("htmx:configRequest", (event) => {
     const elt = event.detail.elt;
     if (!elt || !elt.closest || !elt.closest("#catalog-filters, #catalog-sort")) return;

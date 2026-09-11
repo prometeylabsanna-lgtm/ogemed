@@ -22,13 +22,7 @@ def build_breadcrumbs(
     request,
     *items: tuple[str, str | None] | BreadcrumbItem,
 ) -> list[BreadcrumbItem]:
-    """
-    Build breadcrumb trail starting with Home.
-
-    Pass items as (label, url) tuples or BreadcrumbItem.
-    The last item should have url=None (current page, not clickable).
-    Home is always prepended unless the only item is already Home.
-    """
+    """Крихти з «Головна»; останній елемент — поточна сторінка без посилання."""
     crumbs: list[BreadcrumbItem] = [
         BreadcrumbItem(label=_("Головна"), url=reverse("core:home")),
     ]
@@ -43,12 +37,10 @@ def build_breadcrumbs(
     if not crumbs:
         return crumbs
 
-    # Ensure the last crumb is non-clickable (current page).
     last = crumbs[-1]
     if last.url is not None:
         crumbs[-1] = BreadcrumbItem(label=last.label, url=None)
 
-    # Avoid Home → Home when only home is present.
     if len(crumbs) == 2 and crumbs[0].label == crumbs[1].label:
         return [BreadcrumbItem(label=crumbs[0].label, url=None)]
 
@@ -56,13 +48,9 @@ def build_breadcrumbs(
 
 
 def translate_path_for_language(path: str, language: str) -> str:
-    """
-    Build an equivalent path for language switcher.
-    Default language (uk) has no prefix; ru uses /ru/...
-    """
+    """Еквівалентний шлях для перемикача мови (uk без префікса, ru — /ru/)."""
     parsed = urlparse(path)
     clean = parsed.path or "/"
-    # Strip existing language prefix if present.
     for code in ("uk", "ru"):
         prefix = f"/{code}/"
         if clean.startswith(prefix):

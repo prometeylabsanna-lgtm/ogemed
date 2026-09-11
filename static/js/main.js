@@ -1,4 +1,27 @@
 (() => {
+  document.querySelectorAll("link[data-defer-css]").forEach((link) => {
+    link.media = "all";
+  });
+
+  const hydrateDeferredImgs = (root) => {
+    if (!root) return;
+    const nodes = root.matches?.("img[data-src]")
+      ? [root]
+      : [...root.querySelectorAll("img[data-src]")];
+    nodes.forEach((img) => {
+      const src = img.getAttribute("data-src");
+      if (!src) return;
+      const srcset = img.getAttribute("data-srcset");
+      const sizes = img.getAttribute("data-sizes");
+      if (srcset) img.srcset = srcset;
+      if (sizes) img.sizes = sizes;
+      img.src = src;
+      img.removeAttribute("data-src");
+      img.removeAttribute("data-srcset");
+      img.removeAttribute("data-sizes");
+    });
+  };
+
   const header = document.querySelector("[data-site-header]");
   const burger = document.querySelector("[data-burger]");
   const mobileMenu = document.querySelector("[data-mobile-menu]");
@@ -9,7 +32,7 @@
   };
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+  requestAnimationFrame(onScroll);
 
   if (burger && mobileMenu && header) {
     const setMenuOpen = (open) => {
@@ -61,6 +84,17 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") setOpen(false);
     });
+  }
+
+  if (window.matchMedia("(hover: hover)").matches) {
+    document.addEventListener(
+      "pointerenter",
+      (event) => {
+        const card = event.target.closest?.(".product-card--has-hover");
+        if (card) hydrateDeferredImgs(card);
+      },
+      true
+    );
   }
 
   document.querySelectorAll("[data-callback-trigger]").forEach((btn) => {
@@ -180,7 +214,11 @@
     let index = 0;
     const show = (i) => {
       index = (i + slides.length) % slides.length;
-      slides.forEach((s, n) => s.classList.toggle("is-active", n === index));
+      slides.forEach((s, n) => {
+        const on = n === index;
+        s.classList.toggle("is-active", on);
+        if (on) hydrateDeferredImgs(s);
+      });
       dots.forEach((d, n) => d.classList.toggle("is-active", n === index));
     };
     dots.forEach((dot) => {
@@ -302,7 +340,6 @@
       ro.observe(track);
     }
 
-    // Images can change scrollWidth after load
     track.querySelectorAll("img").forEach((img) => {
       if (!img.complete) img.addEventListener("load", syncArrows, { once: true });
     });

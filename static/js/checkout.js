@@ -236,7 +236,6 @@
     }
   }
 
-  // C2: block double-submit (button outside form via form="checkout-form")
   let submitting = false;
   const submitControls = () =>
     Array.from(

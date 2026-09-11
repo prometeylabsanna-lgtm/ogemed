@@ -62,8 +62,6 @@ class AboutPageTests(TestCase):
         self.assertContains(response, "Довіра")
         self.assertContains(response, "Баланс")
         self.assertContains(response, "Впевнений вибір")
-        self.assertContains(response, "img/about/history-paper.png")
-        self.assertContains(response, "about-paper__matte")
         self.assertContains(response, "about-paper__curl")
         self.assertContains(response, "about-paper__swipe")
         self.assertNotContains(response, "Потягніть за край картки")
@@ -71,7 +69,6 @@ class AboutPageTests(TestCase):
         self.assertContains(response, "/katalog/")
         self.assertContains(response, "/kontakty/")
         self.assertContains(response, "img/about/hero.jpg")
-        # breadcrumbs лише на банері, не дублюються над hero
         self.assertEqual(response.content.decode().count('class="breadcrumbs"'), 1)
 
     def test_about_sections_ru(self):

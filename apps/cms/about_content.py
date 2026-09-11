@@ -450,30 +450,12 @@ class AboutContent(models.Model):
 
     @property
     def history_cards(self) -> list[dict]:
-        fallbacks = {
-            1: "img/about/history-paper.png",
-            2: "img/about/history-paper.png",
-            3: "img/about/history-paper.png",
-        }
         items: list[dict] = []
         for index in range(1, 4):
             title = self._loc(f"history_card_{index}_title")
             body = self._loc(f"history_card_{index}_body")
             if title or body:
-                image_url = ""
-                if index == 1 and self.history_image:
-                    image_url = self.history_image.url
-                elif index == 3 and self.philosophy_image:
-                    image_url = self.philosophy_image.url
-                items.append(
-                    {
-                        "n": index,
-                        "title": title,
-                        "body": body,
-                        "image_url": image_url,
-                        "fallback_static": fallbacks[index],
-                    }
-                )
+                items.append({"n": index, "title": title, "body": body})
         return items
 
     @property

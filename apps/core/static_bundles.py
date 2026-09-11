@@ -17,13 +17,13 @@ BUNDLE_SOURCES: dict[str, tuple[str, ...]] = {
         "css/components/breadcrumbs.css",
         "css/components/search_suggest.css",
         "css/components/footer.css",
+        "css/components/cookie_banner.css",
     ),
     "overlays.css": (
         "css/components/cart.css",
         "css/components/cart_popup.css",
         "css/components/callback_modal.css",
         "css/components/form_validation.css",
-        "css/components/cookie_banner.css",
     ),
     "home.css": (
         "css/components/product_card.css",

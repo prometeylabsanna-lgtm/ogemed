@@ -25,11 +25,7 @@
               {% comment %}Вітрина: showcase → cover; лише якщо файл реально є{% endcomment %}
               {% with showcase=brand.display_cover %}
               {% if showcase %}
-              {% if forloop.first %}
-              {% responsive_img showcase alt=brand.name class_name="brand-panel__visual" sizes="(max-width: 768px) 90vw, 400px" width=800 height=1000 loading="eager" decoding="async" %}
-              {% else %}
               {% responsive_img showcase alt=brand.name class_name="brand-panel__visual" sizes="(max-width: 768px) 90vw, 400px" width=800 height=1000 loading="lazy" decoding="async" fetchpriority="low" %}
-              {% endif %}
               {% endif %}
               {% endwith %}
             </div>
