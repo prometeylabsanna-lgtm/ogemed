@@ -26,7 +26,6 @@
   <meta property="og:locale:alternate" content="{% if LANGUAGE_CODE == 'ru' %}uk_UA{% else %}ru_RU{% endif %}">
   {% block head_preload %}{% endblock %}
   <link rel="preload" href="{% vstatic 'fonts/literata-cyrillic-400.woff2' %}" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="{% vstatic 'fonts/literata-latin-400.woff2' %}" as="font" type="font/woff2" crossorigin>
   <meta name="htmx-config" content='{"includeIndicatorStyles":false}'>
   <link rel="stylesheet" href="{% vstatic 'css/bundles/shell.css' %}">
   {% block extra_css %}{% endblock %}

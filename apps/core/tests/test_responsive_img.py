@@ -30,3 +30,8 @@ class ResponsiveImgTagTests(SimpleTestCase):
         data = responsive_img(field, defer_src=True)
         self.assertTrue(data["defer_src"])
         self.assertEqual(data["src"], "/media/products/shot.jpg")
+
+    def test_thumb_only_skips_full_srcset(self):
+        field = _FakeFile("/media/products/shot.webp")
+        data = responsive_img(field, thumb_only=True)
+        self.assertEqual(data["srcset"], "")

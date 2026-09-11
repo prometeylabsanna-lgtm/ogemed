@@ -652,12 +652,6 @@ a:hover {
   opacity: 0.75;
 }
 
-.site-header__logo picture {
-  display: flex;
-  align-items: center;
-  line-height: 0;
-}
-
 .site-header__logo-img {
   height: 24px;
   width: auto;
@@ -1898,11 +1892,6 @@ a:hover {
   align-items: flex-start;
   width: 100%;
   min-width: 0;
-}
-
-.site-footer__brand picture {
-  display: block;
-  line-height: 0;
 }
 
 .site-footer__logo-img {

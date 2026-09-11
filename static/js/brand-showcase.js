@@ -24,6 +24,35 @@
   root.style.setProperty("--brand-steps", String(Math.max(count, 1)));
   root.classList.add("is-morph");
 
+  const hydrateDeferredImgs = () => {
+    root.querySelectorAll("img[data-src]").forEach((img) => {
+      const src = img.getAttribute("data-src");
+      if (!src) return;
+      const srcset = img.getAttribute("data-srcset");
+      const sizes = img.getAttribute("data-sizes");
+      if (srcset) img.srcset = srcset;
+      if (sizes) img.sizes = sizes;
+      img.src = src;
+      img.removeAttribute("data-src");
+      img.removeAttribute("data-srcset");
+      img.removeAttribute("data-sizes");
+    });
+  };
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        hydrateDeferredImgs();
+        io.disconnect();
+      },
+      { rootMargin: "200px 0px" }
+    );
+    io.observe(root);
+  } else {
+    hydrateDeferredImgs();
+  }
+
   function clamp(v, min, max) {
     return Math.max(min, Math.min(max, v));
   }

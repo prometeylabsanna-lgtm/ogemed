@@ -49,6 +49,7 @@ python manage.py compilemessages -l uk -l ru 2>/dev/null || true
 
 echo "==> Collect static"
 python manage.py collectstatic --noinput
+python manage.py compress_static
 
 _static_count=$(find "${STATIC_ROOT:-/app/staticfiles}" -type f 2>/dev/null | wc -l | tr -d ' ')
 echo "==> static files: ${_static_count}"

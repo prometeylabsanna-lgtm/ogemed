@@ -74,6 +74,9 @@ for i in $(seq 1 60); do
 done
 
 "${COMPOSE[@]}" up -d
+echo "==> Reload nginx (gzip/http2 з bind-mount)"
+"${COMPOSE[@]}" exec -T nginx nginx -s reload \
+  || "${COMPOSE[@]}" up -d --force-recreate nginx
 
 echo "==> Inventory"
 for svc in db web nginx; do

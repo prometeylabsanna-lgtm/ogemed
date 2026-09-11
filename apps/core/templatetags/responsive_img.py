@@ -32,13 +32,14 @@ def responsive_img(
     aria_hidden=False,
     prefer_full=False,
     defer_src=False,
+    thumb_only=False,
 ):
     full = _full_url(field_file)
     thumb = thumb_url(field_file) if field_file else ""
     has_thumb = bool(thumb and full and thumb != full)
     src = full if prefer_full or not has_thumb else thumb
     srcset = ""
-    if has_thumb:
+    if has_thumb and not thumb_only and not prefer_full:
         srcset = f"{thumb} {THUMB_MAX_SIDE}w, {full} 900w"
     return {
         "src": src,

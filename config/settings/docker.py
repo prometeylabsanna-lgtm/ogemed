@@ -56,6 +56,7 @@ SECURE_HSTS_PRELOAD = env.bool("SECURE_HSTS_PRELOAD", default=False)
 # Static віддає nginx — без WhiteNoise
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.gzip.GZipMiddleware",
     "apps.core.middleware.ContentSecurityPolicyMiddleware",
     "apps.core.middleware.MediaCacheControlMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
