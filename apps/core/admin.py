@@ -37,6 +37,7 @@ class SiteSettingsAdmin(ModelAdmin):
                 "fields": (
                     "telegram_url",
                     "instagram_url",
+                    "tiktok_url",
                     "facebook_url",
                     "viber_url",
                     "telegram_consultant_url",

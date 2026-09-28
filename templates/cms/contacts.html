@@ -93,7 +93,7 @@
         {% endif %}
       </ul>
 
-      {% if site_settings.instagram_url or site_settings.facebook_url %}
+      {% if site_settings.instagram_url or site_settings.tiktok_url or site_settings.facebook_url %}
       <div class="contacts__socials">
         <span class="contacts__label">{% trans "Соцмережі" %}</span>
         <div class="contacts__social-row">
@@ -104,6 +104,14 @@
             target="_blank"
             rel="noopener noreferrer"
           >Instagram</a>
+          {% endif %}
+          {% if site_settings.tiktok_url %}
+          <a
+            class="contacts__social"
+            href="{{ site_settings.tiktok_url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >TikTok</a>
           {% endif %}
           {% if site_settings.facebook_url %}
           <a

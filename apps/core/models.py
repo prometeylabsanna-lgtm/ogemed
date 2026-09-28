@@ -50,6 +50,7 @@ class SiteSettings(models.Model):
     )
     telegram_url = models.URLField(_("Telegram"), blank=True)
     instagram_url = models.URLField(_("Instagram"), blank=True)
+    tiktok_url = models.URLField(_("TikTok"), blank=True)
     facebook_url = models.URLField(_("Facebook"), blank=True)
     viber_url = models.URLField(_("Viber"), blank=True)
     telegram_consultant_url = models.URLField(
