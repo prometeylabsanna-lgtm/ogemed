@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.fields import OptimizedImageField
+from apps.core.html_text import plain_text
 from apps.core.image_processing import MAX_SIDE_HERO, MAX_SIDE_LOGO
 
 
@@ -195,12 +196,12 @@ class SiteBlock(models.Model):
         uk = getattr(self, "text_html_uk", None)
         ru = getattr(self, "text_html_ru", None)
         if uk is None and ru is None:
-            return self.text_html or ""
+            return plain_text(self.text_html or "")
         uk_val = uk if uk is not None else (self.text_html or "")
         ru_val = ru if ru is not None else ""
         if lang == "ru" and ru_val:
-            return ru_val
-        return uk_val or ru_val
+            return plain_text(ru_val)
+        return plain_text(uk_val or ru_val)
 
 
 class HomeHeroSettings(SiteSettings):

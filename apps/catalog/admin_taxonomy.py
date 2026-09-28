@@ -9,6 +9,7 @@ from apps.core.admin_filters import (
     UkRelatedDropdownFilter,
 )
 from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
+from apps.core.html_text import TINYMCE_VALID_ELEMENTS
 
 from .models import Attribute, AttributeValue, Brand, Category
 
@@ -47,6 +48,8 @@ def tinymce_widget():
                 "bullist numlist | link | code"
             ),
             "font_size_formats": "12px 14px 16px 18px 20px 24px 28px 32px",
+            "valid_elements": TINYMCE_VALID_ELEMENTS,
+            "convert_urls": False,
         },
     )
 

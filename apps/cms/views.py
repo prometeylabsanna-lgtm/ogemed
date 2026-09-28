@@ -1,6 +1,7 @@
 from django.views.generic import DetailView
 
 from apps.core.breadcrumbs import build_breadcrumbs
+from apps.core.html_text import plain_text
 
 from .about_content import AboutContent
 from .info_page_service import meta_for_page, sections_for_page
@@ -56,8 +57,7 @@ class CMSPageDetailView(DetailView):
         ctx["page_title"] = page.title
         body = (page.body or "").strip()
         if body:
-            plain = " ".join(body.split())
-            ctx["meta_description"] = plain[:160]
+            ctx["meta_description"] = plain_text(body, single_line=True)[:160]
         else:
             ctx["meta_description"] = page.title
         ctx["breadcrumbs"] = build_breadcrumbs(

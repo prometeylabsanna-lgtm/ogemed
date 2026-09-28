@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import get_language, gettext_lazy as _
 
 from apps.core.fields import OptimizedImageField
+from apps.core.html_text import plain_text
 from apps.core.image_processing import MAX_SIDE_HERO
 
 from .about_content import AboutContent  # noqa: F401
@@ -40,8 +41,8 @@ class CMSPage(models.Model):
     def title(self) -> str:
         lang = (get_language() or "uk")[:2]
         if lang == "ru" and self.title_ru:
-            return self.title_ru
-        return self.title_uk
+            return plain_text(self.title_ru)
+        return plain_text(self.title_uk)
 
     @property
     def body(self) -> str:
@@ -107,8 +108,8 @@ class HeroSlide(models.Model):
         uk = getattr(self, f"{base}_uk", "") or ""
         ru = getattr(self, f"{base}_ru", "") or ""
         if lang == "ru" and ru:
-            return ru
-        return uk or ru
+            return plain_text(ru)
+        return plain_text(uk or ru)
 
     @property
     def title(self) -> str:

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n vstatic %}
+{% load i18n vstatic html_text %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% vstatic 'css/bundles/info_page_shipping.css' %}">
@@ -15,7 +15,7 @@
       <h1 class="info-page__title">{{ page.title }}</h1>
       {% if page.body %}
       <div class="info-page__intro">
-        {{ page.body|safe }}
+        {{ page.body|richtext }}
       </div>
       {% endif %}
     </header>
@@ -25,7 +25,7 @@
       <li class="info-page__item">
         <span class="info-page__label">{{ item.label }}</span>
         <p class="info-page__value">{{ item.value }}</p>
-        <div class="info-page__text">{{ item.text|safe }}</div>
+        <div class="info-page__text">{{ item.text|plain_cms }}</div>
       </li>
       {% endfor %}
     </ul>

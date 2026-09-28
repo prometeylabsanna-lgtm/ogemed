@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import get_language, gettext_lazy as _
 
 from apps.core.fields import OptimizedImageField
+from apps.core.html_text import plain_text
 from apps.core.image_processing import MAX_SIDE_HERO, MAX_SIDE_PRODUCT
 
 
@@ -421,8 +422,8 @@ class AboutContent(models.Model):
         uk = getattr(self, f"{base}_uk", "") or ""
         ru = getattr(self, f"{base}_ru", "") or ""
         if lang == "ru" and ru:
-            return ru
-        return uk or ru
+            return plain_text(ru)
+        return plain_text(uk or ru)
 
     @property
     def hero_kicker(self) -> str:

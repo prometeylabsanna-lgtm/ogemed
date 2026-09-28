@@ -1,4 +1,5 @@
 """Shared abstract mixins."""
+from apps.core.html_text import is_rich_field_base, plain_text
 from django.db import models
 from django.utils.translation import get_language, gettext_lazy as _
 
@@ -25,8 +26,10 @@ class SeoFieldsMixin(models.Model):
         uk = getattr(self, f"{field_base}_uk", "") or ""
         ru = getattr(self, f"{field_base}_ru", "") or ""
         if lang == "ru" and ru:
-            return ru
-        return uk or ru
+            value = ru
+        else:
+            value = uk or ru
+        return plain_text(value, single_line=True)
 
     @property
     def seo_title(self) -> str:
@@ -48,5 +51,9 @@ class LocalizedCharMixin(models.Model):
         uk = getattr(self, f"{field_base}_uk", "") or ""
         ru = getattr(self, f"{field_base}_ru", "") or ""
         if lang == "ru" and ru:
-            return ru
-        return uk or ru
+            value = ru
+        else:
+            value = uk or ru
+        if is_rich_field_base(field_base):
+            return value
+        return plain_text(value)

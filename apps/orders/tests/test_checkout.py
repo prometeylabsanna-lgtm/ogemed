@@ -154,6 +154,12 @@ class CartCheckoutTests(TestCase):
         self.assertEqual(follow.status_code, 200)
         self.assertContains(follow, "https://pay.monobank.ua/smart/abc")
 
+        back = self.client.get(reverse("orders:checkout"))
+        self.assertEqual(back.status_code, 302)
+        self.assertIn(reverse("orders:thank_you"), back["Location"])
+        order = Order.objects.get()
+        self.assertIn(order.order_number, back["Location"])
+
     def test_fop_checkout_awaits_payment_and_shows_requisites(self):
         from apps.core.models import SiteSettings
 

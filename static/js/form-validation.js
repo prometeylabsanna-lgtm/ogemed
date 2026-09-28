@@ -468,4 +468,11 @@
   document.body.addEventListener("htmx:afterSwap", (event) => {
     scan(event.target);
   });
+  window.addEventListener("pageshow", () => {
+    document.querySelectorAll("form[data-validate-form]").forEach((form) => {
+      setSubmitting(form, false);
+      const root = form.closest(".checkout");
+      if (root) root.classList.remove("is-submitting");
+    });
+  });
 })();

@@ -4,6 +4,8 @@ from __future__ import annotations
 from django.db import models
 from django.utils.translation import get_language, gettext_lazy as _
 
+from apps.core.html_text import plain_text
+
 
 class InfoPageSection(models.Model):
     """Одна секція контенту на сторінках shipping / returns / privacy / offer."""
@@ -57,8 +59,12 @@ class InfoPageSection(models.Model):
         uk = getattr(self, f"{base}_uk", "") or ""
         ru = getattr(self, f"{base}_ru", "") or ""
         if lang == "ru" and ru:
-            return ru
-        return uk or ru
+            value = ru
+        else:
+            value = uk or ru
+        if base == "body":
+            return value
+        return plain_text(value)
 
     @property
     def heading(self) -> str:
@@ -121,8 +127,8 @@ class InfoPageMeta(models.Model):
         uk = getattr(self, f"{base}_uk", "") or ""
         ru = getattr(self, f"{base}_ru", "") or ""
         if lang == "ru" and ru:
-            return ru
-        return uk or ru
+            return plain_text(ru)
+        return plain_text(uk or ru)
 
     @property
     def cta_title(self) -> str:

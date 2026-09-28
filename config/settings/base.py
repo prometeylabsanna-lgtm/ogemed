@@ -128,6 +128,10 @@ TINYMCE_DEFAULT_CONFIG = {
         "bullist numlist | link image | code"
     ),
     "font_size_formats": "12px 14px 16px 18px 20px 24px 28px 32px",
+    "valid_elements": (
+        "p,br,strong/b,em/i,u,ul,ol,li,a[href|target|rel|title],span[style],h2,h3,h4"
+    ),
+    "convert_urls": False,
     "content_css": False,
     "skin": "oxide",
 }

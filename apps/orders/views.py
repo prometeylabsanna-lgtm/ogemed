@@ -22,6 +22,15 @@ class CheckoutView(View):
     def get(self, request):
         cart = SessionCart(request)
         if cart.is_empty():
+            token = request.session.get("last_order_token") or ""
+            if token:
+                order = Order.objects.filter(access_token=token).first()
+                if order and order.status == OrderStatus.AWAITING_PAYMENT:
+                    thank = (
+                        reverse("orders:thank_you")
+                        + f"?order={order.order_number}&t={order.access_token}"
+                    )
+                    return redirect(thank)
             messages.info(request, _("Кошик порожній"))
             return redirect("cart:detail")
         initial = {}

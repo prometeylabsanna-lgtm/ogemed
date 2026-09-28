@@ -1,6 +1,8 @@
 """Templatetags для SiteBlock."""
 from django import template
 
+from apps.core.html_text import plain_text
+
 register = template.Library()
 
 
@@ -14,7 +16,7 @@ def block_text(context, page: str, key: str, default: str = "") -> str:
     block = _block(context, page, key)
     if block is None:
         return default
-    return block.localized_text() or default
+    return plain_text(block.localized_text() or default)
 
 
 @register.simple_tag(takes_context=True)

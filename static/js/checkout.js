@@ -269,4 +269,24 @@
   form.addEventListener("submit", () => {
     enableNamedFields();
   });
+
+  const clearSubmitting = () => {
+    clickLock = false;
+    form.classList.remove("is-submitting");
+    const root = form.closest(".checkout");
+    if (root) root.classList.remove("is-submitting");
+  };
+
+  window.addEventListener("pageshow", (event) => {
+    const root = form.closest(".checkout");
+    const wasSubmitting = Boolean(
+      (root && root.classList.contains("is-submitting")) ||
+        form.classList.contains("is-submitting")
+    );
+    clearSubmitting();
+    /* Back from Monobank / bfcache: не лишати спінер і не слати форму повторно. */
+    if (event.persisted || wasSubmitting) {
+      window.location.reload();
+    }
+  });
 })();
