@@ -411,8 +411,14 @@
           event.stopImmediatePropagation();
           return;
         }
+        /* Native POST: не чіпати submit-кнопку в цьому тіку — prepend/disable
+           зриває відправку (кнопка form= / iOS Safari / Chrome). */
         if (!form.hasAttribute("hx-post") && !form.hasAttribute("hx-get")) {
-          setSubmitting(form, true, false);
+          window.setTimeout(() => {
+            form.classList.add("is-submitting");
+            const root = form.closest(".checkout");
+            if (root) root.classList.add("is-submitting");
+          }, 0);
         }
       },
       true

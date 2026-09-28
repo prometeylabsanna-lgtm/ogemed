@@ -236,23 +236,37 @@
     }
   }
 
-  let submitting = false;
-  const submitControls = () =>
-    Array.from(
-      document.querySelectorAll(
-        'button[type="submit"][form="checkout-form"], #checkout-form button[type="submit"]'
-      )
-    );
-
-  form.addEventListener("submit", (event) => {
-    if (submitting) {
-      event.preventDefault();
-      return;
-    }
-    submitting = true;
-    submitControls().forEach((btn) => {
-      btn.setAttribute("aria-busy", "true");
-      btn.classList.add("is-loading");
+  const enableNamedFields = () => {
+    form.querySelectorAll("[name][disabled]").forEach((el) => {
+      el.disabled = false;
     });
+  };
+
+  const nativeSubmit = form.querySelector(".checkout__submit-native");
+  const trigger = document.querySelector("[data-checkout-submit]");
+  let clickLock = false;
+
+  if (trigger) {
+    trigger.addEventListener("click", () => {
+      if (clickLock) return;
+      if (form.closest(".checkout")?.classList.contains("is-submitting")) return;
+      clickLock = true;
+      enableNamedFields();
+      if (typeof form.requestSubmit === "function") {
+        form.requestSubmit(nativeSubmit || undefined);
+      } else {
+        form.submit();
+        return;
+      }
+      window.setTimeout(() => {
+        if (!form.closest(".checkout")?.classList.contains("is-submitting")) {
+          clickLock = false;
+        }
+      }, 400);
+    });
+  }
+
+  form.addEventListener("submit", () => {
+    enableNamedFields();
   });
 })();

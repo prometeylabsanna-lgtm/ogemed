@@ -169,6 +169,14 @@ class CartCheckoutTests(TestCase):
         self.assertContains(r, "Оплата на картку / рахунок ФОП")
         self.assertContains(r, "ви отримаєте реквізити")
 
+    def test_checkout_native_submit_is_inside_form(self):
+        self.client.post(reverse("cart:add"), {"variant_id": self.variant.pk})
+        r = self.client.get(reverse("orders:checkout"))
+        self.assertContains(r, 'id="checkout-form"')
+        self.assertContains(r, "checkout__submit-native")
+        self.assertContains(r, "data-checkout-submit")
+        self.assertContains(r, "hx-disable")
+
     def test_checkout_np_point_type_is_ukrainian(self):
         self.client.post(reverse("cart:add"), {"variant_id": self.variant.pk})
         r = self.client.get(reverse("orders:checkout"))

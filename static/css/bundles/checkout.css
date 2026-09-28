@@ -196,6 +196,7 @@ body.page-checkout .site-footer {
 
 /* —— Form —— */
 .checkout__form {
+  position: relative;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -289,6 +290,7 @@ body.page-checkout .site-footer {
   padding-inline: 28px;
   border-radius: 0;
   justify-content: center;
+  align-items: center;
   transition:
     background 0.22s ease,
     border-color 0.22s ease,
@@ -307,13 +309,44 @@ body.page-checkout .site-footer {
   transform: translateY(0);
 }
 
-.checkout__submit:disabled,
-.checkout__submit[aria-busy="true"] {
-  opacity: 0.55;
+.checkout__submit-native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.checkout.is-submitting .checkout__submit {
+  opacity: 0.72;
   cursor: wait;
   transform: none;
   box-shadow: none;
   pointer-events: none;
+}
+
+.checkout.is-submitting .checkout__submit::before {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: checkout-submit-spin 0.7s linear infinite;
+}
+
+@keyframes checkout-submit-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* —— Summary: лінії без рамки —— */
@@ -516,6 +549,11 @@ body.page-checkout .site-footer {
   .checkout__submit:hover,
   .checkout__submit:focus-visible {
     transform: none;
+  }
+
+  .checkout.is-submitting .checkout__submit::before {
+    animation: none;
+    opacity: 0.45;
   }
 }
 

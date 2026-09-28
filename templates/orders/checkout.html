@@ -59,8 +59,9 @@
         {% endfor %}
       </ul>
 
-      <form method="post" class="checkout__form" id="checkout-form" novalidate data-checkout-form data-validate-form>
+      <form method="post" class="checkout__form" id="checkout-form" novalidate data-checkout-form data-validate-form hx-disable>
         {% csrf_token %}
+        <button type="submit" class="checkout__submit-native" tabindex="-1" aria-hidden="true">{% trans "Підтвердити" %}</button>
         {% if form.non_field_errors %}
           <div class="form-errors">{{ form.non_field_errors }}</div>
         {% endif %}
@@ -173,7 +174,7 @@
         <span class="checkout__total-label">{% trans "Разом" %}</span>
         <span class="checkout__total-value">{{ cart_total }} ₴</span>
       </p>
-      <button type="submit" form="checkout-form" class="btn btn--primary checkout__submit">{% trans "Підтвердити" %}</button>
+      <button type="button" class="btn btn--primary checkout__submit" data-checkout-submit>{% trans "Підтвердити" %}</button>
     </aside>
   </div>
 </section>

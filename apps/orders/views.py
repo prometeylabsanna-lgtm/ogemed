@@ -69,18 +69,22 @@ class CheckoutView(View):
             return render(
                 request, self.template_name, self._context(request, form, cart), status=400
             )
-        notify_new_order(order)
+        invoice_url = None
         if order.payment_type == PaymentType.MONOPAY:
             invoice = start_monopay_payment(request, order)
             if invoice and invoice.get("page_url"):
-                return redirect(invoice["page_url"])
-            messages.error(
-                request,
-                _(
-                    "Не вдалося відкрити оплату Monobank. "
-                    "Спробуйте ще раз зі сторінки замовлення або оберіть інший спосіб."
-                ),
-            )
+                invoice_url = invoice["page_url"]
+            else:
+                messages.error(
+                    request,
+                    _(
+                        "Не вдалося відкрити оплату Monobank. "
+                        "Спробуйте ще раз зі сторінки замовлення або оберіть інший спосіб."
+                    ),
+                )
+        notify_new_order(order)
+        if invoice_url:
+            return redirect(invoice_url)
         url = reverse("orders:thank_you") + f"?order={order.order_number}&t={order.access_token}"
         return redirect(url)
 
