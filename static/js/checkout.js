@@ -251,8 +251,8 @@
     }
     submitting = true;
     submitControls().forEach((btn) => {
-      btn.disabled = true;
       btn.setAttribute("aria-busy", "true");
+      btn.classList.add("is-loading");
     });
   });
 })();

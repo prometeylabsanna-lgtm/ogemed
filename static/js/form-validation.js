@@ -323,7 +323,7 @@
     if (first) focusFirstInvalid(first);
   };
 
-  const setSubmitting = (form, on) => {
+  const setSubmitting = (form, on, disable = true) => {
     form.classList.toggle("is-submitting", on);
     const buttons = Array.from(
       form.querySelectorAll('button[type="submit"]')
@@ -335,9 +335,13 @@
       )
     );
     buttons.forEach((btn) => {
-      btn.disabled = on;
+      /* disable на native submit зриває POST (кнопка поза формою / iOS Safari) */
+      if (disable || !on) {
+        btn.disabled = on;
+      }
       btn.classList.toggle("is-loading", on);
       if (on) {
+        btn.setAttribute("aria-busy", "true");
         if (!btn.dataset.labelBackup) btn.dataset.labelBackup = btn.innerHTML;
         if (!btn.querySelector(".btn-spinner")) {
           const spin = document.createElement("span");
@@ -345,9 +349,12 @@
           spin.setAttribute("aria-hidden", "true");
           btn.prepend(spin);
         }
-      } else if (btn.dataset.labelBackup) {
-        btn.innerHTML = btn.dataset.labelBackup;
-        delete btn.dataset.labelBackup;
+      } else {
+        btn.removeAttribute("aria-busy");
+        if (btn.dataset.labelBackup) {
+          btn.innerHTML = btn.dataset.labelBackup;
+          delete btn.dataset.labelBackup;
+        }
       }
     });
   };
@@ -405,7 +412,7 @@
           return;
         }
         if (!form.hasAttribute("hx-post") && !form.hasAttribute("hx-get")) {
-          setSubmitting(form, true);
+          setSubmitting(form, true, false);
         }
       },
       true

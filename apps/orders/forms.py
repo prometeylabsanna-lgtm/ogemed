@@ -57,7 +57,10 @@ class CheckoutForm(forms.Form):
         label=_("Відділення / поштомат"), required=False, max_length=255
     )
     np_point_type = forms.ChoiceField(
-        choices=NPPointType.choices, required=False, initial=NPPointType.WAREHOUSE
+        label=_("Тип пункту"),
+        choices=NPPointType.choices,
+        required=False,
+        initial=NPPointType.WAREHOUSE,
     )
     courier_city = forms.CharField(label=_("Місто"), required=False, max_length=120)
     courier_street = forms.CharField(label=_("Вулиця"), required=False, max_length=255)

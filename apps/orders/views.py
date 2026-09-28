@@ -74,6 +74,13 @@ class CheckoutView(View):
             invoice = start_monopay_payment(request, order)
             if invoice and invoice.get("page_url"):
                 return redirect(invoice["page_url"])
+            messages.error(
+                request,
+                _(
+                    "Не вдалося відкрити оплату Monobank. "
+                    "Спробуйте ще раз зі сторінки замовлення або оберіть інший спосіб."
+                ),
+            )
         url = reverse("orders:thank_you") + f"?order={order.order_number}&t={order.access_token}"
         return redirect(url)
 
