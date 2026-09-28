@@ -325,6 +325,7 @@ ssh ogemed
 cd /var/www/ogemed
 git pull origin main
 bash deploy/docker/deploy.sh --prod
+# без --prod після SSL сайт падає: nginx лишається лише на :80, браузер б'є в :443
 ```
 
 Якщо змінювали лише `.env`:

@@ -1,16 +1,35 @@
 #!/usr/bin/env bash
 # Deploy OGEMED on Droplet: free 80/443 → build → up → healthz.
 # Usage (from /var/www/ogemed):
-#   bash deploy/docker/deploy.sh              # HTTP (docker-compose.yml)
-#   bash deploy/docker/deploy.sh --prod       # HTTPS (prod override)
+#   bash deploy/docker/deploy.sh           # HTTPS, якщо є Let's Encrypt; інакше HTTP
+#   bash deploy/docker/deploy.sh --prod    # завжди HTTPS
+#   bash deploy/docker/deploy.sh --http    # лише :80; заборонено, якщо вже є Let's Encrypt
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
+has_tls_certs() {
+  [[ -f /etc/letsencrypt/live/oge.in.ua/fullchain.pem ]] \
+    && [[ -f /etc/letsencrypt/live/oge.in.ua/privkey.pem ]]
+}
+
+MODE="${1:-}"
 USE_PROD=0
-if [[ "${1:-}" == "--prod" ]]; then
+if [[ "$MODE" == "--prod" ]]; then
   USE_PROD=1
+elif [[ "$MODE" == "--http" ]]; then
+  USE_PROD=0
+elif has_tls_certs; then
+  USE_PROD=1
+  echo "==> Знайдено Let's Encrypt — деплой HTTPS (як --prod)"
+fi
+
+if [[ "$USE_PROD" -eq 0 ]] && has_tls_certs; then
+  echo "FATAL: сертифікати HTTPS є. Деплой без --prod знімає порт 443 → ERR_CONNECTION_REFUSED."
+  echo "Запустіть: bash deploy/docker/deploy.sh --prod"
+  echo "Лише HTTP (свідомо): bash deploy/docker/deploy.sh --http"
+  exit 1
 fi
 
 COMPOSE=(docker compose -f docker-compose.yml)
@@ -89,6 +108,14 @@ for svc in db web nginx; do
 done
 
 "${COMPOSE[@]}" ps
+
+if [[ "$USE_PROD" -eq 1 ]]; then
+  if ! "${COMPOSE[@]}" ps nginx 2>/dev/null | grep -q '443'; then
+    echo "FATAL: nginx без порту 443 — HTTPS мертвий. Перевір docker-compose.prod.yml"
+    exit 1
+  fi
+  echo "==> nginx слухає :80 і :443"
+fi
 
 if [[ $_ok -eq 1 ]] || curl -sf "http://127.0.0.1/healthz/" >/dev/null 2>&1; then
   echo "==> healthz HTTP OK"
