@@ -15,7 +15,7 @@ class PaymentAttempt(models.Model):
         related_name="payment_attempts",
         verbose_name=_("Замовлення"),
     )
-    provider = models.CharField(_("Провайдер"), max_length=32, default="liqpay")
+    provider = models.CharField(_("Провайдер"), max_length=32, default="monopay")
     provider_order_id = models.CharField(max_length=64, blank=True, db_index=True)
     payment_id = models.CharField(max_length=64, blank=True)
     status = models.CharField(

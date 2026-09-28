@@ -108,7 +108,7 @@ class CartCheckoutTests(TestCase):
         with self.assertRaises(ValidationError):
             OrderStatusService.transition(order, OrderStatus.PAID)
 
-    def test_liqpay_checkout_awaits_payment(self):
+    def test_monopay_checkout_awaits_payment(self):
         self.client.post(reverse("cart:add"), {"variant_id": self.variant.pk})
         self.client.post(
             reverse("orders:checkout"),
@@ -119,7 +119,7 @@ class CartCheckoutTests(TestCase):
                 "np_city_name": "Київ",
                 "np_warehouse_name": "Відділення 1",
                 "np_point_type": "warehouse",
-                "payment_type": PaymentType.LIQPAY,
+                "payment_type": PaymentType.MONOPAY,
             },
         )
         order = Order.objects.get()

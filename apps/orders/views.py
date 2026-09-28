@@ -9,7 +9,7 @@ from apps.cart.cart import SessionCart
 from apps.core.breadcrumbs import build_breadcrumbs
 from apps.notify.services import notify_new_order
 from apps.orders.models import Order, OrderStatus, PaymentType
-from apps.payments.views import start_liqpay_payment
+from apps.payments.views import start_monopay_payment
 
 from .forms import CheckoutForm
 from .fop_payment import fop_payment_details
@@ -70,14 +70,10 @@ class CheckoutView(View):
                 request, self.template_name, self._context(request, form, cart), status=400
             )
         notify_new_order(order)
-        if order.payment_type == PaymentType.LIQPAY:
-            form_data = start_liqpay_payment(request, order)
-            if form_data:
-                return render(
-                    request,
-                    "payments/liqpay_redirect.html",
-                    {"order": order, "liqpay": form_data},
-                )
+        if order.payment_type == PaymentType.MONOPAY:
+            invoice = start_monopay_payment(request, order)
+            if invoice and invoice.get("page_url"):
+                return redirect(invoice["page_url"])
         url = reverse("orders:thank_you") + f"?order={order.order_number}&t={order.access_token}"
         return redirect(url)
 
@@ -148,7 +144,7 @@ class ThankYouView(TemplateView):
         ctx["breadcrumbs"] = build_breadcrumbs(self.request, *crumbs)
         ctx["show_retry"] = bool(
             order and order.status == OrderStatus.AWAITING_PAYMENT
-            and order.payment_type == PaymentType.LIQPAY
+            and order.payment_type == PaymentType.MONOPAY
         )
         ctx["show_fop"] = bool(order and order.payment_type == PaymentType.FOP_CARD)
         ctx["fop"] = fop_payment_details(order) if ctx["show_fop"] else None

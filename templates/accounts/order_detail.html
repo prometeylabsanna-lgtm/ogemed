@@ -106,7 +106,7 @@
       {% endif %}
 
       {% if show_pay %}
-      <form method="post" action="{% url 'payments:liqpay_retry' %}">
+      <form method="post" action="{% url 'payments:monopay_retry' %}">
         {% csrf_token %}
         <input type="hidden" name="t" value="{{ order.access_token }}">
         <button type="submit" class="btn btn--primary cabinet-page__cta">{% trans "Оплатити" %}</button>

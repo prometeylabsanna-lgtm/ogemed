@@ -24,7 +24,7 @@ class DeliveryType(models.TextChoices):
 
 
 class PaymentType(models.TextChoices):
-    LIQPAY = "liqpay", _("LiqPay")
+    MONOPAY = "monopay", _("Онлайн оплата (Monobank)")
     CASH_ON_DELIVERY = "cash_on_delivery", _("Оплата при отриманні")
     FOP_CARD = "fop_card", _("Оплата на картку / рахунок ФОП")
 

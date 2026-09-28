@@ -9,7 +9,7 @@
 - DB: SQLite (local) / PostgreSQL (prod)
 - Admin: базова Django Admin
 - Email: Resend API · Notify: Telegram / Viber (best-effort)
-- Оплата: LiqPay + COD · Доставка: Нова Пошта + курʼєр
+- Оплата: Monobank (Monopay) + COD · Доставка: Нова Пошта + курʼєр
 - Deploy: DigitalOcean Droplet (Docker: nginx + gunicorn + PostgreSQL); опційно Vercel demo
 
 **Фаза 2 інфраструктури — Redis + черга:** Django-Q2 підключено.
@@ -55,7 +55,7 @@ python manage.py test
 
 ## URL (SITE_MAP)
 
-`/` · `/katalog/` · `/katalog/<slug>/` · `/tovar/<slug>/` · `/poshuk/` · `/koshyk/` · `/oformlennya/` · `/dyakuyemo/` · CMS-інфо · `/vkhid/` · `/reyestratsiya/` · `/kabinet/...` · `/payments/liqpay/...` · `/healthz/` · `/ru/...`
+`/` · `/katalog/` · `/katalog/<slug>/` · `/tovar/<slug>/` · `/poshuk/` · `/koshyk/` · `/oformlennya/` · `/dyakuyemo/` · CMS-інфо · `/vkhid/` · `/reyestratsiya/` · `/kabinet/...` · `/payments/monopay/...` · `/healthz/` · `/ru/...`
 
 ## Review — покращення після MVP
 

@@ -27,10 +27,10 @@ def resend_status() -> IntegrationStatus:
     return IntegrationStatus("resend", ok, detail)
 
 
-def liqpay_status() -> IntegrationStatus:
-    ok = _present(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-    detail = "ok" if ok else "LIQPAY_* keys missing — online pay disabled"
-    return IntegrationStatus("liqpay", ok, detail)
+def monopay_status() -> IntegrationStatus:
+    ok = bool((settings.MONOPAY_TOKEN or "").strip())
+    detail = "ok" if ok else "MONOPAY_TOKEN empty — online pay disabled"
+    return IntegrationStatus("monopay", ok, detail)
 
 
 def nova_poshta_status() -> IntegrationStatus:
@@ -58,7 +58,7 @@ def viber_status() -> IntegrationStatus:
 def all_integration_statuses() -> list[IntegrationStatus]:
     return [
         resend_status(),
-        liqpay_status(),
+        monopay_status(),
         nova_poshta_status(),
         telegram_status(),
         viber_status(),

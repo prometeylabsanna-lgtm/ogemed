@@ -184,7 +184,7 @@ def order_detail(request, pk):
             "order": order,
             "page_title": _("Замовлення №%(n)s") % {"n": order.order_number},
             "show_pay": order.status == OrderStatus.AWAITING_PAYMENT
-            and order.payment_type == PaymentType.LIQPAY,
+            and order.payment_type == PaymentType.MONOPAY,
             "show_fop": order.payment_type == PaymentType.FOP_CARD,
             "fop": fop_payment_details(order)
             if order.payment_type == PaymentType.FOP_CARD

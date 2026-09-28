@@ -171,10 +171,9 @@ ADMIN_URL = (env("ADMIN_URL", default="ogm8k2x9p4qh7n") or "ogm8k2x9p4qh7n").str
 RESEND_API_KEY = env("RESEND_API_KEY", default="")
 FROM_EMAIL = env("FROM_EMAIL", default="noreply@example.com")
 
-LIQPAY_PUBLIC_KEY = env("LIQPAY_PUBLIC_KEY", default="")
-LIQPAY_PRIVATE_KEY = env("LIQPAY_PRIVATE_KEY", default="")
-LIQPAY_SERVER_URL = env("LIQPAY_SERVER_URL", default="")
-LIQPAY_SANDBOX = env.bool("LIQPAY_SANDBOX", default=True)
+# Monobank Acquiring (Monopay). Empty token = online pay disabled.
+MONOPAY_TOKEN = env("MONOPAY_TOKEN", default="")
+MONOPAY_WEBHOOK_URL = env("MONOPAY_WEBHOOK_URL", default="")
 
 NP_API_KEY = env("NP_API_KEY", default="")
 

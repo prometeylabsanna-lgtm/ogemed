@@ -32,7 +32,7 @@
       {% elif order.status == 'awaiting_payment' %}
         <p class="thankyou__wait">{% trans "Замовлення очікує оплати." %}</p>
         {% if show_retry %}
-          <form class="thankyou__retry" method="post" action="{% url 'payments:liqpay_retry' %}">
+          <form class="thankyou__retry" method="post" action="{% url 'payments:monopay_retry' %}">
             {% csrf_token %}
             <input type="hidden" name="t" value="{{ order.access_token }}">
             <button type="submit" class="btn btn--primary thankyou__btn">{% trans "Сплатити знову" %}</button>
