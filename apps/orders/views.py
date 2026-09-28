@@ -9,7 +9,7 @@ from apps.cart.cart import SessionCart
 from apps.core.breadcrumbs import build_breadcrumbs
 from apps.notify.services import notify_new_order
 from apps.orders.models import Order, OrderStatus, PaymentType
-from apps.payments.views import start_monopay_payment
+from apps.payments.views import stash_monopay_page_url, start_monopay_payment
 
 from .forms import CheckoutForm
 from .fop_payment import fop_payment_details
@@ -69,11 +69,11 @@ class CheckoutView(View):
             return render(
                 request, self.template_name, self._context(request, form, cart), status=400
             )
-        invoice_url = None
+        invoice_go = False
         if order.payment_type == PaymentType.MONOPAY:
             invoice = start_monopay_payment(request, order)
-            if invoice and invoice.get("page_url"):
-                invoice_url = invoice["page_url"]
+            if stash_monopay_page_url(request, invoice):
+                invoice_go = True
             else:
                 messages.error(
                     request,
@@ -83,8 +83,8 @@ class CheckoutView(View):
                     ),
                 )
         notify_new_order(order)
-        if invoice_url:
-            return redirect(invoice_url)
+        if invoice_go:
+            return redirect("payments:monopay_go")
         url = reverse("orders:thank_you") + f"?order={order.order_number}&t={order.access_token}"
         return redirect(url)
 

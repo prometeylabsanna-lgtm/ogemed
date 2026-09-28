@@ -80,3 +80,32 @@ class MonopayCallbackTests(TestCase):
             HTTP_X_SIGN="bad",
         )
         self.assertEqual(r.status_code, 403)
+
+
+class MonopayRedirectTests(TestCase):
+    def test_allows_only_monobank_https_hosts(self):
+        from apps.payments.monopay import is_allowed_monopay_page_url
+
+        self.assertTrue(is_allowed_monopay_page_url("https://pay.monobank.ua/smart/abc"))
+        self.assertTrue(is_allowed_monopay_page_url("https://pay.mbnk.biz/xyz"))
+        self.assertFalse(is_allowed_monopay_page_url("http://pay.monobank.ua/smart/abc"))
+        self.assertFalse(is_allowed_monopay_page_url("https://evil.example/phish"))
+        self.assertFalse(is_allowed_monopay_page_url("https://pay.monobank.ua.evil.com/x"))
+
+    def test_go_page_meta_refresh_uses_session_url(self):
+        session = self.client.session
+        session["monopay_next"] = "https://pay.monobank.ua/smart/abc"
+        session.save()
+        r = self.client.get(reverse("payments:monopay_go"))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "https://pay.monobank.ua/smart/abc")
+        self.assertContains(r, 'http-equiv="refresh"')
+
+    def test_go_page_rejects_foreign_url(self):
+        session = self.client.session
+        session["monopay_next"] = "https://evil.example/phish"
+        session.save()
+        r = self.client.get(reverse("payments:monopay_go"))
+        self.assertEqual(r.status_code, 302)
+        self.assertNotIn("evil.example", r["Location"])
+

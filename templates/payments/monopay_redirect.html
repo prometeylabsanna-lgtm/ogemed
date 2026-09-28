@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n vstatic %}
+
+{% block extra_head %}
+<meta http-equiv="refresh" content="0;url={{ pay_url }}">
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% vstatic 'css/bundles/thankyou.css' %}">
+{% endblock %}
+
+{% block body_class %}page-thankyou{% endblock %}
+
+{% block content %}
+<section class="monopay-go container section-gap" aria-labelledby="monopay-go-title">
+  <header class="monopay-go__head">
+    <p class="monopay-go__kicker">{% trans "Оплата" %}</p>
+    <h1 class="monopay-go__title" id="monopay-go-title">{% trans "Переходимо до Monobank" %}</h1>
+    <p class="monopay-go__lead">
+      {% trans "Якщо сторінка не відкрилась автоматично, натисніть кнопку нижче." %}
+    </p>
+  </header>
+  <a class="btn btn--primary monopay-go__btn" href="{{ pay_url }}" rel="noopener noreferrer">
+    {% trans "Перейти до оплати" %}
+  </a>
+</section>
+{% endblock %}

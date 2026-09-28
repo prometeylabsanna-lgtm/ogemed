@@ -4,17 +4,18 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.db import IntegrityError, transaction
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods, require_POST
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 from apps.orders.models import Order, OrderStatus, PaymentType
 from apps.orders.services_status import OrderStatusService
 
 from .models import PaymentAttempt
-from .monopay import MonopayError, MonopayService
+from .monopay import MonopayError, MonopayService, is_allowed_monopay_page_url
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +60,38 @@ def start_monopay_payment(request, order: Order) -> dict | None:
         raw_payload=invoice.get("raw") or {},
     )
     return invoice
+
+
+def stash_monopay_page_url(request, invoice: dict | None) -> bool:
+    """Save invoice page in session for same-origin hop (CSP form-action)."""
+    url = ((invoice or {}).get("page_url") or "").strip()
+    if not is_allowed_monopay_page_url(url):
+        return False
+    request.session["monopay_next"] = url
+    request.session.modified = True
+    return True
+
+
+@require_GET
+def monopay_go(request):
+    """Same-origin 200 page → meta refresh to Monobank (form POST cannot 302 off-site)."""
+    url = (request.session.pop("monopay_next", None) or "").strip()
+    if not is_allowed_monopay_page_url(url):
+        token = request.session.get("last_order_token") or ""
+        if token:
+            order = Order.objects.filter(access_token=token).first()
+            if order:
+                return redirect(_thank_you_url(order))
+        return redirect("orders:thank_you")
+    return render(
+        request,
+        "payments/monopay_redirect.html",
+        {
+            "pay_url": url,
+            "page_title": _("Оплата Monobank"),
+            "robots_noindex": True,
+        },
+    )
 
 
 @csrf_exempt
@@ -132,6 +165,6 @@ def monopay_retry(request):
     if order.status not in (OrderStatus.AWAITING_PAYMENT, OrderStatus.NEW):
         return redirect(_thank_you_url(order))
     invoice = start_monopay_payment(request, order)
-    if not invoice:
+    if not invoice or not stash_monopay_page_url(request, invoice):
         return redirect(_thank_you_url(order))
-    return HttpResponseRedirect(invoice["page_url"])
+    return redirect("payments:monopay_go")

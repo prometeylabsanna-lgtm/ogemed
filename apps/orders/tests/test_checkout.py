@@ -125,6 +125,35 @@ class CartCheckoutTests(TestCase):
         order = Order.objects.get()
         self.assertEqual(order.status, OrderStatus.AWAITING_PAYMENT)
 
+    def test_monopay_checkout_redirects_same_origin_not_offsite(self):
+        from unittest.mock import patch
+
+        self.client.post(reverse("cart:add"), {"variant_id": self.variant.pk})
+        with patch(
+            "apps.orders.views.start_monopay_payment",
+            return_value={
+                "page_url": "https://pay.monobank.ua/smart/abc",
+                "invoice_id": "inv-1",
+            },
+        ):
+            r = self.client.post(
+                reverse("orders:checkout"),
+                {
+                    "customer_name": "Іван",
+                    "customer_phone": "+380501112233",
+                    "delivery_type": DeliveryType.COURIER,
+                    "courier_city": "Київ",
+                    "courier_street": "Хрещатик",
+                    "payment_type": PaymentType.MONOPAY,
+                },
+            )
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r["Location"], reverse("payments:monopay_go"))
+        self.assertNotIn("pay.monobank.ua", r["Location"])
+        follow = self.client.get(r["Location"])
+        self.assertEqual(follow.status_code, 200)
+        self.assertContains(follow, "https://pay.monobank.ua/smart/abc")
+
     def test_fop_checkout_awaits_payment_and_shows_requisites(self):
         from apps.core.models import SiteSettings
 

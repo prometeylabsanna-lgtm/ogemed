@@ -227,6 +227,68 @@ body.page-thankyou .site-footer {
   }
 }
 
+.monopay-go {
+  max-width: 36rem;
+  padding: 8px 0 48px;
+}
+
+.monopay-go__kicker {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.monopay-go__title {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.5vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--color-text);
+}
+
+.monopay-go__lead {
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-neutral-700);
+}
+
+.monopay-go__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  width: auto;
+  max-width: 100%;
+  padding-inline: 28px;
+}
+
+@media (max-width: 1023px) {
+  .monopay-go {
+    padding: 8px 0 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .monopay-go {
+    padding: 4px 0 32px;
+  }
+
+  .monopay-go__btn {
+    width: 100%;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .monopay-go__btn {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
 /* === css/components/thankyou_fop.css === */
 .fop-req {
   margin: 18px 0 4px;

@@ -9,6 +9,7 @@ import time
 import urllib.error
 import urllib.request
 from decimal import Decimal, ROUND_HALF_UP
+from urllib.parse import urlparse
 
 import ecdsa
 from django.conf import settings
@@ -19,6 +20,24 @@ API_BASE = "https://api.monobank.ua"
 CCY_UAH = 980
 _PUBKEY_CACHE: dict[str, object] = {"key": "", "ts": 0.0}
 _PUBKEY_TTL_SEC = 3600
+_PAY_HOSTS = frozenset(
+    {"pay.monobank.ua", "www.monobank.ua", "monobank.ua", "pay.mbnk.biz", "mbnk.biz"}
+)
+_PAY_HOST_SUFFIXES = (".monobank.ua", ".mbnk.biz")
+
+
+def is_allowed_monopay_page_url(url: str) -> bool:
+    """True only for https Monobank invoice pages (blocks open redirect)."""
+    raw = (url or "").strip()
+    if not raw.startswith("https://"):
+        return False
+    parsed = urlparse(raw)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme != "https" or not host:
+        return False
+    if host in _PAY_HOSTS:
+        return True
+    return any(host.endswith(suffix) for suffix in _PAY_HOST_SUFFIXES)
 
 
 class MonopayError(Exception):
