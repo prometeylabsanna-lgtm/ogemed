@@ -45,10 +45,24 @@ free_host_ports() {
   systemctl disable 'gunicorn-*' 2>/dev/null || true
   systemctl stop ogemed 2>/dev/null || true
   systemctl disable ogemed 2>/dev/null || true
-  if command -v fuser >/dev/null 2>&1; then
-    fuser -k 80/tcp 2>/dev/null || true
-    fuser -k 443/tcp 2>/dev/null || true
+  # Не вбивати docker-proxy на :80/:443 — інакше HTTPS падає, поки nginx не recreate
+}
+
+healthz_ok() {
+  if "${COMPOSE[@]}" exec -T web python -c \
+    "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz/', timeout=5)" \
+    >/dev/null 2>&1; then
+    return 0
   fi
+  local code
+  code="$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 http://127.0.0.1/healthz/ || true)"
+  if [[ "$code" == "200" || "$code" == "301" || "$code" == "302" ]]; then
+    return 0
+  fi
+  if curl -sfk --max-time 3 -H "Host: oge.in.ua" "https://127.0.0.1/healthz/" >/dev/null 2>&1; then
+    return 0
+  fi
+  return 1
 }
 
 echo "==> Project: $ROOT"
@@ -79,13 +93,7 @@ fi
 echo "==> Waiting for /healthz/"
 _ok=0
 for i in $(seq 1 60); do
-  if curl -sf -H "Host: 127.0.0.1" "http://127.0.0.1/healthz/" >/dev/null 2>&1 \
-    || curl -sf "http://127.0.0.1:8000/healthz/" >/dev/null 2>&1; then
-    _ok=1
-    break
-  fi
-  # nginx proxy path (no Host needed for healthz if ALLOWED_HOSTS has localhost)
-  if curl -sf "http://127.0.0.1/healthz/" >/dev/null 2>&1; then
+  if healthz_ok; then
     _ok=1
     break
   fi
@@ -117,8 +125,8 @@ if [[ "$USE_PROD" -eq 1 ]]; then
   echo "==> nginx слухає :80 і :443"
 fi
 
-if [[ $_ok -eq 1 ]] || curl -sf "http://127.0.0.1/healthz/" >/dev/null 2>&1; then
-  echo "==> healthz HTTP OK"
+if [[ $_ok -eq 1 ]] || healthz_ok; then
+  echo "==> healthz OK"
 else
   echo "==> healthz not ready yet — logs:"
   "${COMPOSE[@]}" logs --tail=40 web nginx
