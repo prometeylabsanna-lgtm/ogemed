@@ -3,6 +3,7 @@ from django.contrib import admin
 from tinymce.widgets import TinyMCE
 from unfold.admin import ModelAdmin, TabularInline
 
+from apps.core.admin_field_hints import AdminFieldHintsMixin
 from apps.core.admin_filters import (
     DropdownFiltersMixin,
     UkBooleanDropdownFilter,
@@ -72,7 +73,7 @@ ATTR_LANG_SWITCH_HTML = (
 
 
 @admin.register(Attribute)
-class AttributeAdmin(DropdownFiltersMixin, ModelAdmin):
+class AttributeAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     change_form_template = "admin/catalog/i18n_change_form.html"
     list_display = ("name_uk", "slug", "is_filterable", "sort_order")
     list_filter = (("is_filterable", UkBooleanDropdownFilter),)
@@ -109,7 +110,7 @@ class AttributeAdmin(DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(AttributeValue)
-class AttributeValueAdmin(DropdownFiltersMixin, ModelAdmin):
+class AttributeValueAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     list_display = ("name_uk", "attribute", "slug", "color_hex", "sort_order")
     list_filter = (("attribute", UkRelatedDropdownFilter),)
     prepopulated_fields = {"slug": ("name_uk",)}
@@ -121,7 +122,7 @@ class AttributeValueAdmin(DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(DropdownFiltersMixin, ModelAdmin):
+class CategoryAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     change_form_template = "admin/catalog/i18n_change_form.html"
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     list_display = ("category_name", "slug", "parent", "is_active", "sort_order")
@@ -194,7 +195,7 @@ class CategoryAdmin(DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(Brand)
-class BrandAdmin(DropdownFiltersMixin, ModelAdmin):
+class BrandAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     change_form_template = "admin/catalog/i18n_change_form.html"
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     list_display = ("name_uk", "slug", "is_featured", "is_active", "sort_order")

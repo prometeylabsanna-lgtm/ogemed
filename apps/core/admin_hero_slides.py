@@ -8,7 +8,7 @@ from unfold.widgets import UnfoldBooleanWidget
 from apps.core.admin_widgets import AdminImagePreviewWidget
 
 from apps.cms.models import HeroSlide
-from apps.core.admin_guidelines import get_image_hint
+from apps.core.admin_guidelines import get_image_hint, get_text_limit_hint, get_text_soft_limit
 from apps.core.admin_site_content_widgets import CmsAdminTextInputWidget
 
 _HERO_IMAGE_HINT = get_image_hint("hero")
@@ -29,6 +29,11 @@ class HeroSlideForm(forms.ModelForm):
             "sort_order",
             "is_active",
         )
+        labels = {
+            "cta_label_uk": "Текст кнопки (UK)",
+            "cta_label_ru": "Текст кнопки (RU)",
+            "cta_url": "Посилання кнопки",
+        }
         widgets = {
             "image": AdminImagePreviewWidget(),
             "title_uk": CmsAdminTextInputWidget(),
@@ -56,6 +61,20 @@ class HeroSlideForm(forms.ModelForm):
             "cta_url",
         ):
             self.fields[name].required = False
+            field = self.fields[name]
+            model_field = self._meta.model._meta.get_field(name)
+            max_length = getattr(model_field, "max_length", None)
+            hint = get_text_limit_hint(name, max_length=max_length)
+            if hint:
+                existing = str(field.help_text or "").strip()
+                if hint not in existing:
+                    field.help_text = f"{existing} {hint}".strip() if existing else hint
+            soft = get_text_soft_limit(name)
+            if soft:
+                field.widget.attrs.setdefault("data-recommend-max", str(soft))
+                field.widget.attrs.setdefault(
+                    "data-field-label", str(field.label or name)
+                )
         self.fields["is_active"].required = False
         if not self.instance.pk:
             self.fields["is_active"].initial = True

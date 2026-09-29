@@ -58,6 +58,9 @@ class CatalogListView(ListView):
         ctx = super().get_context_data(**kwargs)
         ctx.update(catalog_controls_context())
         ctx["page_title"] = _("Каталог")
+        ctx["meta_description"] = _(
+            "Каталог косметики OGEMED for you — догляд, бренди та акційні товари"
+        )
         ctx["current_sort"] = self.request.GET.get("sort", "novelty")
         ctx["current_view"] = resolve_catalog_view(self.request.GET)
         ctx["selected_attrs"] = self.request.GET.getlist("attr")

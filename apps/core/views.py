@@ -22,9 +22,9 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["page_title"] = _("OGEMED for you")
+        ctx["page_title"] = _("OGEMED for you — інтернет-магазин косметики")
         ctx["meta_description"] = _(
-            "Інтернет-магазин косметики OGEMED for you"
+            "Інтернет-магазин косметики OGEMED for you — догляд, бренди та акційні товари"
         )
         ctx["breadcrumbs"] = None
         ctx["hero_slides"] = HeroSlide.objects.filter(is_active=True)

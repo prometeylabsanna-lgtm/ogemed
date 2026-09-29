@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from unfold.admin import ModelAdmin, TabularInline
 
+from apps.core.admin_field_hints import AdminFieldHintsMixin
 from apps.core.admin_filters import (
     DropdownFiltersMixin,
     UkChoicesDropdownFilter,
@@ -24,12 +25,13 @@ class OrderItemInline(TabularInline):
         "line_total",
         "product",
         "variant",
+        "stock_reserved",
     )
     can_delete = False
 
 
 @admin.register(Order)
-class OrderAdmin(DropdownFiltersMixin, ModelAdmin):
+class OrderAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     list_display = (
         "order_number",
         "customer_name",
@@ -45,7 +47,15 @@ class OrderAdmin(DropdownFiltersMixin, ModelAdmin):
         ("delivery_type", UkChoicesDropdownFilter),
     )
     search_fields = ("order_number", "customer_name", "customer_phone", "customer_email")
-    readonly_fields = ("order_number", "access_token", "created_at", "updated_at", "subtotal", "total")
+    readonly_fields = (
+        "order_number",
+        "access_token",
+        "created_at",
+        "updated_at",
+        "subtotal",
+        "total",
+        "stock_restored",
+    )
     inlines = [OrderItemInline]
     actions = [
         "action_to_processing",

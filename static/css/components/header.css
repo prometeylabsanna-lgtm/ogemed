@@ -365,6 +365,12 @@
   flex-shrink: 0;
 }
 
+.site-header__lang-form {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+}
+
 .site-header__lang-link {
   display: inline-flex;
   align-items: center;
@@ -372,9 +378,13 @@
   min-height: 32px;
   min-width: 36px;
   padding: 4px 10px;
+  border: 0;
+  background: transparent;
   color: var(--color-text-muted);
   opacity: 1;
+  font: inherit;
   font-weight: 400;
+  cursor: pointer;
   transition:
     color var(--header-ease),
     font-weight var(--header-ease);

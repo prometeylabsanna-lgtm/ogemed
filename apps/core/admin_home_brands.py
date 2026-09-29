@@ -6,9 +6,11 @@ from django.forms import modelformset_factory
 from unfold.widgets import UnfoldAdminIntegerFieldWidget, UnfoldBooleanWidget
 
 from apps.catalog.models import Brand
+from apps.core.admin_guidelines import get_image_hint
 from apps.core.admin_widgets import AdminImagePreviewWidget
 
 HOME_BRANDS_LIMIT = 3
+_SHOWCASE_HINT = get_image_hint("brand_showcase")
 
 
 class HomeBrandRowForm(forms.ModelForm):
@@ -26,7 +28,9 @@ class HomeBrandRowForm(forms.ModelForm):
             "sort_order": "Порядок",
         }
         help_texts = {
-            "showcase_image": "Якщо порожнє — візьметься фото для каталогу.",
+            "showcase_image": (
+                f"{_SHOWCASE_HINT} Якщо порожнє — візьметься фото для каталогу."
+            ),
             "is_featured": f"На вітрині показуються до {HOME_BRANDS_LIMIT} обраних.",
         }
 

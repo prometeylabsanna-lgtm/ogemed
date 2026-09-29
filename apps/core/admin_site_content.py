@@ -10,15 +10,14 @@ from django.shortcuts import render
 from django.urls import reverse
 from unfold.widgets import UnfoldBooleanWidget
 
-from apps.core.admin_widgets import AdminImagePreviewWidget
-
-from apps.core.admin_guidelines import get_image_hint, get_text_limit_hint
+from apps.core.admin_guidelines import get_image_hint, get_text_limit_hint, get_text_soft_limit
 from apps.core.admin_hero_slides import build_hero_slide_formset
 from apps.core.admin_home_brands import build_home_brands_formset, save_home_brands_formset
 from apps.core.admin_site_content_widgets import (
     CmsAdminTextareaWidget,
     CmsAdminTextInputWidget,
 )
+from apps.core.admin_widgets import AdminImagePreviewWidget
 from apps.core.block_defaults import (
     BLOCK_CONTENT_TYPES,
     INLINE_KEYS,
@@ -51,6 +50,23 @@ class HeaderBrandForm(forms.ModelForm):
             "phone": CmsAdminTextInputWidget(),
             "phone_2": CmsAdminTextInputWidget(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if "logo" in self.fields:
+            self.fields["logo"].help_text = get_image_hint("logo")
+        for name in ("phone", "phone_2"):
+            if name not in self.fields:
+                continue
+            field = self.fields[name]
+            soft = get_text_soft_limit(name) or 32
+            field.widget.attrs.setdefault("data-recommend-max", str(soft))
+            field.widget.attrs.setdefault(
+                "data-field-label", str(field.label or name)
+            )
+            hint = get_text_limit_hint(name, max_length=32)
+            if hint and hint not in str(field.help_text or ""):
+                field.help_text = hint
 
 
 def block_field_name(page: str, key: str, suffix: str) -> str:
@@ -181,13 +197,18 @@ class SitePageContentForm(forms.Form):
             return
 
         # TEXT / URL — дві мови
+        soft = get_text_soft_limit(key)
         char_hint = get_text_limit_hint(key)
         for lang, lang_label in (("uk", "UA"), ("ru", "RU")):
+            widget = _text_widget(key)
+            if soft:
+                widget.attrs.setdefault("data-recommend-max", str(soft))
+                widget.attrs.setdefault("data-field-label", f"{label} [{lang_label}]")
             self.fields[block_field_name(page, key, f"text_html_{lang}")] = forms.CharField(
                 label=f"{label} [{lang_label}]",
                 initial=_get_lang_text(block, lang),
                 required=False,
-                widget=_text_widget(key),
+                widget=widget,
                 help_text=char_hint if lang == "uk" else "",
             )
 

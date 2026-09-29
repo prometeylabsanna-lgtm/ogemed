@@ -17,7 +17,15 @@ def np_cities(request):
 def np_warehouses(request):
     city_ref = (request.GET.get("city_ref") or "").strip()
     q = (request.GET.get("q") or "").strip()
-    if not city_ref or len(q) < 2:
+    warm = (request.GET.get("warm") or "").strip() in ("1", "true", "yes")
+    if not city_ref:
         return JsonResponse({"results": []})
+
     client = NovaPoshtaClient()
-    return JsonResponse({"results": client.get_warehouses(city_ref, q)})
+    if warm:
+        items = client.list_city_warehouses(city_ref)
+        return JsonResponse({"ok": True, "count": len(items)})
+
+    if len(q) < 2:
+        return JsonResponse({"results": []})
+    return JsonResponse({"results": client.search_warehouses(city_ref, q)})

@@ -100,6 +100,11 @@ class Order(models.Model):
     )
     created_at = models.DateTimeField(_("Створено"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Оновлено"), auto_now=True)
+    stock_restored = models.BooleanField(
+        _("Залишок повернуто"),
+        default=False,
+        help_text=_("Службове: після скасування залишок уже нараховано назад."),
+    )
 
     class Meta:
         verbose_name = _("Замовлення")
@@ -136,6 +141,11 @@ class OrderItem(models.Model):
     unit_price = models.DecimalField(_("Ціна"), max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(_("Кількість"), default=1)
     line_total = models.DecimalField(_("Сума"), max_digits=12, decimal_places=2)
+    stock_reserved = models.BooleanField(
+        _("Залишок зарезервовано"),
+        default=False,
+        help_text=_("Службове: при створенні замовлення qty списано зі складу."),
+    )
 
     class Meta:
         verbose_name = _("Позиція замовлення")

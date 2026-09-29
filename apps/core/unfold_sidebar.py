@@ -124,6 +124,7 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
         "SCRIPTS": [
             "/static/js/admin/theme-init.js",
             "/static/js/admin/filters.js",
+            "/static/js/admin/form_save_errors.js",
         ],
         "SIDEBAR": {
             "show_search": True,
@@ -170,7 +171,7 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
                     "items": [
                         *_legal_page_sidebar_items(prefix),
                         {
-                            "title": "CTA / замітки (усі)",
+                            "title": "Форма / замітки (усі)",
                             "icon": "notes",
                             "link": _admin_link(prefix, "cms", "infopagemeta"),
                         },

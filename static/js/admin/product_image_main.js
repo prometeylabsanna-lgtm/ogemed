@@ -1,6 +1,11 @@
 (function () {
   "use strict";
 
+  // Шаблон і ModelAdmin.Media обидва підключали цей файл — два слухачі submit
+  // знімали прапорець по черзі і кнопка «Зберегти» нічого не відправляла.
+  if (window.__ogemedProductImageMain) return;
+  window.__ogemedProductImageMain = true;
+
   // Синхронно з apps.catalog.forms.MIN_IMAGE_SIDE
   var MIN_IMAGE_SIDE = 1600;
   var WARN_CLASS = "product-image-size-warn";
@@ -70,31 +75,34 @@
     });
   }
 
+  function clearSmallMark(input) {
+    delete input.dataset.imageTooSmall;
+    delete input.dataset.imageWidth;
+    delete input.dataset.imageHeight;
+  }
+
   function checkInput(input) {
     var file = input.files && input.files[0];
     if (!file) {
       clearWarn(input);
+      clearSmallMark(input);
       return Promise.resolve(null);
     }
     return readDimensions(file).then(function (size) {
       if (Math.max(size.width, size.height) < MIN_IMAGE_SIDE) {
+        input.dataset.imageTooSmall = "1";
+        input.dataset.imageWidth = String(size.width);
+        input.dataset.imageHeight = String(size.height);
         setWarn(input, size.width, size.height);
         return size;
       }
       clearWarn(input);
+      clearSmallMark(input);
       return null;
     }).catch(function () {
       clearWarn(input);
+      clearSmallMark(input);
       return null;
-    });
-  }
-
-  function collectSmallUploads(form) {
-    var inputs = Array.prototype.slice.call(
-      form.querySelectorAll('input[type="file"]')
-    ).filter(isProductImageFileInput);
-    return Promise.all(inputs.map(checkInput)).then(function (results) {
-      return results.filter(Boolean);
     });
   }
 
@@ -118,6 +126,20 @@
     true
   );
 
+  function smallUploads(form) {
+    return Array.prototype.filter.call(
+      form.querySelectorAll('input[type="file"]'),
+      function (input) {
+        return (
+          isProductImageFileInput(input) &&
+          input.files &&
+          input.files.length &&
+          input.dataset.imageTooSmall === "1"
+        );
+      }
+    );
+  }
+
   document.addEventListener(
     "submit",
     function (event) {
@@ -127,41 +149,38 @@
         delete form.dataset.imageSizeWarnOk;
         return;
       }
-      if (!form.querySelector('input[type="file"]')) return;
 
-      var hasNew = Array.prototype.some.call(
-        form.querySelectorAll('input[type="file"]'),
-        function (input) {
-          return isProductImageFileInput(input) && input.files && input.files.length;
-        }
-      );
-      if (!hasNew) return;
+      var small = smallUploads(form);
+      if (!small.length) return;
 
       event.preventDefault();
-      event.stopPropagation();
+      var first = small[0];
+      var ok = window.confirm(
+        "Рекомендовано зображення від " +
+          MIN_IMAGE_SIDE +
+          "px по довгій стороні (зараз " +
+          first.dataset.imageWidth +
+          "×" +
+          first.dataset.imageHeight +
+          "px), інакше збільшення на сторінці товару буде розмитим.\n\n" +
+          "Зберегти все одно?"
+      );
+      if (!ok) return;
 
-      collectSmallUploads(form).then(function (small) {
-        if (small.length) {
-          var first = small[0];
-          var ok = window.confirm(
-            "Рекомендовано зображення від " +
-              MIN_IMAGE_SIDE +
-              "px по довгій стороні (зараз " +
-              first.width +
-              "×" +
-              first.height +
-              "px), інакше збільшення на сторінці товару буде розмитим.\n\n" +
-              "Зберегти все одно?"
-          );
-          if (!ok) return;
-        }
-        form.dataset.imageSizeWarnOk = "1";
+      form.dataset.imageSizeWarnOk = "1";
+      var submitter = event.submitter || null;
+      window.setTimeout(function () {
         if (typeof form.requestSubmit === "function") {
-          form.requestSubmit();
-        } else {
-          form.submit();
+          try {
+            form.requestSubmit(submitter || undefined);
+            return;
+          } catch (err) {
+            form.submit();
+            return;
+          }
         }
-      });
+        form.submit();
+      }, 0);
     },
     true
   );

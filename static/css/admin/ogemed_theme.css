@@ -443,6 +443,48 @@ fieldset.product-attrs-grid .select2-selection {
   }
 }
 
+/* Банер помилок збереження форми */
+.ogemed-admin-error-banner {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #e6a0a0;
+  border-radius: 0.5rem;
+  background: #fff5f5;
+  color: #7a1f1f;
+  box-sizing: border-box;
+}
+
+.ogemed-admin-error-banner__title {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.ogemed-admin-error-banner__list {
+  margin: 0 0 0.5rem;
+  padding-left: 1.2rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.ogemed-admin-error-banner__hint {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #8a3a3a;
+}
+
+@media (max-width: 767px) {
+  .ogemed-admin-error-banner {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .ogemed-admin-error-banner__title {
+    font-size: 0.9rem;
+  }
+}
+
 /* М’яке попередження розміру фото товару (не блокує збереження) */
 .product-image-size-warn {
   margin: 0.4rem 0 0;

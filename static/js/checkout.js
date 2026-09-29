@@ -153,6 +153,13 @@
     }
   };
 
+  const warmWarehouses = (ref) => {
+    if (!ref || ref === "manual") return;
+    fetch(
+      `/api/np/warehouses/?city_ref=${encodeURIComponent(ref)}&warm=1`
+    ).catch(() => {});
+  };
+
   attachAutocomplete({
     input: cityInput,
     listEl: cityList,
@@ -161,6 +168,11 @@
     buildUrl: (q) => `/api/np/cities/?q=${encodeURIComponent(q)}`,
     onSelect: () => {
       syncWarehouseEnabled();
+      if (whInput) {
+        whInput.value = "";
+        if (whRef) whRef.value = "";
+      }
+      warmWarehouses(cityRef ? cityRef.value : "");
       if (whInput) whInput.focus();
     },
   });

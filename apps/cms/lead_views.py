@@ -11,7 +11,7 @@ from .models import Lead
 
 
 class LeadForm(forms.ModelForm):
-    website = forms.CharField(required=False, widget=forms.HiddenInput)  # honeypot
+    honeypot = forms.CharField(required=False, widget=forms.TextInput)
     product_label = forms.CharField(required=False, max_length=255)
     product_url = forms.CharField(required=False, max_length=500)
 
@@ -39,7 +39,8 @@ class LeadForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        if cleaned.get("website"):
+        # ERR-121: honeypot as non-field error (visible alert), not clean_honeypot
+        if self.data.get("honeypot") or self.data.get("website"):
             raise forms.ValidationError("bot")
 
         lead_type = cleaned.get("lead_type") or Lead.LeadType.CALLBACK
@@ -95,7 +96,11 @@ def lead_create(request):
         return HttpResponse(_("Помилка"), status=422)
 
     lead = form.save(commit=False)
-    lead.honeypot = form.cleaned_data.get("website", "")
+    lead.honeypot = (
+        form.cleaned_data.get("honeypot")
+        or form.data.get("website")
+        or ""
+    )
     if request.user.is_authenticated:
         lead.user = request.user
     lead.save()

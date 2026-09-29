@@ -80,17 +80,23 @@ class HeroSlide(models.Model):
     subtitle_uk = models.CharField(_("Підзаголовок (UK)"), max_length=255, blank=True)
     subtitle_ru = models.CharField(_("Підзаголовок (RU)"), max_length=255, blank=True)
     cta_label_uk = models.CharField(
-        _("CTA (UK)"), max_length=80, blank=True, default="Дивитись"
+        _("Текст кнопки (UK)"), max_length=80, blank=True, default="Дивитись"
     )
     cta_label_ru = models.CharField(
-        _("CTA (RU)"), max_length=80, blank=True, default="Смотреть"
+        _("Текст кнопки (RU)"), max_length=80, blank=True, default="Смотреть"
     )
-    cta_url = models.CharField(_("CTA URL"), max_length=255, blank=True, default="/katalog/")
+    cta_url = models.CharField(
+        _("Посилання кнопки"), max_length=255, blank=True, default="/katalog/"
+    )
     image = OptimizedImageField(
         _("Зображення"),
         upload_to="hero/",
         blank=True,
         max_side=MAX_SIDE_HERO,
+        help_text=_(
+            "Банер: Desktop ≈1920×800; на мобільному обрізання по центру. "
+            "Формат: JPG, PNG або WebP. Вага до 20 МБ (краще до 3 МБ)."
+        ),
     )
     is_active = models.BooleanField(_("Активний"), default=True)
     sort_order = models.PositiveIntegerField(_("Порядок"), default=0)

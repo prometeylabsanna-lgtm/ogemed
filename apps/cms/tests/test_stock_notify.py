@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.utils import translation
 
 from apps.catalog.models import Availability, Brand, Category, Product, ProductVariant
 from apps.cms.models import Lead
@@ -32,6 +33,10 @@ class StockNotifyLeadTests(TestCase):
 
     def setUp(self):
         self.client = Client()
+        translation.activate("uk")
+
+    def tearDown(self):
+        translation.deactivate()
 
     def test_catalog_card_shows_stock_notify(self):
         r = self.client.get(reverse("catalog:list"))
@@ -57,7 +62,7 @@ class StockNotifyLeadTests(TestCase):
                 "phone": "+380501112233",
                 "product_label": "Сироватка out — 30 мл",
                 "product_url": "/tovar/serum-out/",
-                "website": "",
+                "honeypot": "",
             },
             HTTP_HX_REQUEST="true",
         )
@@ -75,5 +80,6 @@ class StockNotifyLeadTests(TestCase):
         self.product.save(update_fields=["availability"])
         r = self.client.get(reverse("catalog:list"))
         self.assertContains(r, "До кошика")
+        self.assertContains(r, 'data-qa="cart-add"')
         self.assertNotContains(r, 'data-stock-notify-trigger')
         self.assertNotContains(r, 'data-price-inquiry-trigger')

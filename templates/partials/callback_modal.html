@@ -19,12 +19,16 @@
         hx-post="{% url 'cms:lead_create' %}"
         hx-target="#callback-result"
         hx-swap="innerHTML"
+        data-qa="lead-form"
         data-validate-form
         novalidate
       >
         {% csrf_token %}
         <input type="hidden" name="lead_type" value="callback">
-        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true">
+        <div class="hp-field" aria-hidden="true">
+          <label for="cb-honeypot">{% trans "Залиште порожнім" %}</label>
+          <input id="cb-honeypot" type="text" name="honeypot" value="" tabindex="-1" autocomplete="off">
+        </div>
 
         <div class="callback-modal__field">
           <label for="cb-name">{% trans "Імʼя" %}</label>

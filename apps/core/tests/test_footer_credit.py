@@ -43,12 +43,13 @@ class FooterDeveloperLinkTests(TestCase):
         self.assertContains(response, ">PrometeyLabs</a>")
         self.assertContains(response, "site-footer__credit-link")
 
-    def test_localized_home_keeps_credit_link(self):
+    def test_localized_home_shows_credit_without_link(self):
         response = self.client.get("/ru/")
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, CREDIT_URL)
-        self.assertContains(response, "nofollow")
-        self.assertContains(response, "site-footer__credit-link")
+        self.assertContains(response, "PrometeyLabs")
+        self.assertNotContains(response, CREDIT_URL)
+        self.assertNotContains(response, "site-footer__credit-link")
+        self.assertContains(response, "site-footer__credit-name")
 
     def test_inner_pages_show_credit_without_link(self):
         for url in (reverse("cms:about"), reverse("cms:privacy")):

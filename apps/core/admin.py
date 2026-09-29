@@ -1,6 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 
+from apps.core.admin_field_hints import AdminFieldHintsMixin
 from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 from apps.core.map_embed import normalize_map_embed
 
@@ -8,7 +9,7 @@ from .models import SiteSettings
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(ModelAdmin):
+class SiteSettingsAdmin(AdminFieldHintsMixin, ModelAdmin):
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     fieldsets = (
         (

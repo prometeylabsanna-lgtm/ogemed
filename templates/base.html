@@ -4,13 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>{% block title %}{{ page_title|default:"OGEMED for you" }}{% endblock %}</title>
+  <title>{% block title %}{{ page_title|default:"OGEMED for you — інтернет-магазин косметики" }}{% endblock %}</title>
   <link rel="icon" href="{% vstatic 'img/favicon.ico' %}" sizes="any">
   <link rel="icon" type="image/png" href="{% vstatic 'img/favicon-32.png' %}" sizes="32x32">
   <link rel="apple-touch-icon" href="{% vstatic 'img/apple-touch-icon.png' %}">
-  {% if meta_description %}
-  <meta name="description" content="{{ meta_description }}">
-  {% endif %}
+  <meta name="description" content="{% firstof meta_description page_title "OGEMED for you — інтернет-магазин косметики" %}">
   {% if robots_noindex %}
   <meta name="robots" content="noindex, nofollow">
   {% endif %}
@@ -21,6 +19,12 @@
   <link rel="alternate" hreflang="uk" href="{{ hreflang_urls.uk }}">
   <link rel="alternate" hreflang="ru" href="{{ hreflang_urls.ru }}">
   <link rel="alternate" hreflang="x-default" href="{{ hreflang_urls.x_default }}">
+  {% endif %}
+  <meta property="og:title" content="{% firstof page_title "OGEMED for you — інтернет-магазин косметики" %}">
+  <meta property="og:description" content="{% firstof meta_description page_title "OGEMED for you — інтернет-магазин косметики" %}">
+  <meta property="og:type" content="website">
+  {% if canonical_url %}
+  <meta property="og:url" content="{{ canonical_url }}">
   {% endif %}
   <meta property="og:locale" content="{% if LANGUAGE_CODE == 'ru' %}ru_RU{% else %}uk_UA{% endif %}">
   <meta property="og:locale:alternate" content="{% if LANGUAGE_CODE == 'ru' %}uk_UA{% else %}ru_RU{% endif %}">

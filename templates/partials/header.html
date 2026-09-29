@@ -53,6 +53,7 @@
               method="get"
               action="{% url 'catalog:search' %}"
               role="search"
+              data-qa="search"
               data-search-suggest
               data-suggest-url="{% url 'catalog:search_suggest' %}"
             >
@@ -156,7 +157,7 @@
                     opacity="0.72"
                   />
                 </svg>
-                <span class="site-header__cart-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+                <span class="site-header__cart-badge" data-cart-count data-qa="cart-count">{{ cart_count|default:0 }}</span>
               </span>
             </a>
 
@@ -177,20 +178,40 @@
             </div>
             {% endif %}
 
-            <div class="site-header__lang" aria-label="{% trans 'Мова' %}">
-              <a
-                class="site-header__lang-link{% if LANGUAGE_CODE == 'uk' %} is-active{% endif %}"
-                href="{{ lang_urls.uk }}"
-                hreflang="uk"
-                lang="uk"
-              >UA</a>
+            <div class="site-header__lang" data-qa="lang-switch" aria-label="{% trans 'Мова' %}">
+              <form
+                class="site-header__lang-form"
+                action="{% url 'set_language' %}"
+                method="post"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ lang_urls.uk }}">
+                <button
+                  type="submit"
+                  name="language"
+                  value="uk"
+                  class="site-header__lang-link{% if LANGUAGE_CODE == 'uk' %} is-active{% endif %}"
+                  lang="uk"
+                  hreflang="uk"
+                >UA</button>
+              </form>
               <span class="site-header__lang-sep" aria-hidden="true">|</span>
-              <a
-                class="site-header__lang-link{% if LANGUAGE_CODE == 'ru' %} is-active{% endif %}"
-                href="{{ lang_urls.ru }}"
-                hreflang="ru"
-                lang="ru"
-              >RU</a>
+              <form
+                class="site-header__lang-form"
+                action="{% url 'set_language' %}"
+                method="post"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ lang_urls.ru }}">
+                <button
+                  type="submit"
+                  name="language"
+                  value="ru"
+                  class="site-header__lang-link{% if LANGUAGE_CODE == 'ru' %} is-active{% endif %}"
+                  lang="ru"
+                  hreflang="ru"
+                >RU</button>
+              </form>
             </div>
 
             <button
@@ -234,6 +255,7 @@
               type="button"
               class="site-header__burger"
               data-burger
+              data-qa="menu-open"
               aria-expanded="false"
               aria-controls="mobile-menu"
               aria-label="{% trans 'Меню' %}"
@@ -268,10 +290,30 @@
             <a href="{% url 'cms:about' %}">{% trans "Про нас" %}</a>
             <a href="{% url 'cms:contacts' %}">{% trans "Контакти" %}</a>
           </nav>
-          <div class="mobile-menu__lang">
-            <a href="{{ lang_urls.uk }}" class="{% if LANGUAGE_CODE == 'uk' %}is-active{% endif %}">UA</a>
+          <div class="mobile-menu__lang" data-qa="lang-switch">
+            <form class="site-header__lang-form" action="{% url 'set_language' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ lang_urls.uk }}">
+              <button
+                type="submit"
+                name="language"
+                value="uk"
+                class="site-header__lang-link{% if LANGUAGE_CODE == 'uk' %} is-active{% endif %}"
+                lang="uk"
+              >UA</button>
+            </form>
             <span aria-hidden="true">|</span>
-            <a href="{{ lang_urls.ru }}" class="{% if LANGUAGE_CODE == 'ru' %}is-active{% endif %}">RU</a>
+            <form class="site-header__lang-form" action="{% url 'set_language' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ lang_urls.ru }}">
+              <button
+                type="submit"
+                name="language"
+                value="ru"
+                class="site-header__lang-link{% if LANGUAGE_CODE == 'ru' %} is-active{% endif %}"
+                lang="ru"
+              >RU</button>
+            </form>
           </div>
           {% if site_settings.phone or site_settings.phone_2 %}
           <div class="mobile-menu__phones">

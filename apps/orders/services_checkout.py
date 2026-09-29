@@ -4,14 +4,14 @@ from __future__ import annotations
 from decimal import Decimal
 
 from django.db import connection, transaction
-from django.db.models import F
 from django.utils.translation import gettext as _
 
 from apps.cart.cart import SessionCart
-from apps.catalog.models import Availability, ProductVariant
+from apps.catalog.models import ProductVariant
 
 from .models import Order, OrderItem, OrderStatus, PaymentType
 from .services_status import OrderStatusService
+from .services_stock import reserve_variant_stock, should_reserve_stock
 
 
 class InsufficientStockError(Exception):
@@ -37,7 +37,7 @@ def create_order_from_cart(request, cleaned_data: dict) -> Order:
             raise InsufficientStockError(
                 _("Товар «%(name)s» більше недоступний") % {"name": line.variant.product.name_uk}
             )
-        if variant.effective_availability() == Availability.IN_STOCK and variant.stock < line.quantity:
+        if should_reserve_stock(variant) and variant.stock < line.quantity:
             raise InsufficientStockError(
                 _("Недостатньо товару «%(name)s» на складі") % {"name": variant.product.name_uk}
             )
@@ -76,6 +76,7 @@ def create_order_from_cart(request, cleaned_data: dict) -> Order:
 
     for line in lines:
         variant = locked_variants[line.variant.pk]
+        reserved = should_reserve_stock(variant)
         OrderItem.objects.create(
             order=order,
             product=variant.product,
@@ -86,9 +87,10 @@ def create_order_from_cart(request, cleaned_data: dict) -> Order:
             unit_price=variant.price,
             quantity=line.quantity,
             line_total=line.line_total,
+            stock_reserved=reserved,
         )
-        if variant.effective_availability() == Availability.IN_STOCK:
-            ProductVariant.objects.filter(pk=variant.pk).update(stock=F("stock") - line.quantity)
+        if reserved:
+            reserve_variant_stock(variant, line.quantity)
 
     cart.clear()
     request.session["last_order_token"] = order.access_token

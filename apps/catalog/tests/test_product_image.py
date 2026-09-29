@@ -62,6 +62,7 @@ class ProductAdminAddWithoutImageTests(TestCase):
             html,
             r'<input[^>]*name="[^"]*image"[^>]*type="file"[^>]*required',
         )
+        self.assertEqual(html.count("js/admin/product_image_main.js"), 1)
 
     def test_can_save_new_product_without_image(self):
         url = reverse("admin:catalog_product_add")

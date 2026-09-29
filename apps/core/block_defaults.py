@@ -4,7 +4,7 @@ from __future__ import annotations
 
 BLOCK_FIELD_LABELS: dict[tuple[str, str], str] = {
     # Home — hero
-    ("home", "hero_section_visible"): "Показувати hero",
+    ("home", "hero_section_visible"): "Показувати банер",
     ("home", "hero_fallback_title"): "Заголовок без слайдів",
     ("home", "hero_fallback_subtitle"): "Підзаголовок без слайдів",
     # Home — products / brands / care
@@ -19,14 +19,14 @@ BLOCK_FIELD_LABELS: dict[tuple[str, str], str] = {
     ("home", "care_section_title"): "Заголовок підбору",
     ("home", "care_section_text"): "Текст підбору",
     ("home", "care_section_image"): "Фон секції підбору",
-    ("home", "care_cta_label"): "CTA підбору",
-    ("home", "care_cta_url"): "URL CTA підбору",
+    ("home", "care_cta_label"): "Текст кнопки підбору",
+    ("home", "care_cta_url"): "Посилання кнопки підбору",
     # Contacts
     ("contacts", "intro_title"): "Заголовок intro",
     ("contacts", "intro_text"): "Текст intro",
-    ("contacts", "cta_label"): "CTA «Передзвоніть»",
+    ("contacts", "cta_label"): "Текст кнопки форми «Передзвоніть»",
     # Site chrome
-    ("site", "header_search_placeholder"): "Placeholder пошуку",
+    ("site", "header_search_placeholder"): "Підказка в полі пошуку",
     ("site", "footer_about_text"): "Опис у підвалі",
     ("site", "footer_copyright"): "Копірайт",
 }

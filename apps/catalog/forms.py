@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
+from apps.core.admin_field_hints import apply_admin_field_hints
 from apps.core.admin_widgets import AdminImagePreviewWidget
 
 from .models import ProductImage
@@ -23,6 +24,12 @@ class ProductImageForm(forms.ModelForm):
         # Без required у HTML: Unfold ховає <input type=file> у display:none,
         # і браузер мовчки блокує submit форми товару.
         self.fields["image"].required = False
+        for name, field in self.fields.items():
+            try:
+                db_field = self._meta.model._meta.get_field(name)
+            except Exception:
+                continue
+            apply_admin_field_hints(db_field, field)
 
     def clean_image(self):
         image = self.cleaned_data.get("image")

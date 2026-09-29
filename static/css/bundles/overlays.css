@@ -1149,6 +1149,20 @@
   pointer-events: none;
 }
 
+.hp-field label,
+.hp-field input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+}
+
 .lead-success {
   margin: 0;
   color: var(--color-accent-700);

@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.utils.translation import gettext as _
 
 from .models import Order, OrderStatus
+from .services_stock import release_order_stock
 
 ALLOWED_TRANSITIONS: dict[str, set[str]] = {
     OrderStatus.NEW: {
@@ -40,6 +42,7 @@ class OrderStatusService:
         return new in ALLOWED_TRANSITIONS.get(current, set())
 
     @classmethod
+    @transaction.atomic
     def transition(
         cls,
         order: Order,
@@ -58,6 +61,8 @@ class OrderStatusService:
             order.status = new_status
             if save:
                 order.save(update_fields=["status", "updated_at"])
+            if new_status == OrderStatus.CANCELLED:
+                release_order_stock(order)
             if notify:
                 from apps.notify.services import notify_order_status_changed
 

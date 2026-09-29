@@ -80,7 +80,7 @@ class InfoPageSection(models.Model):
 
 
 class InfoPageMeta(models.Model):
-    """CTA та бічна замітка (кроки) для інфо-сторінки."""
+    """Форма зворотного звʼязку та бічна замітка (кроки) для інфо-сторінки."""
 
     page_key = models.CharField(
         _("Сторінка"),
@@ -88,10 +88,10 @@ class InfoPageMeta(models.Model):
         choices=InfoPageSection.PageKey.choices,
         unique=True,
     )
-    cta_title_uk = models.CharField(_("CTA заголовок (UK)"), max_length=255, blank=True)
-    cta_title_ru = models.CharField(_("CTA заголовок (RU)"), max_length=255, blank=True)
-    cta_text_uk = models.TextField(_("CTA текст (UK)"), blank=True)
-    cta_text_ru = models.TextField(_("CTA текст (RU)"), blank=True)
+    cta_title_uk = models.CharField(_("Заголовок форми (UK)"), max_length=255, blank=True)
+    cta_title_ru = models.CharField(_("Заголовок форми (RU)"), max_length=255, blank=True)
+    cta_text_uk = models.TextField(_("Текст форми (UK)"), blank=True)
+    cta_text_ru = models.TextField(_("Текст форми (RU)"), blank=True)
     note_title_uk = models.CharField(
         _("Замітка — заголовок (UK)"),
         max_length=255,

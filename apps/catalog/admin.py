@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.utils.text import slugify
 from unfold.admin import ModelAdmin, TabularInline
 
+from apps.core.admin_field_hints import AdminFieldHintsMixin
 from apps.core.admin_filters import (
     DropdownFiltersMixin,
     UkBooleanDropdownFilter,
@@ -40,7 +41,7 @@ class ProductImageInline(TabularInline):
 
 
 @admin.register(Product)
-class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
+class ProductAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     change_form_template = "admin/catalog/product/change_form.html"
     form = ProductAdminForm
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
@@ -241,7 +242,7 @@ class ProductAdmin(DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(LabelIcon)
-class LabelIconAdmin(ModelAdmin):
+class LabelIconAdmin(AdminFieldHintsMixin, ModelAdmin):
     change_form_template = "admin/catalog/i18n_change_form.html"
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     list_display = ("preview", "title_uk", "title_ru", "key", "updated_at")
@@ -306,7 +307,7 @@ class LabelIconAdmin(ModelAdmin):
 
 
 @admin.register(ProductVariant)
-class ProductVariantAdmin(DropdownFiltersMixin, ModelAdmin):
+class ProductVariantAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     list_display = (
         "sku",
         "barcode",
@@ -326,7 +327,7 @@ class ProductVariantAdmin(DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(ProductImage)
-class ProductImageAdmin(DropdownFiltersMixin, ModelAdmin):
+class ProductImageAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     form = ProductImageForm
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     list_display = ("product", "variant", "is_main", "sort_order")

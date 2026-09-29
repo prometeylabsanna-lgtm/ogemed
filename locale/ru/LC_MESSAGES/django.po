@@ -613,6 +613,9 @@ msgstr "Список"
 msgid "Каталог"
 msgstr "Каталог"
 
+msgid "Каталог косметики OGEMED for you — догляд, бренди та акційні товари"
+msgstr "Каталог косметики OGEMED for you — уход, бренды и акционные товары"
+
 #: apps/catalog/views.py:176
 msgid "Товарів цього бренду поки немає"
 msgstr "Товаров этого бренда пока нет"
@@ -1338,12 +1341,12 @@ msgid "Пароль не повинен збігатися з email"
 msgstr "Пароль не должен совпадать с email"
 
 #: apps/core/views.py:25
-msgid "OGEMED for you"
-msgstr "OGEMED for you"
+msgid "OGEMED for you — інтернет-магазин косметики"
+msgstr "OGEMED for you — интернет-магазин косметики"
 
 #: apps/core/views.py:27
-msgid "Інтернет-магазин косметики OGEMED for you"
-msgstr "Интернет-магазин косметики OGEMED for you"
+msgid "Інтернет-магазин косметики OGEMED for you — догляд, бренди та акційні товари"
+msgstr "Интернет-магазин косметики OGEMED for you — уход, бренды и акционные товары"
 
 #: apps/orders/admin.py:93 apps/orders/services_status.py:53
 #, python-format

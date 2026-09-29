@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if products %}
-<div class="product-grid" data-product-grid data-view="{{ current_view|default:'grid' }}">
+<div class="product-grid" data-product-grid data-qa="product-grid" data-view="{{ current_view|default:'grid' }}">
   {% include "catalog/partials/_product_cards.html" %}
 </div>
 <div id="catalog-more">

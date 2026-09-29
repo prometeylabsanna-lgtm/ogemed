@@ -52,7 +52,7 @@ class LeadFormValidationTests(TestCase):
                 "phone": "123",
                 "email": "",
                 "message": "",
-                "website": "",
+                "honeypot": "",
             }
         )
         self.assertFalse(form.is_valid())
@@ -67,7 +67,7 @@ class LeadFormValidationTests(TestCase):
                 "phone": "+380501112233",
                 "email": "test@example.com",
                 "message": "",
-                "website": "",
+                "honeypot": "",
             }
         )
         self.assertTrue(form.is_valid(), form.errors)
@@ -81,7 +81,7 @@ class LeadFormValidationTests(TestCase):
                 "lead_type": Lead.LeadType.CALLBACK,
                 "name": "Олена",
                 "phone": "99",
-                "website": "",
+                "honeypot": "",
             },
             HTTP_HX_REQUEST="true",
         )

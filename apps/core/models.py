@@ -13,7 +13,10 @@ class SiteSettings(models.Model):
         _("Логотип"),
         upload_to="site/",
         blank=True,
-        help_text=_("PNG/SVG з прозорим фоном. Порожньо = логотип із static/img/logo.png"),
+        help_text=_(
+            "PNG або SVG з прозорим фоном, читабельний у маленькому розмірі. "
+            "Вага до 2 МБ. Порожньо = логотип із static/img/logo.png"
+        ),
         max_side=MAX_SIDE_LOGO,
         allow_svg=True,
     )

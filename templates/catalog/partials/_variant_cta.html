@@ -5,6 +5,7 @@
     method="post"
     action="{% url 'cart:add' %}"
     class="pdp__add"
+    data-qa="cart-add"
     hx-post="{% url 'cart:add' %}"
     hx-target="#cart-popup-body"
     hx-swap="innerHTML"

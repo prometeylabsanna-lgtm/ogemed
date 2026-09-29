@@ -20,6 +20,7 @@
         hx-target="#stock-notify-result"
         hx-swap="innerHTML"
         data-stock-notify-form
+        data-qa="lead-form"
         data-validate-form
         novalidate
       >
@@ -28,7 +29,10 @@
         <input type="hidden" name="name" value="">
         <input type="hidden" name="product_label" value="" data-stock-notify-label>
         <input type="hidden" name="product_url" value="" data-stock-notify-url>
-        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true">
+        <div class="hp-field" aria-hidden="true">
+          <label for="sn-honeypot">{% trans "Залиште порожнім" %}</label>
+          <input id="sn-honeypot" type="text" name="honeypot" value="" tabindex="-1" autocomplete="off">
+        </div>
 
         <p class="callback-modal__hint" data-stock-notify-hint></p>
 

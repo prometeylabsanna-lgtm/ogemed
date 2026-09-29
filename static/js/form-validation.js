@@ -249,7 +249,7 @@
 
   const validateInput = (input) => {
     if (!input || input.disabled || input.type === "hidden") return true;
-    if (input.classList.contains("hp-field") || input.name === "website") return true;
+    if (input.classList.contains("hp-field") || input.name === "website" || input.name === "honeypot") return true;
     const rule = resolveRule(input);
     if (!rule) return true;
     const message = fieldError(input, rule);
@@ -260,7 +260,7 @@
   const allValidatedInputs = (form) =>
     Array.from(form.querySelectorAll("input, textarea, select")).filter((el) => {
       if (el.type === "hidden" || el.disabled) return false;
-      if (el.classList.contains("hp-field") || el.name === "website") return false;
+      if (el.classList.contains("hp-field") || el.name === "website" || el.name === "honeypot") return false;
       return Boolean(resolveRule(el));
     });
 

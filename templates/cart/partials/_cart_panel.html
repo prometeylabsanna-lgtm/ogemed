@@ -97,7 +97,7 @@
         <span class="cart-panel__total-label">{% trans "Разом" %}</span>
         <span class="cart-panel__total-value">{{ cart_total }} ₴</span>
       </p>
-      <a class="btn btn--primary cart-panel__checkout" href="{% url 'orders:checkout' %}">{% trans "Оформити замовлення" %}</a>
+      <a class="btn btn--primary cart-panel__checkout" href="{% url 'orders:checkout' %}" data-qa="checkout-cta">{% trans "Оформити замовлення" %}</a>
     </div>
   </aside>
 </div>

@@ -35,6 +35,10 @@ class Category(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
         upload_to="categories/",
         blank=True,
         max_side=MAX_SIDE_PRODUCT,
+        help_text=_(
+            "Обкладинка ≈1200×1600 (3∶4) або квадрат від 1200 px. "
+            "Формат: JPG, PNG або WebP. Вага до 20 МБ (краще до 3 МБ)."
+        ),
     )
     description_uk = models.TextField(_("Опис (UK)"), blank=True)
     description_ru = models.TextField(_("Опис (RU)"), blank=True)
@@ -81,14 +85,20 @@ class Brand(TimeStampedModel, SeoFieldsMixin, LocalizedCharMixin):
         _("Фото для каталогу"),
         upload_to="brands/covers/",
         blank=True,
-        help_text=_("Плитка бренду у фільтрах каталогу."),
+        help_text=_(
+            "Плитка бренду у фільтрах каталогу. ≈1200×1600 (3∶4). "
+            "Формат: JPG, PNG або WebP. Вага до 20 МБ (краще до 3 МБ)."
+        ),
         max_side=MAX_SIDE_PRODUCT,
     )
     showcase_image = OptimizedImageField(
         _("Зображення для вітрини на головній"),
         upload_to="brands/showcase/",
         blank=True,
-        help_text=_("PNG без фону. Якщо порожнє — візьметься фото для каталогу."),
+        help_text=_(
+            "Краще PNG з прозорим фоном, довша сторона ≥1200 px. "
+            "Якщо порожнє — візьметься фото для каталогу. Вага до 20 МБ (краще до 3 МБ)."
+        ),
         max_side=MAX_SIDE_PRODUCT,
     )
     is_featured = models.BooleanField(_("Показувати на головній"), default=False)
@@ -512,9 +522,9 @@ class ProductImage(TimeStampedModel):
         upload_to="products/",
         blank=True,
         help_text=_(
-            "Необовʼязково. Рекомендовано від 1600px по довгій стороні — інакше "
-            "збільшення на сторінці товару може бути розмитим. Менше фото все одно "
-            "можна зберегти."
+            "Необовʼязково. Картка/галерея: ≥1600 px по довгій стороні, пропорції ≈3∶4. "
+            "Формат: JPG, PNG або WebP. Вага до 20 МБ (краще до 3 МБ). "
+            "Менше фото все одно можна зберегти."
         ),
         max_side=MAX_SIDE_PRODUCT,
     )
@@ -555,7 +565,10 @@ class LabelIcon(models.Model):
         _("Зображення"),
         upload_to="label_icons/",
         blank=True,
-        help_text=_("PNG з прозорим фоном. Порожньо = дефолт із static/img/labels/"),
+        help_text=_(
+            "PNG з прозорим фоном, квадрат ≈128–256 px. Вага до 1 МБ. "
+            "Порожньо = дефолт із static/img/labels/"
+        ),
         max_side=MAX_SIDE_LOGO,
         allow_svg=True,
     )

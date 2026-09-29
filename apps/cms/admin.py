@@ -4,6 +4,7 @@ from django.urls import reverse
 from tinymce.widgets import TinyMCE
 from unfold.admin import ModelAdmin
 
+from apps.core.admin_field_hints import AdminFieldHintsMixin
 from apps.core.admin_filters import (
     DropdownFiltersMixin,
     UkAllValuesDropdownFilter,
@@ -18,7 +19,7 @@ from .models import CMSPage, Lead
 
 
 @admin.register(CMSPage)
-class CMSPageAdmin(DropdownFiltersMixin, ModelAdmin):
+class CMSPageAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     list_display = ("title_uk", "slug", "page_key", "is_published", "sort_order")
     list_filter = (
         ("is_published", UkBooleanDropdownFilter),
@@ -39,7 +40,7 @@ class CMSPageAdmin(DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(InfoPageSection)
-class InfoPageSectionAdmin(DropdownFiltersMixin, ModelAdmin):
+class InfoPageSectionAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     list_display = (
         "heading_uk",
         "page_key",
@@ -120,14 +121,18 @@ class InfoPageSectionAdmin(DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(InfoPageMeta)
-class InfoPageMetaAdmin(DropdownFiltersMixin, ModelAdmin):
-    list_display = ("page_key", "cta_title_uk")
+class InfoPageMetaAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
+    list_display = ("page_key", "form_title_uk")
     list_filter = (("page_key", UkChoicesDropdownFilter),)
     fieldsets = (
         (None, {"fields": ("page_key",)}),
         (
-            "CTA",
+            "Форма",
             {
+                "description": (
+                    "Блок форми зворотного звʼязку на інфо-сторінці "
+                    "(заголовок, текст і кнопка «Передзвоніть»)."
+                ),
                 "fields": (
                     "cta_title_uk",
                     "cta_title_ru",
@@ -151,9 +156,13 @@ class InfoPageMetaAdmin(DropdownFiltersMixin, ModelAdmin):
         ),
     )
 
+    @admin.display(description="Заголовок форми", ordering="cta_title_uk")
+    def form_title_uk(self, obj):
+        return obj.cta_title_uk
+
 
 @admin.register(AboutContent)
-class AboutContentAdmin(ModelAdmin):
+class AboutContentAdmin(AdminFieldHintsMixin, ModelAdmin):
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     fieldsets = (
         (
@@ -249,9 +258,9 @@ class AboutContentAdmin(ModelAdmin):
         formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
         if db_field.name == "hero_image" and formfield is not None:
             formfield.label = "Зображення банера"
-            formfield.help_text = (
-                "Desktop ≈ 1920×800 (WebP/JPEG). Обрізання по центру на мобільному."
-            )
+            from apps.core.admin_guidelines import get_image_hint
+
+            formfield.help_text = get_image_hint("about_hero")
         return formfield
 
     def has_add_permission(self, request) -> bool:
@@ -268,7 +277,7 @@ class AboutContentAdmin(ModelAdmin):
 
 
 @admin.register(Lead)
-class LeadAdmin(DropdownFiltersMixin, ModelAdmin):
+class LeadAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     list_display = ("name", "phone", "lead_type", "is_processed", "created_at")
     list_filter = (
         ("lead_type", UkChoicesDropdownFilter),

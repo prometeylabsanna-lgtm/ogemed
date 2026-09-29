@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from unfold.admin import ModelAdmin, StackedInline
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 
+from apps.core.admin_field_hints import AdminFieldHintsMixin
 from apps.core.admin_filters import DropdownFiltersMixin, UkBooleanDropdownFilter
 
 from .models import Profile
@@ -16,7 +17,7 @@ class ProfileInline(StackedInline):
     can_delete = False
 
 
-class UserAdmin(DropdownFiltersMixin, DjangoUserAdmin, ModelAdmin):
+class UserAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, DjangoUserAdmin, ModelAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
@@ -35,6 +36,6 @@ admin.site.register(User, UserAdmin)
 
 
 @admin.register(Profile)
-class ProfileAdmin(ModelAdmin):
+class ProfileAdmin(AdminFieldHintsMixin, ModelAdmin):
     list_display = ("user", "full_name", "phone")
     search_fields = ("full_name", "phone", "user__email")
