@@ -18,6 +18,12 @@ class ProductImageForm(forms.ModelForm):
             "image": AdminImagePreviewWidget(),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Без required у HTML: Unfold ховає <input type=file> у display:none,
+        # і браузер мовчки блокує submit форми товару.
+        self.fields["image"].required = False
+
     def clean_image(self):
         image = self.cleaned_data.get("image")
         # старі записи не чіпаємо: перевіряємо лише щойно завантажений файл
