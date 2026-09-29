@@ -16,7 +16,7 @@ def _attr_field_name(attribute_id: int) -> str:
 class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ("is_active", "slug", "attribute_values", "search_text", "popularity")
+        exclude = ("is_active", "attribute_values", "search_text", "popularity")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

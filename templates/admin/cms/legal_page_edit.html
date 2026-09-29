@@ -1,0 +1,154 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static unfold %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin/site_content.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin/legal_page.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+{{ media }}
+<script src="{% static 'js/admin/cms_lang_tabs.js' %}" defer></script>
+<script src="{% static 'js/admin/legal_page_sections.js' %}" defer></script>
+{% endblock %}
+
+{% block title %}{{ title }} · {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block content %}
+<div class="site-content-editor">
+  <div class="site-content-editor__head">
+    <div>
+      <p class="site-content-editor__eyebrow text-font-subtle-light dark:text-font-subtle-dark">
+        {% for crumb, url in breadcrumb %}
+          {% if not forloop.last %}{{ crumb }} → {% else %}{{ crumb }}{% endif %}
+        {% endfor %}
+      </p>
+      <h1 class="site-content-editor__title text-font-important-light dark:text-font-important-dark">{{ title }}</h1>
+      <p class="site-content-editor__section-desc text-font-subtle-light dark:text-font-subtle-dark">
+        Заголовок, тексти, форма CTA і блоки — на одній сторінці.
+      </p>
+    </div>
+    <div class="site-content-editor__head-actions">
+      <div class="cms-lang-switch" data-cms-lang-switch role="group" aria-label="Мова полів">
+        <button type="button" class="cms-lang-switch__btn is-active" data-cms-lang="uk">UA</button>
+        <button type="button" class="cms-lang-switch__btn" data-cms-lang="ru">RU</button>
+      </div>
+      <a href="{{ preview_url }}" class="site-content-editor__preview border border-base-200 dark:border-base-700 text-font-default-light dark:text-font-default-dark hover:border-primary-500 dark:hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-500/10" target="_blank" rel="noopener noreferrer">
+        Переглянути на сайті
+        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+      </a>
+    </div>
+  </div>
+
+  {% include "unfold/helpers/messages.html" %}
+
+  <form method="post" enctype="multipart/form-data" novalidate data-cms-content-form>
+    {% csrf_token %}
+
+    {% if page_form.non_field_errors %}
+      {% include "unfold/helpers/messages/errornote.html" with errors=page_form.non_field_errors %}
+    {% endif %}
+    {% if about_form and about_form.non_field_errors %}
+      {% include "unfold/helpers/messages/errornote.html" with errors=about_form.non_field_errors %}
+    {% endif %}
+    {% if meta_form and meta_form.non_field_errors %}
+      {% include "unfold/helpers/messages/errornote.html" with errors=meta_form.non_field_errors %}
+    {% endif %}
+
+    <div class="site-content-editor__fieldsets">
+      {% for fieldset_title, fieldset_fields in fieldsets %}
+      <section class="site-content-fieldset border border-base-200 dark:border-base-700 rounded-default shadow-sm dark:bg-base-900 p-4 md:p-5">
+        {% if fieldset_title %}
+        <h2 class="site-content-fieldset__title text-font-important-light dark:text-font-important-dark">{{ fieldset_title }}</h2>
+        {% endif %}
+        <div class="site-content-fieldset__fields">
+          {% for field in fieldset_fields %}
+            <div class="cms-field-wrap{% if field.name|slice:'-3:' == '_ru' %} cms-lang-ru{% elif field.name|slice:'-3:' == '_uk' %} cms-lang-uk{% endif %}">
+              {% include "unfold/helpers/field.html" with field=field %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+
+      {% if sections_formset %}
+      <section class="site-content-fieldset border border-base-200 dark:border-base-700 rounded-default shadow-sm dark:bg-base-900 p-4 md:p-5" data-legal-sections>
+        <div class="legal-sections-admin__head">
+          <div>
+            <h2 class="site-content-fieldset__title text-font-important-light dark:text-font-important-dark">Секції / питання</h2>
+            <p class="legal-sections-admin__hint text-font-subtle-light dark:text-font-subtle-dark">
+              Усі блоки цієї сторінки. Порядок — поле «Порядок».
+            </p>
+          </div>
+          <button type="button" class="legal-sections-admin__add" data-legal-sections-add>
+            <span class="material-symbols-outlined" aria-hidden="true">add</span>
+            Додати секцію
+          </button>
+        </div>
+
+        {{ sections_formset.management_form }}
+        {% if sections_formset.non_form_errors %}
+          {% include "unfold/helpers/messages/errornote.html" with errors=sections_formset.non_form_errors %}
+        {% endif %}
+
+        <div class="legal-sections-admin__list" data-legal-sections-list>
+          {% for section_form in sections_formset %}
+          <div class="legal-sections-admin__row border border-base-200 dark:border-base-700{% if section_form.errors %} is-invalid{% endif %}" data-legal-section-row>
+            {% for hidden in section_form.hidden_fields %}{{ hidden }}{% endfor %}
+            <div class="legal-sections-admin__fields">
+              {% include "unfold/helpers/field.html" with field=section_form.layout %}
+              {% include "unfold/helpers/field.html" with field=section_form.sort_order %}
+              {% include "unfold/helpers/field.html" with field=section_form.is_active %}
+              <div class="cms-lang-uk">{% include "unfold/helpers/field.html" with field=section_form.heading_uk %}</div>
+              <div class="cms-lang-uk">{% include "unfold/helpers/field.html" with field=section_form.subheading_uk %}</div>
+              <div class="cms-lang-uk">{% include "unfold/helpers/field.html" with field=section_form.body_uk %}</div>
+              <div class="cms-lang-ru">{% include "unfold/helpers/field.html" with field=section_form.heading_ru %}</div>
+              <div class="cms-lang-ru">{% include "unfold/helpers/field.html" with field=section_form.subheading_ru %}</div>
+              <div class="cms-lang-ru">{% include "unfold/helpers/field.html" with field=section_form.body_ru %}</div>
+              {% if section_form.DELETE %}
+              <label class="legal-sections-admin__delete">
+                {{ section_form.DELETE }}
+                <span>Видалити</span>
+              </label>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <template data-legal-sections-empty>
+          <div class="legal-sections-admin__row border border-base-200 dark:border-base-700" data-legal-section-row>
+            {% for hidden in sections_formset.empty_form.hidden_fields %}{{ hidden }}{% endfor %}
+            <div class="legal-sections-admin__fields">
+              {% include "unfold/helpers/field.html" with field=sections_formset.empty_form.layout %}
+              {% include "unfold/helpers/field.html" with field=sections_formset.empty_form.sort_order %}
+              {% include "unfold/helpers/field.html" with field=sections_formset.empty_form.is_active %}
+              <div class="cms-lang-uk">{% include "unfold/helpers/field.html" with field=sections_formset.empty_form.heading_uk %}</div>
+              <div class="cms-lang-uk">{% include "unfold/helpers/field.html" with field=sections_formset.empty_form.subheading_uk %}</div>
+              <div class="cms-lang-uk">{% include "unfold/helpers/field.html" with field=sections_formset.empty_form.body_uk %}</div>
+              <div class="cms-lang-ru">{% include "unfold/helpers/field.html" with field=sections_formset.empty_form.heading_ru %}</div>
+              <div class="cms-lang-ru">{% include "unfold/helpers/field.html" with field=sections_formset.empty_form.subheading_ru %}</div>
+              <div class="cms-lang-ru">{% include "unfold/helpers/field.html" with field=sections_formset.empty_form.body_ru %}</div>
+              {% if sections_formset.empty_form.DELETE %}
+              <label class="legal-sections-admin__delete">
+                {{ sections_formset.empty_form.DELETE }}
+                <span>Видалити</span>
+              </label>
+              {% endif %}
+            </div>
+          </div>
+        </template>
+      </section>
+      {% endif %}
+    </div>
+
+    <div class="site-content-editor__actions">
+      {% component "unfold/components/button.html" with submit=1 name="_save" variant="primary" %}
+        {% trans "Зберегти" %}
+      {% endcomponent %}
+    </div>
+  </form>
+</div>
+{% endblock %}

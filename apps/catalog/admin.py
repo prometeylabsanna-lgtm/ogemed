@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.actions import delete_selected
 from django.utils.html import format_html
-from django.utils.text import slugify
 from unfold.admin import ModelAdmin, TabularInline
 
 from apps.core.admin_field_hints import AdminFieldHintsMixin
@@ -11,6 +10,7 @@ from apps.core.admin_filters import (
     UkChoicesDropdownFilter,
     UkRelatedDropdownFilter,
 )
+from apps.core.admin_slug import SlugLockAdminMixin
 from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 from apps.core.image_processing import thumb_url
 
@@ -41,10 +41,14 @@ class ProductImageInline(TabularInline):
 
 
 @admin.register(Product)
-class ProductAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
+class ProductAdmin(
+    SlugLockAdminMixin, AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin
+):
     change_form_template = "admin/catalog/product/change_form.html"
     form = ProductAdminForm
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
+    slug_fallback = "product"
+    slug_max_length = 160
     list_display = (
         "name_uk",
         "sku",
@@ -65,7 +69,7 @@ class ProductAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     )
     actions = (*PRODUCT_ADMIN_ACTIONS, delete_selected)
     search_fields = ("name_uk", "name_ru", "slug", "sku", "barcode", "search_text")
-    filter_horizontal = ("categories", "related_products")
+    filter_horizontal = ("related_products",)
     inlines = [ProductImageInline]
     fieldsets = (
         (
@@ -92,13 +96,17 @@ class ProductAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
             {
                 "classes": ("product-shared-fields",),
                 "fields": (
+                    "slug",
                     "status",
                     "brand",
                     "primary_category",
-                    "categories",
                     "is_hit",
                     "is_new",
                     "is_sale",
+                ),
+                "description": (
+                    "Основна категорія визначає розділ товару в каталозі. "
+                    "Додаткові категорії на формі не потрібні."
                 ),
             },
         ),
@@ -143,10 +151,17 @@ class ProductAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
     )
 
     class Media:
-        css = {"all": ("css/admin/site_content.css", "css/admin/ogemed_theme.css")}
+        css = {
+            "all": (
+                "css/admin/site_content.css",
+                "css/admin/ogemed_theme.css",
+                "css/admin/slug_lock.css",
+            )
+        }
         js = (
             "js/admin/catalog_lang_tabs.js",
             "js/admin/product_image_main.js",
+            "js/admin/slug_lock.js",
         )
 
     def get_fieldsets(self, request, obj=None):
@@ -212,7 +227,7 @@ class ProductAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         formfield = super().formfield_for_manytomany(db_field, request, **kwargs)
-        if db_field.name in ("categories", "related_products") and formfield is not None:
+        if db_field.name == "related_products" and formfield is not None:
             formfield.help_text = ""
         return formfield
 
@@ -220,25 +235,13 @@ class ProductAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
         super().save_related(request, form, formsets, change)
         if hasattr(form, "save_attribute_values"):
             form.save_attribute_values()
-
-    def save_model(self, request, obj, form, change):
-        if not change or not obj.slug:
-            obj.slug = self._unique_product_slug(obj.name_uk, obj.pk)
-        super().save_model(request, obj, form, change)
-
-    @staticmethod
-    def _unique_product_slug(name: str, pk) -> str:
-        base = slugify(name) or "product"
-        base = base[:140]
-        slug = base
-        n = 2
-        qs = Product.objects.all()
-        if pk:
-            qs = qs.exclude(pk=pk)
-        while qs.filter(slug=slug).exists():
-            slug = f"{base}-{n}"
-            n += 1
-        return slug
+        obj = form.instance
+        if not obj.pk:
+            return
+        if obj.primary_category_id:
+            obj.categories.set([obj.primary_category_id])
+        else:
+            obj.categories.clear()
 
 
 @admin.register(LabelIcon)

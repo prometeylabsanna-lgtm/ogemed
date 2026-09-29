@@ -164,6 +164,10 @@ CONTENT_SECTIONS: tuple[ContentSection, ...] = (
         sidebar_icon="dock_to_bottom",
         preview_url="/",
         admin_model_name="sitefootersettings",
+        description=(
+            "Тексти підвалу та посилання на соцмережі / месенджери "
+            "(ті самі значення, що показуються в футері й FAB)."
+        ),
         blocks=(
             ("site", "footer_about_text"),
             ("site", "footer_copyright"),

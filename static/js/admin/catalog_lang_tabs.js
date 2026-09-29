@@ -1,25 +1,6 @@
 (function () {
   "use strict";
 
-  var I18N_UK = [
-    "name_uk",
-    "short_description_uk",
-    "description_uk",
-    "tagline_uk",
-    "seo_title_uk",
-    "seo_description_uk",
-    "title_uk",
-  ];
-  var I18N_RU = [
-    "name_ru",
-    "short_description_ru",
-    "description_ru",
-    "tagline_ru",
-    "seo_title_ru",
-    "seo_description_ru",
-    "title_ru",
-  ];
-
   function setLang(root, lang) {
     root.classList.remove("cms-lang-mode-uk", "cms-lang-mode-ru");
     root.classList.add("cms-lang-mode-" + lang);
@@ -31,38 +12,37 @@
     });
   }
 
-  function i18nScope(root) {
-    return root.querySelector("fieldset.product-i18n-fields") || root;
-  }
-
-  function fieldRow(scope, name) {
-    return (
-      scope.querySelector(".field-" + name) ||
-      scope.querySelector("[class*='field-" + name + "']")
-    );
-  }
-
   function markI18nRows(root) {
-    var scope = i18nScope(root);
-    I18N_UK.forEach(function (name) {
-      var row = fieldRow(scope, name);
-      if (row && !row.closest(".inline-group")) {
-        row.classList.add("cms-lang-uk");
-      }
+    root.querySelectorAll("[class*='field-']").forEach(function (row) {
+      var match = String(row.className).match(/(?:^|\s)field-([\w-]+?)_(uk|ru)(?:\s|$)/);
+      if (!match) return;
+      row.classList.add("cms-lang-" + match[2]);
     });
-    I18N_RU.forEach(function (name) {
-      var row = fieldRow(scope, name);
-      if (row && !row.closest(".inline-group")) {
-        row.classList.add("cms-lang-ru");
-      }
-    });
+  }
+
+  function ensureLangSwitch(root) {
+    if (root.querySelector("[data-cms-lang-switch]")) return;
+    var bar = document.createElement("div");
+    bar.className =
+      "product-admin-editor__langbar product-admin-editor__langbar--inline";
+    bar.setAttribute("data-cms-lang-switch", "");
+    bar.setAttribute("role", "group");
+    bar.setAttribute("aria-label", "Мова контенту");
+    bar.innerHTML =
+      '<button type="button" class="cms-lang-switch__btn is-active" data-cms-lang="uk">UA</button>' +
+      '<button type="button" class="cms-lang-switch__btn" data-cms-lang="ru">RU</button>' +
+      '<p class="product-admin-editor__langhint">' +
+      "Перемикач показує текстові поля українською або російською." +
+      "</p>";
+    root.insertBefore(bar, root.firstChild);
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     var root = document.querySelector(
-      "[data-catalog-lang-root], [data-product-lang-root], [data-i18n-lang-root]"
+      "[data-catalog-lang-root], [data-product-lang-root], [data-i18n-lang-root], .product-admin-editor, .site-content-editor"
     );
     if (!root) return;
+    ensureLangSwitch(root);
     markI18nRows(root);
     setLang(root, "uk");
     root.querySelectorAll("[data-cms-lang]").forEach(function (btn) {

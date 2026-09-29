@@ -167,3 +167,46 @@ class Lead(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} ({self.phone})"
+
+
+# Proxy-моделі для сайдбару «Юридичні сторінки» (єдиний редактор).
+class LegalAboutPage(CMSPage):
+    class Meta:
+        proxy = True
+        verbose_name = _("Про нас")
+        verbose_name_plural = _("Про нас")
+
+
+class LegalContactsPage(CMSPage):
+    class Meta:
+        proxy = True
+        verbose_name = _("Контакти")
+        verbose_name_plural = _("Контакти")
+
+
+class LegalShippingPage(CMSPage):
+    class Meta:
+        proxy = True
+        verbose_name = _("Доставка і оплата")
+        verbose_name_plural = _("Доставка і оплата")
+
+
+class LegalReturnsPage(CMSPage):
+    class Meta:
+        proxy = True
+        verbose_name = _("Повернення")
+        verbose_name_plural = _("Повернення")
+
+
+class LegalPrivacyPage(CMSPage):
+    class Meta:
+        proxy = True
+        verbose_name = _("Конфіденційність")
+        verbose_name_plural = _("Конфіденційність")
+
+
+class LegalOfferPage(CMSPage):
+    class Meta:
+        proxy = True
+        verbose_name = _("Оферта")
+        verbose_name_plural = _("Оферта")

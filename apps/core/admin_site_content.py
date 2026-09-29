@@ -37,6 +37,14 @@ from apps.core.site_content_registry import (
 SECTION_VISIBLE_FIELD = "section_visible"
 LANGS = ("uk", "ru")
 HEADER_BRAND_FIELDS = ("logo", "phone", "phone_2")
+FOOTER_SOCIAL_FIELDS = (
+    "telegram_url",
+    "instagram_url",
+    "tiktok_url",
+    "facebook_url",
+    "viber_url",
+    "telegram_consultant_url",
+)
 
 
 class HeaderBrandForm(forms.ModelForm):
@@ -67,6 +75,15 @@ class HeaderBrandForm(forms.ModelForm):
             hint = get_text_limit_hint(name, max_length=32)
             if hint and hint not in str(field.help_text or ""):
                 field.help_text = hint
+
+
+class FooterSocialForm(forms.ModelForm):
+    """Соцмережі / месенджери — показуються в підвалі та FAB."""
+
+    class Meta:
+        model = SiteSettings
+        fields = FOOTER_SOCIAL_FIELDS
+        widgets = {name: CmsAdminTextInputWidget() for name in FOOTER_SOCIAL_FIELDS}
 
 
 def block_field_name(page: str, key: str, suffix: str) -> str:
@@ -287,6 +304,7 @@ def _section_fieldsets(
     section: ContentSection,
     *,
     header_form: HeaderBrandForm | None = None,
+    footer_form: FooterSocialForm | None = None,
 ) -> list:
     fieldsets: list = []
     if header_form is not None:
@@ -303,6 +321,17 @@ def _section_fieldsets(
             fields = _bound_fields_for_keys(form, section, group.block_keys)
             if fields:
                 fieldsets.append((group.title, fields))
+    if footer_form is not None:
+        fieldsets.append(
+            (
+                "Соцмережі / месенджери",
+                [
+                    footer_form[name]
+                    for name in FOOTER_SOCIAL_FIELDS
+                    if name in footer_form.fields
+                ],
+            )
+        )
     return fieldsets
 
 
@@ -328,11 +357,15 @@ def site_content_section_view(
     blocks = load_section_blocks(section)
     use_hero_slides = section.slug == "hero"
     use_header_brand = section.slug == "header"
+    use_footer_social = section.slug == "footer"
     use_home_brands = section.slug == "brands"
     slides_formset = None
     brands_formset = None
     header_form = None
-    settings_obj = SiteSettings.load() if use_header_brand else None
+    footer_form = None
+    settings_obj = (
+        SiteSettings.load() if (use_header_brand or use_footer_social) else None
+    )
 
     if request.method == "POST":
         form = SitePageContentForm(section, blocks, request.POST, request.FILES)
@@ -344,6 +377,8 @@ def site_content_section_view(
             header_form = HeaderBrandForm(
                 request.POST, request.FILES, instance=settings_obj
             )
+        if use_footer_social:
+            footer_form = FooterSocialForm(request.POST, instance=settings_obj)
         forms_ok = form.is_valid()
         if use_hero_slides:
             forms_ok = forms_ok and slides_formset.is_valid()
@@ -351,6 +386,8 @@ def site_content_section_view(
             forms_ok = forms_ok and brands_formset.is_valid()
         if use_header_brand:
             forms_ok = forms_ok and header_form.is_valid()
+        if use_footer_social:
+            forms_ok = forms_ok and footer_form.is_valid()
         if forms_ok:
             form.save()
             if slides_formset is not None:
@@ -359,6 +396,8 @@ def site_content_section_view(
                 save_home_brands_formset(brands_formset)
             if header_form is not None:
                 header_form.save()
+            if footer_form is not None:
+                footer_form.save()
             messages.success(
                 request,
                 f"«{section.sidebar_title or section.title}» збережено.",
@@ -372,14 +411,19 @@ def site_content_section_view(
             brands_formset = build_home_brands_formset()
         if use_header_brand:
             header_form = HeaderBrandForm(instance=settings_obj)
+        if use_footer_social:
+            footer_form = FooterSocialForm(instance=settings_obj)
 
     opts = model_admin.model._meta if model_admin else SiteBlock._meta
     context = {
         **default_admin_site.each_context(request),
         "form": form,
         "header_form": header_form,
+        "footer_form": footer_form,
         "section": section,
-        "fieldsets": _section_fieldsets(form, section, header_form=header_form),
+        "fieldsets": _section_fieldsets(
+            form, section, header_form=header_form, footer_form=footer_form
+        ),
         "slides_formset": slides_formset,
         "brands_formset": brands_formset,
         "preview_url": section.preview_url,

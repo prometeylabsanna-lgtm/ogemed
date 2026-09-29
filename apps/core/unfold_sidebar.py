@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+from apps.cms.legal_page_registry import LEGAL_PAGES
 from apps.core.site_content_registry import build_content_sidebar_items
 
 # Палітра з static/css/base.css — Unfold чекає "R G B" або "#hex"
@@ -43,32 +44,14 @@ def _admin_link(prefix: str, *parts: str) -> str:
     return f"/{base}/{path}/" if path else f"/{base}/"
 
 
-def _admin_link_query(prefix: str, *parts: str, query: str = "") -> str:
-    url = _admin_link(prefix, *parts)
-    return f"{url}?{query}" if query else url
-
-
-_LEGAL_PAGES = (
-    ("shipping", "Доставка і оплата", "local_shipping"),
-    ("returns", "Повернення", "undo"),
-    ("privacy", "Конфіденційність", "policy"),
-    ("offer", "Оферта", "gavel"),
-)
-
-
 def _legal_page_sidebar_items(prefix: str) -> list[dict]:
     return [
         {
-            "title": title,
-            "icon": icon,
-            "link": _admin_link_query(
-                prefix,
-                "cms",
-                "infopagesection",
-                query=f"page_key__exact={key}",
-            ),
+            "title": page.title,
+            "icon": page.icon,
+            "link": _admin_link(prefix, "cms", page.model_name),
         }
-        for key, title, icon in _LEGAL_PAGES
+        for page in LEGAL_PAGES
     ]
 
 
@@ -149,33 +132,10 @@ def build_unfold_config(*, admin_url: str = "ogm8k2x9p4qh7n") -> dict:
                     "items": build_content_sidebar_items(admin_url=prefix),
                 },
                 {
-                    "title": "Про нас (детально)",
-                    "separator": True,
-                    "items": [
-                        {
-                            "title": "Контент «Про нас»",
-                            "icon": "info",
-                            "link": _admin_link(prefix, "cms", "aboutcontent"),
-                        },
-                        {
-                            "title": "CMS-сторінки",
-                            "icon": "article",
-                            "link": _admin_link(prefix, "cms", "cmspage"),
-                        },
-                    ],
-                },
-                {
                     "title": "Юридичні сторінки",
                     "separator": True,
                     "collapsible": True,
-                    "items": [
-                        *_legal_page_sidebar_items(prefix),
-                        {
-                            "title": "Форма / замітки (усі)",
-                            "icon": "notes",
-                            "link": _admin_link(prefix, "cms", "infopagemeta"),
-                        },
-                    ],
+                    "items": _legal_page_sidebar_items(prefix),
                 },
                 {
                     "title": "Каталог",

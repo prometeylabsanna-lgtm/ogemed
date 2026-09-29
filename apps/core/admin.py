@@ -2,6 +2,7 @@ from django.contrib import admin
 from unfold.admin import ModelAdmin
 
 from apps.core.admin_field_hints import AdminFieldHintsMixin
+from apps.core.admin_i18n import LANG_SWITCH_HTML, I18nLangTabsMixin
 from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 from apps.core.map_embed import normalize_map_embed
 
@@ -9,60 +10,39 @@ from .models import SiteSettings
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(AdminFieldHintsMixin, ModelAdmin):
+class SiteSettingsAdmin(I18nLangTabsMixin, AdminFieldHintsMixin, ModelAdmin):
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     fieldsets = (
         (
             "Контакти",
             {
+                "description": (
+                    "Карта: вставте посилання на точку Google Maps або код iframe — "
+                    "на сайті відобразиться автоматично."
+                    + LANG_SWITCH_HTML
+                ),
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "phone",
                     "phone_2",
                     "email",
                     "manager_email",
                     "address_uk",
-                    "address_ru",
                     "work_hours_uk",
+                    "address_ru",
                     "work_hours_ru",
                     "map_embed_url",
-                ),
-                "description": (
-                    "Карта: вставте посилання на точку Google Maps або код iframe — "
-                    "на сайті відобразиться автоматично."
-                ),
-            },
-        ),
-        (
-            "Соцмережі / месенджери",
-            {
-                "fields": (
-                    "telegram_url",
-                    "instagram_url",
-                    "tiktok_url",
-                    "facebook_url",
-                    "viber_url",
-                    "telegram_consultant_url",
                 ),
             },
         ),
         (
             "Бренд",
             {
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "logo",
                     "brand_tagline_uk",
                     "brand_tagline_ru",
-                ),
-            },
-        ),
-        (
-            "Реквізити ФОП (оплата на картку / IBAN)",
-            {
-                "fields": (
-                    "fop_recipient_name",
-                    "fop_iban",
-                    "fop_card_number",
-                    "fop_edrpou",
                 ),
             },
         ),

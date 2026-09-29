@@ -11,6 +11,8 @@ from apps.core.admin_filters import (
     UkBooleanDropdownFilter,
     UkChoicesDropdownFilter,
 )
+from apps.core.admin_i18n import LANG_SWITCH_HTML, I18nLangTabsMixin
+from apps.core.admin_slug import SlugLockAdminMixin
 from apps.core.admin_widgets import IMAGE_FORMFIELD_OVERRIDES
 
 from .about_content import AboutContent
@@ -19,19 +21,40 @@ from .models import CMSPage, Lead
 
 
 @admin.register(CMSPage)
-class CMSPageAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
+class CMSPageAdmin(
+    SlugLockAdminMixin,
+    I18nLangTabsMixin,
+    AdminFieldHintsMixin,
+    DropdownFiltersMixin,
+    ModelAdmin,
+):
     list_display = ("title_uk", "slug", "page_key", "is_published", "sort_order")
     list_filter = (
         ("is_published", UkBooleanDropdownFilter),
         ("page_key", UkAllValuesDropdownFilter),
     )
     search_fields = ("title_uk", "title_ru", "slug", "page_key")
-    prepopulated_fields = {"slug": ("title_uk",)}
+    slug_source_field = "title_uk"
+    slug_fallback = "page"
+    slug_max_length = 120
     fieldsets = (
         (None, {"fields": ("slug", "page_key", "is_published", "sort_order")}),
-        ("Українська", {"fields": ("title_uk", "body_uk")}),
-        ("Русский", {"fields": ("title_ru", "body_ru")}),
+        (
+            "Назва і текст",
+            {
+                "classes": ("product-i18n-fields",),
+                "description": LANG_SWITCH_HTML,
+                "fields": ("title_uk", "body_uk", "title_ru", "body_ru"),
+            },
+        ),
     )
+
+    class Media:
+        css = {"all": ("css/admin/slug_lock.css",)}
+        js = ("js/admin/slug_lock.js",)
+
+    def has_module_permission(self, request) -> bool:
+        return False
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name in ("body_uk", "body_ru"):
@@ -40,7 +63,9 @@ class CMSPageAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(InfoPageSection)
-class InfoPageSectionAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
+class InfoPageSectionAdmin(
+    I18nLangTabsMixin, AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin
+):
     list_display = (
         "heading_uk",
         "page_key",
@@ -63,14 +88,24 @@ class InfoPageSectionAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmi
             {"fields": ("page_key", "layout", "sort_order", "is_active")},
         ),
         (
-            "Українська",
-            {"fields": ("heading_uk", "subheading_uk", "body_uk")},
-        ),
-        (
-            "Русский",
-            {"fields": ("heading_ru", "subheading_ru", "body_ru")},
+            "Текст секції",
+            {
+                "classes": ("product-i18n-fields",),
+                "description": LANG_SWITCH_HTML,
+                "fields": (
+                    "heading_uk",
+                    "subheading_uk",
+                    "body_uk",
+                    "heading_ru",
+                    "subheading_ru",
+                    "body_ru",
+                ),
+            },
         ),
     )
+
+    def has_module_permission(self, request) -> bool:
+        return False
 
     @staticmethod
     def _page_key_from_request(request) -> str | None:
@@ -121,7 +156,9 @@ class InfoPageSectionAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmi
 
 
 @admin.register(InfoPageMeta)
-class InfoPageMetaAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
+class InfoPageMetaAdmin(
+    I18nLangTabsMixin, AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin
+):
     list_display = ("page_key", "form_title_uk")
     list_filter = (("page_key", UkChoicesDropdownFilter),)
     fieldsets = (
@@ -132,11 +169,13 @@ class InfoPageMetaAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
                 "description": (
                     "Блок форми зворотного звʼязку на інфо-сторінці "
                     "(заголовок, текст і кнопка «Передзвоніть»)."
+                    + LANG_SWITCH_HTML
                 ),
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "cta_title_uk",
-                    "cta_title_ru",
                     "cta_text_uk",
+                    "cta_title_ru",
                     "cta_text_ru",
                 ),
             },
@@ -144,17 +183,21 @@ class InfoPageMetaAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
         (
             "Бічна замітка",
             {
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "note_title_uk",
-                    "note_title_ru",
                     "note_steps_uk",
-                    "note_steps_ru",
                     "note_text_uk",
+                    "note_title_ru",
+                    "note_steps_ru",
                     "note_text_ru",
                 ),
             },
         ),
     )
+
+    def has_module_permission(self, request) -> bool:
+        return False
 
     @admin.display(description="Заголовок форми", ordering="cta_title_uk")
     def form_title_uk(self, obj):
@@ -162,7 +205,7 @@ class InfoPageMetaAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
 
 
 @admin.register(AboutContent)
-class AboutContentAdmin(AdminFieldHintsMixin, ModelAdmin):
+class AboutContentAdmin(I18nLangTabsMixin, AdminFieldHintsMixin, ModelAdmin):
     formfield_overrides = IMAGE_FORMFIELD_OVERRIDES
     fieldsets = (
         (
@@ -171,15 +214,17 @@ class AboutContentAdmin(AdminFieldHintsMixin, ModelAdmin):
                 "description": (
                     "Перший великий блок на сторінці «Про нас». "
                     "Якщо фото немає — показується стандартне зображення."
+                    + LANG_SWITCH_HTML
                 ),
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "hero_visible",
                     "hero_image",
                     "hero_kicker_uk",
-                    "hero_kicker_ru",
                     "hero_title_uk",
-                    "hero_title_ru",
                     "hero_text_uk",
+                    "hero_kicker_ru",
+                    "hero_title_ru",
                     "hero_text_ru",
                 ),
             },
@@ -187,21 +232,22 @@ class AboutContentAdmin(AdminFieldHintsMixin, ModelAdmin):
         (
             "Історія бренду",
             {
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "history_visible",
                     "history_kicker_uk",
-                    "history_kicker_ru",
                     "history_card_1_title_uk",
-                    "history_card_1_title_ru",
                     "history_card_1_body_uk",
-                    "history_card_1_body_ru",
                     "history_card_2_title_uk",
-                    "history_card_2_title_ru",
                     "history_card_2_body_uk",
-                    "history_card_2_body_ru",
                     "history_card_3_title_uk",
-                    "history_card_3_title_ru",
                     "history_card_3_body_uk",
+                    "history_kicker_ru",
+                    "history_card_1_title_ru",
+                    "history_card_1_body_ru",
+                    "history_card_2_title_ru",
+                    "history_card_2_body_ru",
+                    "history_card_3_title_ru",
                     "history_card_3_body_ru",
                 ),
             },
@@ -209,29 +255,30 @@ class AboutContentAdmin(AdminFieldHintsMixin, ModelAdmin):
         (
             "Філософія догляду",
             {
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "philosophy_visible",
                     "philosophy_kicker_uk",
-                    "philosophy_kicker_ru",
                     "philosophy_title_uk",
-                    "philosophy_title_ru",
                     "philosophy_body_uk",
-                    "philosophy_body_ru",
                     "philosophy_thesis_1_title_uk",
-                    "philosophy_thesis_1_title_ru",
                     "philosophy_thesis_1_text_uk",
-                    "philosophy_thesis_1_text_ru",
                     "philosophy_thesis_2_title_uk",
-                    "philosophy_thesis_2_title_ru",
                     "philosophy_thesis_2_text_uk",
-                    "philosophy_thesis_2_text_ru",
                     "philosophy_thesis_3_title_uk",
-                    "philosophy_thesis_3_title_ru",
                     "philosophy_thesis_3_text_uk",
-                    "philosophy_thesis_3_text_ru",
                     "philosophy_thesis_4_title_uk",
-                    "philosophy_thesis_4_title_ru",
                     "philosophy_thesis_4_text_uk",
+                    "philosophy_kicker_ru",
+                    "philosophy_title_ru",
+                    "philosophy_body_ru",
+                    "philosophy_thesis_1_title_ru",
+                    "philosophy_thesis_1_text_ru",
+                    "philosophy_thesis_2_title_ru",
+                    "philosophy_thesis_2_text_ru",
+                    "philosophy_thesis_3_title_ru",
+                    "philosophy_thesis_3_text_ru",
+                    "philosophy_thesis_4_title_ru",
                     "philosophy_thesis_4_text_ru",
                 ),
             },
@@ -239,20 +286,24 @@ class AboutContentAdmin(AdminFieldHintsMixin, ModelAdmin):
         (
             "Нижній блок з кнопками",
             {
+                "classes": ("product-i18n-fields",),
                 "fields": (
                     "cta_visible",
                     "cta_title_uk",
-                    "cta_title_ru",
                     "cta_text_uk",
-                    "cta_text_ru",
                     "cta_catalog_label_uk",
-                    "cta_catalog_label_ru",
                     "cta_contacts_label_uk",
+                    "cta_title_ru",
+                    "cta_text_ru",
+                    "cta_catalog_label_ru",
                     "cta_contacts_label_ru",
                 ),
             },
         ),
     )
+
+    def has_module_permission(self, request) -> bool:
+        return False
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
@@ -288,3 +339,4 @@ class LeadAdmin(AdminFieldHintsMixin, DropdownFiltersMixin, ModelAdmin):
 
 
 # HeroSlide — лише через CMS «Головна — Hero» (formset), не як окремий ModelAdmin.
+from apps.cms import admin_legal_proxies  # noqa: E402, F401

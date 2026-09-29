@@ -208,6 +208,35 @@ class AttributeValue(TimeStampedModel, LocalizedCharMixin):
     def name(self) -> str:
         return self.localized("name")
 
+    def save(self, *args, **kwargs) -> None:
+        from apps.core.admin_slug import unique_slug
+
+        auto = getattr(self, "_auto_slug", True)
+        creating = self.pk is None
+        scope = {"attribute_id": self.attribute_id} if self.attribute_id else None
+        if auto:
+            self.slug = unique_slug(
+                AttributeValue,
+                self.name_uk or "",
+                pk=None if creating else self.pk,
+                fallback="value",
+                max_length=80,
+                scope_filter=scope,
+            )
+        super().save(*args, **kwargs)
+        if auto and creating and self.pk:
+            final = unique_slug(
+                AttributeValue,
+                self.name_uk or "",
+                pk=self.pk,
+                fallback="value",
+                max_length=80,
+                scope_filter=scope,
+            )
+            if final != self.slug:
+                type(self).objects.filter(pk=self.pk).update(slug=final)
+                self.slug = final
+
 
 class ProductQuerySet(models.QuerySet):
     def published(self):

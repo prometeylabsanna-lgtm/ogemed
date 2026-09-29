@@ -42,7 +42,8 @@
 
   function collectServerErrors(root) {
     var labels = [];
-    root.querySelectorAll(".errorlist, ul.errorlist, .text-red-600, .text-red-500").forEach(function (list) {
+    // Не чіпати .text-red-* — у Unfold так стилізовані зірочки required (*)
+    root.querySelectorAll(".errorlist, ul.errorlist").forEach(function (list) {
       var host =
         list.closest(".form-row, .field-box, .flex, .cms-field-wrap, td, [class*='field-']") ||
         list.parentElement;
@@ -67,9 +68,32 @@
     return unique(labels);
   }
 
+  function isEffectivelyHidden(el) {
+    if (!el || el.disabled || el.type === "hidden") return true;
+    if (el.getAttribute("aria-hidden") === "true") return true;
+    if (el.closest("[hidden], .cms-lang-ru, .cms-lang-uk")) {
+      var modeRoot = el.closest(".cms-lang-mode-uk, .cms-lang-mode-ru, .product-admin-editor, .site-content-editor");
+      if (modeRoot) {
+        var isRu = el.closest(".cms-lang-ru");
+        var isUk = el.closest(".cms-lang-uk");
+        if (modeRoot.classList.contains("cms-lang-mode-uk") && isRu) return true;
+        if (modeRoot.classList.contains("cms-lang-mode-ru") && isUk) return true;
+      }
+    }
+    var style = window.getComputedStyle(el);
+    if (style.display === "none" || style.visibility === "hidden") return true;
+    var parent = el.closest(".cms-lang-ru, .cms-lang-uk");
+    if (parent) {
+      var ps = window.getComputedStyle(parent);
+      if (ps.display === "none" || ps.visibility === "hidden") return true;
+    }
+    return false;
+  }
+
   function collectSoftLimitIssues(form) {
     var issues = [];
     form.querySelectorAll("[data-recommend-max]").forEach(function (el) {
+      if (isEffectivelyHidden(el)) return;
       var max = parseInt(el.getAttribute("data-recommend-max") || "0", 10);
       if (!max) return;
       var value = (el.value || "").trim();
@@ -91,7 +115,7 @@
     if (typeof form.checkValidity !== "function") return issues;
     var controls = form.querySelectorAll("input, select, textarea");
     controls.forEach(function (el) {
-      if (el.disabled || el.type === "hidden" || el.type === "submit") return;
+      if (isEffectivelyHidden(el) || el.type === "submit") return;
       if (typeof el.checkValidity === "function" && !el.checkValidity()) {
         issues.push(fieldLabel(el));
       }

@@ -1,0 +1,19 @@
+.slug-lock-input.is-slug-locked,
+.slug-lock-input[readonly] {
+  opacity: 0.72;
+  cursor: default;
+  background-color: var(--color-base-50, #faf8f5);
+}
+
+.field-slug_unlock,
+.form-row.field-slug_unlock {
+  margin-top: -0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .slug-lock-input.is-slug-locked,
+  .slug-lock-input[readonly] {
+    opacity: 0.8;
+  }
+}
