@@ -43,7 +43,6 @@ LEGAL_PAGES: tuple[LegalPageDef, ...] = (
         preview_path="/dostavka-i-oplata/",
         slug_default="dostavka-i-oplata",
         model_name="legalshippingpage",
-        has_sections=True,
         has_meta=True,
         has_fop=True,
     ),
@@ -54,7 +53,6 @@ LEGAL_PAGES: tuple[LegalPageDef, ...] = (
         preview_path="/povernennya/",
         slug_default="povernennya",
         model_name="legalreturnspage",
-        has_sections=True,
         has_meta=True,
     ),
     LegalPageDef(
@@ -64,7 +62,6 @@ LEGAL_PAGES: tuple[LegalPageDef, ...] = (
         preview_path="/polityka-konfidentsiynosti/",
         slug_default="polityka-konfidentsiynosti",
         model_name="legalprivacypage",
-        has_sections=True,
         has_meta=True,
     ),
     LegalPageDef(
@@ -74,7 +71,6 @@ LEGAL_PAGES: tuple[LegalPageDef, ...] = (
         preview_path="/publichna-oferta/",
         slug_default="publichna-oferta",
         model_name="legalofferpage",
-        has_sections=True,
         has_meta=True,
         has_fop=True,
     ),

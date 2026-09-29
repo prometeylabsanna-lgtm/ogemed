@@ -14,21 +14,13 @@
       <header class="info-page__head">
         <p class="info-page__kicker">{% trans "Документи" %}</p>
         <h1 class="info-page__title">{{ page.title }}</h1>
-        {% if page.body %}
-        <div class="info-page__intro">
-          {{ page.body|richtext }}
-        </div>
-        {% endif %}
       </header>
 
+      {% if page.body %}
       <div class="info-page__prose">
-        {% for section in info_sections %}
-        <section class="info-page__section">
-          <h2 class="info-page__section-title">{{ section.title }}</h2>
-          <div class="info-page__section-body">{{ section.body|richtext }}</div>
-        </section>
-        {% endfor %}
+        {{ page.body|richtext }}
       </div>
+      {% endif %}
     </div>
 
     <aside class="info-page__aside">

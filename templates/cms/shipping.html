@@ -13,22 +13,13 @@
     <header class="info-page__head">
       <p class="info-page__kicker">{% trans "Сервіс" %}</p>
       <h1 class="info-page__title">{{ page.title }}</h1>
-      {% if page.body %}
-      <div class="info-page__intro">
-        {{ page.body|richtext }}
-      </div>
-      {% endif %}
     </header>
 
-    <ul class="info-page__list" role="list">
-      {% for item in info_sections %}
-      <li class="info-page__item">
-        <span class="info-page__label">{{ item.label }}</span>
-        <p class="info-page__value">{{ item.value }}</p>
-        <div class="info-page__text">{{ item.text|plain_cms }}</div>
-      </li>
-      {% endfor %}
-    </ul>
+    {% if page.body %}
+    <div class="info-page__prose info-page__main">
+      {{ page.body|richtext }}
+    </div>
+    {% endif %}
 
     <aside class="info-page__aside">
       {% if info_note %}

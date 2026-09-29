@@ -3,14 +3,14 @@
 /*
   Shipping: одна 2-колонкова сітка
   head | aside(steps+cta)
-  list | aside
+  main | aside
 */
 body.page-shipping .info-page__layout--shipping {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   grid-template-areas:
     "head aside"
-    "list aside";
+    "main aside";
   gap: clamp(28px, 5vw, 64px);
   align-items: start;
 }
@@ -26,8 +26,10 @@ body.page-shipping .info-page__intro {
   margin-inline: 0;
 }
 
-body.page-shipping .info-page__list {
-  grid-area: list;
+body.page-shipping .info-page__prose,
+body.page-shipping .info-page__main {
+  grid-area: main;
+  max-width: none;
 }
 
 body.page-shipping .info-page__aside {
@@ -50,7 +52,7 @@ body.page-shipping .info-page__aside {
     grid-template-areas:
       "head"
       "aside"
-      "list";
+      "main";
     gap: 32px;
   }
 

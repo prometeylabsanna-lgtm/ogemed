@@ -147,10 +147,31 @@ class LegalCMSPageForm(forms.ModelForm):
         widgets = {
             "title_uk": CmsAdminTextInputWidget(),
             "title_ru": CmsAdminTextInputWidget(),
-            "body_uk": TinyMCE(attrs={"cols": 80, "rows": 10}),
-            "body_ru": TinyMCE(attrs={"cols": 80, "rows": 10}),
+            "body_uk": TinyMCE(
+                attrs={"cols": 80, "rows": 24},
+                mce_attrs={"height": 520},
+            ),
+            "body_ru": TinyMCE(
+                attrs={"cols": 80, "rows": 24},
+                mce_attrs={"height": 520},
+            ),
             "is_published": UnfoldBooleanWidget(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if "body_uk" in self.fields:
+            self.fields["body_uk"].label = "Текст сторінки (UK)"
+            self.fields["body_uk"].help_text = (
+                "Весь основний текст сторінки в одному редакторі. "
+                "Заголовки, абзаци та відступи — через форматування."
+            )
+        if "body_ru" in self.fields:
+            self.fields["body_ru"].label = "Текст сторінки (RU)"
+            self.fields["body_ru"].help_text = (
+                "Весь основний текст сторінки російською. "
+                "Заголовки, абзаци та відступи — через форматування."
+            )
 
 
 class LegalInfoMetaForm(forms.ModelForm):
@@ -386,7 +407,7 @@ def legal_page_edit_view(request, page_key: str, *, model_admin=None):
     if meta_form is not None:
         fieldsets.append(
             (
-                "Форма CTA",
+                "Форма",
                 _bound_fields(
                     meta_form,
                     ("cta_title_uk", "cta_text_uk", "cta_title_ru", "cta_text_ru"),

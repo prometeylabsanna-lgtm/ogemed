@@ -4,7 +4,7 @@ from apps.core.breadcrumbs import build_breadcrumbs
 from apps.core.html_text import plain_text
 
 from .about_content import AboutContent
-from .info_page_service import meta_for_page, sections_for_page
+from .info_page_service import meta_for_page
 from .models import CMSPage
 
 
@@ -73,7 +73,6 @@ class CMSPageDetailView(DetailView):
         key = page.page_key or _PAGE_KEY_BY_SLUG.get(page.slug, "")
         if key not in {"shipping", "returns", "privacy", "offer"}:
             return
-        ctx["info_sections"] = sections_for_page(key)
         meta = meta_for_page(key)
         ctx["cta_title"] = meta["cta_title"]
         ctx["cta_text"] = meta["cta_text"]

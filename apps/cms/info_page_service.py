@@ -17,6 +17,58 @@ def _plain_to_html(text: str) -> str:
     return linebreaks(text)
 
 
+def _escape_basic(text: str) -> str:
+    return (
+        (text or "")
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
+def section_row_to_html(*, layout: str, heading: str, subheading: str, body: str) -> str:
+    """Один колишній блок секції → HTML для єдиного редактора."""
+    parts: list[str] = []
+    heading = (heading or "").strip()
+    subheading = (subheading or "").strip()
+    body_html = _plain_to_html(body)
+    if heading:
+        parts.append(f"<h2>{_escape_basic(heading)}</h2>")
+    if layout != InfoPageSection.Layout.PROSE and subheading:
+        parts.append(f"<p><strong>{_escape_basic(subheading)}</strong></p>")
+    if body_html:
+        parts.append(body_html)
+    return "\n".join(parts)
+
+
+def merge_sections_html_for_page(page_key: str, *, lang: str = "uk") -> str:
+    """Злити активні InfoPageSection у один HTML (для міграції / seed)."""
+    rows = list(
+        InfoPageSection.objects.filter(page_key=page_key, is_active=True).order_by(
+            "sort_order", "id"
+        )
+    )
+    chunks: list[str] = []
+    for row in rows:
+        heading = getattr(row, f"heading_{lang}", "") or row.heading_uk
+        subheading = getattr(row, f"subheading_{lang}", "") or ""
+        body = getattr(row, f"body_{lang}", "") or ""
+        if lang == "ru" and not (body or "").strip():
+            body = row.body_uk
+        if lang == "ru" and not (subheading or "").strip():
+            subheading = row.subheading_uk
+        html = section_row_to_html(
+            layout=row.layout,
+            heading=heading,
+            subheading=subheading,
+            body=body,
+        )
+        if html.strip():
+            chunks.append(html)
+    return "\n".join(chunks)
+
+
 def sections_for_page(page_key: str) -> list[dict]:
     qs = InfoPageSection.objects.filter(page_key=page_key, is_active=True)
     rows = list(qs)
