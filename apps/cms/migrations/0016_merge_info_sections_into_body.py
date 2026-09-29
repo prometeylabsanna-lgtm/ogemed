@@ -66,6 +66,7 @@ def forwards(apps, schema_editor):
 
         update_fields: list[str] = []
         # Не чіпаємо body, якщо адмін уже заповнив текст — лише доливаємо, коли порожньо.
+        # (Повне відновлення intro+секції — у 0017.)
         if merged_uk and _is_blank_html(page.body_uk):
             page.body_uk = merged_uk
             update_fields.append("body_uk")
@@ -76,7 +77,7 @@ def forwards(apps, schema_editor):
         if update_fields:
             page.save(update_fields=update_fields)
 
-        InfoPageSection.objects.filter(page_key=key).update(is_active=False)
+        # Не вимикаємо секції тут — 0017 зливає й вимикає після відновлення.
 
 
 def backwards(apps, schema_editor):

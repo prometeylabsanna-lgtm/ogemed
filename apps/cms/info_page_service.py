@@ -42,13 +42,14 @@ def section_row_to_html(*, layout: str, heading: str, subheading: str, body: str
     return "\n".join(parts)
 
 
-def merge_sections_html_for_page(page_key: str, *, lang: str = "uk") -> str:
-    """Злити активні InfoPageSection у один HTML (для міграції / seed)."""
-    rows = list(
-        InfoPageSection.objects.filter(page_key=page_key, is_active=True).order_by(
-            "sort_order", "id"
-        )
-    )
+def merge_sections_html_for_page(
+    page_key: str, *, lang: str = "uk", include_inactive: bool = False
+) -> str:
+    """Злити InfoPageSection у один HTML (для міграції / seed)."""
+    qs = InfoPageSection.objects.filter(page_key=page_key).order_by("sort_order", "id")
+    if not include_inactive:
+        qs = qs.filter(is_active=True)
+    rows = list(qs)
     chunks: list[str] = []
     for row in rows:
         heading = getattr(row, f"heading_{lang}", "") or row.heading_uk

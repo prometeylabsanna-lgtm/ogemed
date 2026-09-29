@@ -131,6 +131,11 @@ class SlugLockAdminMixin:
         return {}
 
     def get_form(self, request, obj=None, **kwargs):
+        fields = kwargs.get("fields")
+        if fields is not None:
+            kwargs["fields"] = tuple(
+                f for f in fields if f != "slug_unlock"
+            )
         BaseForm = super().get_form(request, obj, **kwargs)
         mixin = self
 

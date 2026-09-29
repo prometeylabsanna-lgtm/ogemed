@@ -58,10 +58,19 @@ class ProductAdminAttrsTests(TestCase):
         self.assertNotIn("Обрано Характеристики", html)
         self.assertNotIn("Choose all Характеристики", html)
 
+    def test_add_page_loads_with_slug_lock(self):
+        url = reverse("admin:catalog_product_add")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        self.assertIn("slug_unlock", html)
+        self.assertIn("Дозволити редагувати slug", html)
+
     def test_save_attribute_via_select(self):
         form = ProductAdminForm(
             data={
                 "sku": self.product.sku,
+                "slug": self.product.slug,
                 "name_uk": self.product.name_uk,
                 "price": "100.00",
                 "stock": 0,
